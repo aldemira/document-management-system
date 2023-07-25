@@ -27,6 +27,7 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.ui.*;
 import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.constants.service.RPCService;
 import com.openkm.frontend.client.extension.widget.preview.PreviewExtension;
 import com.openkm.frontend.client.util.Util;
@@ -40,26 +41,19 @@ import java.util.List;
  * @author jllort
  */
 public class Preview extends Composite {
-	private static final int TURN_BACK_HEIGHT = 25;
+	public static final String DOWNLOAD_TYPE_PREVIEW = "preview";
+
 	private VerticalPanel vPanel;
 	private HTML pdf;
 	private HTML swf;
-	private HTML video;
-	public HTMLPreview htmlPreview;
-	public SyntaxHighlighterPreview syntaxHighlighterPreview;
+	public EmbeddedPreview embeddedPreview;
 	private int width = 0;
 	private int height = 0;
 	private boolean previewAvailable = false;
-	private boolean previewConversion = true;
-	String mediaUrl = "";
-	private String mediaProvider = "";
 	private List<PreviewExtension> widgetPreviewExtensionList;
-	private HasPreviewEvent previewEvent;
-	private HorizontalPanel hReturnPanel;
-	private Button backButton;
-	private String pdfID = "jsPdfViewer";
-	public EmbeddedPreview embeddedPreview;
 	private String pdfContainer = "pdfembededcontainer";
+	private String flashContainer = "pdfviewercontainer";
+	private String pdfID = "jsPdfViewer";
 
 	/**
 	 * Preview
@@ -68,33 +62,9 @@ public class Preview extends Composite {
 		this.previewEvent = previewEvent;
 		widgetPreviewExtensionList = new ArrayList<>();
 		vPanel = new VerticalPanel();
-		htmlPreview = new HTMLPreview();
-		syntaxHighlighterPreview = new SyntaxHighlighterPreview();
-		pdf = new HTML("<div id=\"pdfembededcontainer\"></div>\n");
-		swf = new HTML("<div id=\"pdfviewercontainer\"></div>\n");
-		video = new HTML("<div id=\"mediaplayercontainer\"></div>\n");
-		hReturnPanel = new HorizontalPanel();
-		hReturnPanel.setWidth("100%");
-		backButton = new Button(Main.i18n("search.button.preview.back"));
-		backButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				previewEvent.returnBack();
-			}
-		});
-		backButton.setStylePrimaryName("okm-Button");
-		HTML space2 = Util.hSpace("5px");
-		hReturnPanel.add(space2);
-		hReturnPanel.add(backButton);
-		hReturnPanel.setCellWidth(space2, "5px");
-		hReturnPanel.setCellHorizontalAlignment(backButton, HasAlignment.ALIGN_LEFT);
-		hReturnPanel.setCellVerticalAlignment(backButton, HasAlignment.ALIGN_MIDDLE);
-		hReturnPanel.setHeight(String.valueOf(TURN_BACK_HEIGHT) + "px");
-		hReturnPanel.setStyleName("okm-TopPanel");
-		hReturnPanel.addStyleName("okm-Border-Top");
-		hReturnPanel.addStyleName("okm-Border-Left");
-		hReturnPanel.addStyleName("okm-Border-Right");
 		embeddedPreview = new EmbeddedPreview();
+		pdf = new HTML("<div id=\"" + pdfContainer + "\"></div>\n");
+		swf = new HTML("<div id=\"" + flashContainer + "\"></div>\n");
 		initWidget(vPanel);
 	}
 
@@ -159,25 +129,35 @@ public class Preview extends Composite {
 		hideWidgetExtension();
 		vPanel.clear();
 
-		if (previewEvent != null) {
-			vPanel.add(hReturnPanel);
-			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT) + "px");
-		}
-
 		vPanel.add(pdf);
-		vPanel.setCellHorizontalAlignment(pdf, HasAlignment.ALIGN_CENTER);
+		vPanel.setCellHorizontalAlignment(pdf, HasAlignment.ALIGN_DEFAULT);
 		vPanel.setCellVerticalAlignment(pdf, HasAlignment.ALIGN_MIDDLE);
 
 		if (previewAvailable) {
-			String url = RPCService.DownloadServlet + "?inline=true&uuid=" + URL.encodeQueryString(uuid);
-			pdf.setHTML("<div id=\"pdfembededcontainer\">" +
+			String url = RPCService.ConverterServlet + "?inline=true&toPdf=true&uuid=" + URL.encodeQueryString(uuid)
+					+ "&downloadType=" + DOWNLOAD_TYPE_PREVIEW;
+			pdf.setHTML("<div id=\"" + flashContainer + "\">" +
 					"<object id=\"" + pdfID + "\" name=\"" + pdfID + "\" width=\"" + width + "\" height=\"" + height + "\" type=\"application/pdf\" data=\"" + url + "\"&#zoom=85&scrollbar=1&toolbar=1&navpanes=1&view=FitH\">" +
-					"<p>Browser plugin suppport error, PDF can not be displayed</p>" +
+					"<p>Browser plugin support error, PDF can not be displayed</p>" +
 					"</object>" +
 					"</div>\n"); // needed for rewriting  purpose
 		} else {
 			pdf.setHTML("<div id=\"pdfembededcontainer\" align=\"center\"><br><br>" + Main.i18n("preview.unavailable") + "</div>\n");
 		}
+	}
+
+	/**
+	 * showSystemEmbeddedPreview
+	 */
+	public void showSystemEmbeddedPreview(String url) {
+		hideWidgetExtension();
+		vPanel.clear();
+
+		vPanel.add(embeddedPreview);
+		vPanel.setCellHorizontalAlignment(embeddedPreview, HasAlignment.ALIGN_CENTER);
+		vPanel.setCellVerticalAlignment(embeddedPreview, HasAlignment.ALIGN_MIDDLE);
+
+		embeddedPreview.showEmbedded(url);
 	}
 
 	/**
@@ -189,60 +169,15 @@ public class Preview extends Composite {
 	}
 
 	/**
-	 * Set the media file to reproduce
-	 *
-	 * @param mediaUrl The media file url
-	 */
-	public void showMediaFile(String mediaUrl, String mimeType) {
-		hideWidgetExtension();
-		vPanel.clear();
-
-		if (previewEvent != null) {
-			vPanel.add(hReturnPanel);
-			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT) + "px");
-		}
-
-		vPanel.add(video);
-		vPanel.setCellHorizontalAlignment(video, HasAlignment.ALIGN_CENTER);
-		vPanel.setCellVerticalAlignment(video, HasAlignment.ALIGN_MIDDLE);
-
-		this.mediaUrl = mediaUrl;
-		Util.removeMediaPlayer();
-		video.setHTML("<div id=\"mediaplayercontainer\"></div>\n");
-
-		if (mimeType.equals("audio/mpeg")) {
-			mediaProvider = "sound";
-		} else if (mimeType.equals("video/x-flv") || mimeType.equals("video/mp4")) {
-			mediaProvider = "video";
-		} else if (mimeType.equals("application/x-shockwave-flash")) {
-			mediaProvider = "";
-		}
-
-		Util.createMediaPlayer(mediaUrl, mediaProvider, "" + width, "" + height);
-	}
-
-	/**
-	 * resizeMediaPlayer
-	 */
-	public void resizeMediaPlayer(int width, int height) {
-		Util.resizeMediaPlayer("" + width, "" + height);
-	}
-
-	/**
 	 * setPreviewExtension
 	 */
-	public void showPreviewExtension(PreviewExtension preview, String url) {
+	public void showPreviewExtension(PreviewExtension preview, String url, GWTDocument doc) {
 		hideWidgetExtension();
 		vPanel.clear();
 
-		if (previewEvent != null) {
-			vPanel.add(hReturnPanel);
-			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT) + "px");
-		}
-
 		if (previewAvailable) {
+			preview.createViewer(doc, url, width, height);
 			vPanel.add(preview.getWidget());
-			preview.createViewer(url, width, height);
 		}
 	}
 
@@ -260,17 +195,26 @@ public class Preview extends Composite {
 	/**
 	 * Sets the boolean value if previewing document is available
 	 *
-	 * @param previewAvailable Set preview availability status.
+	 * @param doc Set preview availability status.
 	 */
-	public void setPreviewAvailable(boolean previewAvailable) {
-		this.previewAvailable = previewAvailable;
-	}
-
-	/**
-	 * Sets the boolean value if document preview does not need conversion
-	 */
-	public void setPreviewConversion(boolean previewConversion) {
-		this.previewConversion = previewConversion;
+	public void setPreviewAvailable(GWTDocument doc) {
+		if (doc.getMimeType().equals("video/x-flv") || doc.getMimeType().equals("video/mp4") || doc.getMimeType().equals("audio/mpeg")
+				|| doc.getMimeType().equals("audio/x-wav") || doc.getMimeType().equals("application/pdf")
+				|| doc.getMimeType().equals("application/postscript") || doc.getMimeType().equals("application/x-shockwave-flash")
+				|| isHTMLPreviewAvailable(doc.getMimeType())
+				|| isSyntaxHighlighterPreviewAvailable(doc.getMimeType())
+				|| doc.isConvertibleToSwf() || doc.isConvertibleToPdf()) {
+			previewAvailable = true;
+		} else {
+			boolean found = false;
+			for (PreviewExtension preview : widgetPreviewExtensionList) {
+				if (preview.isPreviewAvailable(doc.getMimeType())) {
+					found = true;
+					break;
+				}
+			}
+			previewAvailable = found;
+		}
 	}
 
 	/**
@@ -332,40 +276,63 @@ public class Preview extends Composite {
 	}
 
 	/**
-	 * Preview PDF, take in consideration profile selection
+	 * previewDocument
 	 */
-	public void showPDF(String uuid) {
-			hideWidgetExtension();
-			vPanel.clear();
+	public void previewDocument(boolean refreshing, GWTDocument doc) {
+		Log.debug("PreviewDocument: " + doc.getPath());
 
-			vPanel.add(pdf);
-			vPanel.setCellHorizontalAlignment(pdf, HasAlignment.ALIGN_CENTER);
-			vPanel.setCellVerticalAlignment(pdf, HasAlignment.ALIGN_MIDDLE);
-
-			if (previewAvailable) {
-				pdf.setHTML("<div id=\"" + pdfContainer + "\"></div>\n"); // needed for rewriting  purpose
-					showSystemEmbeddedPreview(EmbeddedPreview.PDFJS_URL + URL.encodeQueryString(RPCService.ConverterServlet +"?toPdf=true&inline=true&uuid=" + uuid));
-			} else {
-				pdf.setHTML("<div id=\"" + pdfContainer + "\" align=\"center\"><br><br>" + Main.i18n("preview.unavailable") + "</div>\n");
+		if (doc.getMimeType().equals("video/x-flv") || doc.getMimeType().equals("video/mp4") || doc.getMimeType().equals("audio/mpeg")
+				|| doc.getMimeType().equals("audio/x-wav")) {
+			Log.debug("Preview: Media Player");
+			String url = RPCService.DownloadServlet + "?uuid=" + URL.encodeQueryString(doc.getUuid()) + "&downloadType="
+					+ DOWNLOAD_TYPE_PREVIEW;
+			showSystemEmbeddedPreview(EmbeddedPreview.MPG_URL + URL.encodeQueryString(url) + "&mimeType=" + doc.getMimeType()
+					+ "&width=" + width + "&height=" + height);
+		} else if (isHTMLPreviewAvailable(doc.getMimeType())) {
+			Log.debug("Preview: HTML");
+			if (!refreshing) {
+				String url = "mimeType=" + doc.getMimeType() + "&uuid=" + doc.getUuid();
+				showSystemEmbeddedPreview(url);
 			}
+		} else if (isSyntaxHighlighterPreviewAvailable(doc.getMimeType())) {
+			Log.debug("Preview: Syntax Highlighter");
+			if (!refreshing) {
+				String url = "mimeType=" + doc.getMimeType() + "&uuid=" + doc.getUuid();
+				showSystemEmbeddedPreview(url);
+			}
+		} else if (doc.getMimeType().equals("application/x-shockwave-flash")) {
+			String url = RPCService.ConverterServlet + "?inline=true&toSwf=true&uuid=" + URL.encodeQueryString(doc.getUuid()) + "&downloadType="
+					+ DOWNLOAD_TYPE_PREVIEW;
+			showSystemEmbeddedPreview(EmbeddedPreview.SWF_URL + URL.encodeQueryString(url) + "&uuid=" + URL.encodeQueryString(doc.getUuid()));
+		} else {
+			if (refreshing) {
+				if (Main.get().workspaceUserProperties.getWorkspace().isAcrobatPluginPreview()) {
+					Util.resizeEmbededPDF("" + width, "" + height, pdfID);
+				}
+			} else {
+				showEmbedPDF(doc.getUuid());
+			}
+		}
 	}
 
 	/**
-	 * showSystemEmbeddedPreview
+	 * isHTMLPreviewAvailable
 	 */
-	public void showSystemEmbeddedPreview(String url) {
-		hideWidgetExtension();
-		vPanel.clear();
+	public static boolean isHTMLPreviewAvailable(String mime) {
+		return mime.equals("text/html");
+	}
 
-		if (previewEvent != null) {
-			vPanel.add(hReturnPanel);
-			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT) + "px");
-		}
-
-		vPanel.add(embeddedPreview);
-		vPanel.setCellHorizontalAlignment(embeddedPreview, HasAlignment.ALIGN_CENTER);
-		vPanel.setCellVerticalAlignment(embeddedPreview, HasAlignment.ALIGN_MIDDLE);
-
-		embeddedPreview.showEmbedded(url);
+	/**
+	 * isPreviewAvailable
+	 */
+	public static boolean isSyntaxHighlighterPreviewAvailable(String mime) {
+		return mime.equals("text/x-java") || mime.equals("text/xml") || mime.equals("text/x-sql")
+				|| mime.equals("text/x-scala") || mime.equals("text/x-python")
+				|| mime.equals("application/x-php") || mime.equals("application/x-bsh")
+				|| mime.equals("application/x-perl") || mime.equals("application/javascript")
+				|| mime.equals("text/plain") || mime.equals("text/x-groovy") || mime.equals("text/x-diff")
+				|| mime.equals("text/x-pascal") || mime.equals("text/css") || mime.equals("text/x-csharp")
+				|| mime.equals("text/x-c++") || mime.equals("application/x-font-truetype")
+				|| mime.equals("text/applescript") || mime.equals("application/x-shellscript");
 	}
 }

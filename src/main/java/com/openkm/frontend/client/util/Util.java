@@ -595,9 +595,12 @@ public class Util {
     }-*/;
 
 	public static native void resizeEmbededPDF(String width, String height, String pdfId) /*-{
-      obj = $wnd.document.getElementById(pdfId);
-      obj.width = width;
-      obj.height = height;
+		obj = $wnd.document.getElementById(pdfId);
+		// Take in consideration if object exists
+		if (obj != null) {
+			obj.width = width;
+			obj.height = height;
+		}
     }-*/;
 
 	public static native void copyToClipboard(String text) /*-{

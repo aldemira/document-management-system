@@ -102,7 +102,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		notes = new Notes(Notes.DOCUMENT_NOTE);
 		version = new VersionScrollTable();
 		security = new SecurityScrollTable();
-		preview = new Preview(null);
+		preview = new Preview();
 		panel = new VerticalPanel();
 		propertyGroup = new ArrayList<>();
 		widgetExtensionList = new ArrayList<>();
