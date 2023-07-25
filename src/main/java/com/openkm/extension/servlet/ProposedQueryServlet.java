@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -61,8 +61,8 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 			} else {
 				to = users + roles;
 			}
-			List<String> userNames = new ArrayList<String>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
-			List<String> roleNames = new ArrayList<String>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
+			List<String> userNames = new ArrayList<>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
+			List<String> roleNames = new ArrayList<>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
 
 			for (String role : roleNames) {
 				List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);
@@ -94,7 +94,7 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public Map<String, Long> findProposedQueriesUsersFrom() throws OKMException {
 		log.debug("findProposedQueriesUsersFrom()");
-		Map<String, Long> received = new HashMap<String, Long>();
+		Map<String, Long> received = new HashMap<>();
 		updateSessionManager();
 		try {
 			String user = getThreadLocalRequest().getRemoteUser();
@@ -103,7 +103,7 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 				if (unreadMap.containsKey(sender)) {
 					received.put(sender, unreadMap.get(sender));
 				} else {
-					received.put(sender, new Long(0));
+					received.put(sender, 0L);
 				}
 			}
 		} catch (DatabaseException e) {
@@ -144,7 +144,7 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 	public List<GWTProposedQueryReceived> findProposedQueryByMeFromUser(String user) throws OKMException {
 		log.debug("findProposedQueryByMeFromUser()");
 		updateSessionManager();
-		List<GWTProposedQueryReceived> proposedQueryReceivedList = new ArrayList<GWTProposedQueryReceived>();
+		List<GWTProposedQueryReceived> proposedQueryReceivedList = new ArrayList<>();
 
 		try {
 			String me = getThreadLocalRequest().getRemoteUser();
@@ -215,14 +215,15 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 	@Override
 	public void deleteProposedQueryByMeFromUser(String user) throws OKMException {
 		log.debug("deleteProposedQueryByMeFromUser({})", user);
-		List<String> pqId = new ArrayList<String>();
+		List<String> pqId = new ArrayList<>();
 		updateSessionManager();
+
 		try {
 			for (ProposedQueryReceived proposedQueryReceived : ProposedQueryDAO.findProposedQueryByMeFromUser(getThreadLocalRequest().getRemoteUser(), user)) {
 				pqId.add(String.valueOf(proposedQueryReceived.getId()));
 			}
 			for (String id : pqId) {
-				ProposedQueryDAO.deleteReceived(Integer.valueOf(id));
+				ProposedQueryDAO.deleteReceived(Integer.parseInt(id));
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -230,4 +231,3 @@ public class ProposedQueryServlet extends OKMRemoteServiceServlet implements OKM
 		}
 	}
 }
-	

@@ -21,33 +21,24 @@
 
 package com.openkm.principal;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
+import com.openkm.cache.CacheProvider;
+import com.openkm.core.Config;
+import com.openkm.util.SystemProfiling;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
+import org.apache.commons.lang.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.ReferralException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.InitialDirContext;
-import javax.naming.directory.SearchControls;
-import javax.naming.directory.SearchResult;
-
-import org.apache.commons.lang.NotImplementedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.openkm.cache.CacheProvider;
-import com.openkm.core.Config;
-import com.openkm.util.SystemProfiling;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
+import javax.naming.directory.*;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 
 /**
  * http://forums.sun.com/thread.jspa?threadID=581444
@@ -63,7 +54,7 @@ public class OpenLdapPrincipalAdapter implements PrincipalAdapter {
     public List<String> getUsers() throws PrincipalAdapterException {
         log.debug("getUsers()");
         long begin = System.currentTimeMillis();
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
 
         // @formatter:off
         List<String> ldap = ldapSearch(CACHE_LDAP_GENERAL, "getUsers",
@@ -72,17 +63,15 @@ public class OpenLdapPrincipalAdapter implements PrincipalAdapter {
                 Config.PRINCIPAL_LDAP_USER_ATTRIBUTE);
         // @formatter:on
 
-        for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
-            String user = it.next();
+		for (String user : ldap) {
+			if (!Config.SYSTEM_USER.equals(user)) {
+				if (Config.SYSTEM_LOGIN_LOWERCASE) {
+					user = user.toLowerCase();
+				}
 
-            if (!Config.SYSTEM_USER.equals(user)) {
-                if (Config.SYSTEM_LOGIN_LOWERCASE) {
-                    user = user.toLowerCase();
-                }
-
-                list.add(user);
-            }
-        }
+				list.add(user);
+			}
+		}
 
         if (Config.PRINCIPAL_LDAP_USERS_FROM_ROLES) {
             // Get Roles
@@ -126,7 +115,7 @@ public class OpenLdapPrincipalAdapter implements PrincipalAdapter {
     public List<String> getRoles() throws PrincipalAdapterException {
         log.debug("getRoles()");
         long begin = System.currentTimeMillis();
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
 
         // @formatter:off
         List<String> ldap = ldapSearch(CACHE_LDAP_GENERAL, "getRoles",
@@ -135,10 +124,9 @@ public class OpenLdapPrincipalAdapter implements PrincipalAdapter {
                 Config.PRINCIPAL_LDAP_ROLE_ATTRIBUTE);
         // @formatter:on
 
-        for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
-            String role = it.next();
-            list.add(role);
-        }
+		for (String role : ldap) {
+			list.add(role);
+		}
 
         SystemProfiling.log(null, System.currentTimeMillis() - begin);
         log.trace("getRoles.Time: {}", System.currentTimeMillis() - begin);
@@ -201,7 +189,7 @@ public class OpenLdapPrincipalAdapter implements PrincipalAdapter {
     public List<String> getUsersByRole(String role) throws PrincipalAdapterException {
         log.debug("getUsersByRole({})", role);
         long begin = System.currentTimeMillis();
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
 
         // @formatter:off
         List<String> ldap = ldapSearch(CACHE_LDAP_GENERAL, "getUsersByRole:" + role,
@@ -210,17 +198,15 @@ public class OpenLdapPrincipalAdapter implements PrincipalAdapter {
                 Config.PRINCIPAL_LDAP_USERS_BY_ROLE_ATTRIBUTE);
         // @formatter:on
 
-        for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
-            String user = it.next();
+		for (String user : ldap) {
+			if (!Config.SYSTEM_USER.equals(user)) {
+				if (Config.SYSTEM_LOGIN_LOWERCASE) {
+					user = user.toLowerCase();
+				}
 
-            if (!Config.SYSTEM_USER.equals(user)) {
-                if (Config.SYSTEM_LOGIN_LOWERCASE) {
-                    user = user.toLowerCase();
-                }
-
-                list.add(user);
-            }
-        }
+				list.add(user);
+			}
+		}
 
         SystemProfiling.log(role, System.currentTimeMillis() - begin);
         log.trace("getUsersByRole.Time: {}", System.currentTimeMillis() - begin);
@@ -232,7 +218,7 @@ public class OpenLdapPrincipalAdapter implements PrincipalAdapter {
     public List<String> getRolesByUser(String user) throws PrincipalAdapterException {
         log.debug("getRolesByUser({})", user);
         long begin = System.currentTimeMillis();
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
 
         // @formatter:off
         List<String> ldap = ldapSearch(CACHE_LDAP_GENERAL, "getRolesByUser:" + user,
@@ -241,10 +227,9 @@ public class OpenLdapPrincipalAdapter implements PrincipalAdapter {
                 Config.PRINCIPAL_LDAP_ROLES_BY_USER_ATTRIBUTE);
         // @formatter:on
 
-        for (Iterator<String> it = ldap.iterator(); it.hasNext(); ) {
-            String role = it.next();
-            list.add(role);
-        }
+		for (String role : ldap) {
+			list.add(role);
+		}
 
         SystemProfiling.log(user, System.currentTimeMillis() - begin);
         log.trace("getRolesByUser.Time: {}", System.currentTimeMillis() - begin);
@@ -256,15 +241,15 @@ public class OpenLdapPrincipalAdapter implements PrincipalAdapter {
      * LDAP Search
      */
     private List<String> ldapSearch(String cache, String key, String searchBase, String searchFilter, String attribute) {
-        List<String> searchBases = new ArrayList<String>();
+        List<String> searchBases = new ArrayList<>();
         searchBases.add(searchBase);
         return ldapSearch(cache, key, searchBases, searchFilter, attribute);
     }
 
     @SuppressWarnings("unchecked")
     private List<String> ldapSearch(String cache, String key, List<String> searchBases, String searchFilter, String attribute) {
-        log.debug("ldapSearch({}, {}, {}, {}, {})", new Object[]{cache, key, searchBases, searchFilter, attribute});
-        List<String> al = new ArrayList<String>();
+        log.debug("ldapSearch({}, {}, {}, {}, {})", cache, key, searchBases, searchFilter, attribute);
+        List<String> al = new ArrayList<>();
         Cache ldapResultCache = CacheProvider.getInstance().getCache(cache);
         Element elto = ldapResultCache.get(key);
         DirContext ctx = null;
@@ -283,12 +268,12 @@ public class OpenLdapPrincipalAdapter implements PrincipalAdapter {
                 if (!attribute.equals("")) {
                     searchCtls.setReturningAttributes(new String[] {attribute});
                 }
-                
+
                 for (String searchBase : searchBases) {
                     NamingEnumeration<SearchResult> results = ctx.search(searchBase, searchFilter, searchCtls);
 
                     while (results.hasMore()) {
-                        SearchResult searchResult = (SearchResult) results.next();
+                        SearchResult searchResult = results.next();
                         Attributes attributes = searchResult.getAttributes();
 
                         if (attribute.equals("")) {
@@ -336,7 +321,7 @@ public class OpenLdapPrincipalAdapter implements PrincipalAdapter {
                 }
             } catch (NamingException e) {
                 log.error("NamingException: {} (Cache: {} - Key: {} - Base: {} - Filter: {} - Attribute: {})",
-                        new Object[]{e.getMessage(), cache, key, searchBases, searchFilter, attribute});
+						e.getMessage(), cache, key, searchBases, searchFilter, attribute);
 
                 // To prevent the same error over and over again
                 ldapResultCache.put(new Element(key, al));
@@ -359,7 +344,7 @@ public class OpenLdapPrincipalAdapter implements PrincipalAdapter {
      * Create static LDAP configuration environment.
      */
     private static Hashtable<String, String> getEnvironment() {
-        Hashtable<String, String> env = new Hashtable<String, String>();
+        Hashtable<String, String> env = new Hashtable<>();
 
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.SECURITY_AUTHENTICATION, "simple");

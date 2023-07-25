@@ -73,13 +73,13 @@ public class DbSimpleAccessManager implements DbAccessManager {
 	@Override
 	public boolean isGranted(NodeBase node, String user, int permissions) throws PrincipalAdapterException, DatabaseException {
 		List<String> roles = CommonAuthModule.getPrincipalAdapter().getRolesByUser(user);
-		return isGranted(node, user, new HashSet<String>(roles), permissions);
+		return isGranted(node, user, new HashSet<>(roles), permissions);
 	}
 
 	/**
 	 * Check for permissions.
 	 */
-	private boolean isGranted(NodeBase node, String user, Set<String> roles, int permissions) throws DatabaseException {
+	private boolean isGranted(NodeBase node, String user, Set<String> roles, int permissions) {
 		log.debug("isGranted({}, {})", node.getUuid(), permissions);
 		boolean access = false;
 
@@ -112,9 +112,9 @@ public class DbSimpleAccessManager implements DbAccessManager {
 	/**
 	 * Check access properties
 	 */
-	private boolean checkProperties(Map<String, Integer> usersPerms, Map<String, Integer> rolesPerms, String user, Set<String> roles,
-	                                int perms) {
-		log.debug("checkProperties({}, {}, {}, {})", new Object[]{usersPerms, rolesPerms, roles, perms});
+	private boolean checkProperties(Map<String, Integer> usersPerms, Map<String, Integer> rolesPerms, String user,
+									Set<String> roles, int perms) {
+		log.debug("checkProperties({}, {}, {}, {})", usersPerms, rolesPerms, roles, perms);
 		boolean access = false;
 
 		// Fist try with user permissions

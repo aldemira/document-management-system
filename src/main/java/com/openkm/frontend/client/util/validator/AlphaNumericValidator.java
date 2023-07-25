@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -35,10 +35,9 @@ import eu.maydu.gwt.validation.client.i18n.ValidationMessages;
  *
  */
 public class AlphaNumericValidator extends Validator<AlphaNumericValidator> {
-
-	private TextBoxBase textBox = null;
-	private SuggestBox suggestBox = null;
 	private String regexPattern = "[a-zA-z0-9]*";
+	private SuggestBox suggestBox = null;
+	private TextBoxBase textBox = null;
 
 	public AlphaNumericValidator(TextBoxBase text) {
 		this.textBox = text;

@@ -49,7 +49,7 @@ public class FsDirectoryResource extends FsResource implements MakeCollectionabl
 	public List<? extends Resource> getChildren() {
 		log.info("getChildren()");
 
-		ArrayList<FsResource> list = new ArrayList<FsResource>();
+		ArrayList<FsResource> list = new ArrayList<>();
 		File[] files = this.file.listFiles();
 		if (files != null) {
 			for (File fchild : files) {
@@ -128,20 +128,11 @@ public class FsDirectoryResource extends FsResource implements MakeCollectionabl
 	 * Will generate a listing of the contents of this directory, unless the
 	 * factory's allowDirectoryBrowsing has been set to false. If so it will
 	 * just output a message saying that access has been disabled.
-	 *
-	 * @param out
-	 * @param range
-	 * @param params
-	 * @param contentType
-	 * @throws IOException
-	 * @throws NotAuthorizedException
 	 */
-	public void sendContent(OutputStream out, Range range, Map<String, String> params, String contentType)
-			throws IOException, NotAuthorizedException {
+	public void sendContent(OutputStream out, Range range, Map<String, String> params, String contentType) throws IOException {
 		log.info("sendContent({}, {})", range, contentType);
 
-		String subpath = getFile().getCanonicalPath().substring(factory.getRoot().getCanonicalPath().length())
-				.replace('\\', '/');
+		String subpath = getFile().getCanonicalPath().substring(factory.getRoot().getCanonicalPath().length()).replace('\\', '/');
 		String uri = subpath;
 		// String uri = "/" + factory.getContextPath() + subpath;
 		XmlWriter w = new XmlWriter(out);

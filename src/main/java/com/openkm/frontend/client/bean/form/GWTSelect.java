@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -36,8 +36,8 @@ import java.util.List;
 public class GWTSelect extends GWTFormElement implements IsSerializable {
 	public static final String TYPE_SIMPLE = "simple";
 	public static final String TYPE_MULTIPLE = "multiple";
-	private Collection<GWTOption> options = new ArrayList<GWTOption>();
-	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
+	private Collection<GWTOption> options = new ArrayList<>();
+	private List<GWTValidator> validators = new ArrayList<>();
 	private String type = TYPE_SIMPLE;
 	private String data = "";
 	private String optionsData = "";

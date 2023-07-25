@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -40,7 +40,7 @@ public class AutomationAction implements Serializable {
 
 	@Column(name = "AAC_CLASS_NAME", length = 255)
 	private String className;
-	
+
 	@Column(name = "AAC_ORDER")
 	private int order;
 
@@ -50,7 +50,7 @@ public class AutomationAction implements Serializable {
 	@CollectionTable(name = "OKM_AUTO_ACTION_PARAMS", joinColumns = {@JoinColumn(name = "AAP_VALIDATION")})
 	@Lob
 	@Type(type = "org.hibernate.type.StringClobType")
-	private List<String> params = new ArrayList<String>();
+	private List<String> params = new ArrayList<>();
 
 	@Column(name = "AAC_ACTIVE", nullable = false)
 	@Type(type = "true_false")

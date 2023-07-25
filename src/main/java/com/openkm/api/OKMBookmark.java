@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -51,7 +51,7 @@ public class OKMBookmark implements BookmarkModule {
 	@Override
 	public Bookmark add(String token, String nodePath, String name) throws AccessDeniedException,
 			PathNotFoundException, RepositoryException, DatabaseException {
-		log.debug("add({}, {}, {})", new Object[]{token, nodePath, name});
+		log.debug("add({}, {}, {})", token, nodePath, name);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		Bookmark bookmark = bm.add(token, nodePath, name);
 		log.debug("add: {}", bookmark);
@@ -61,7 +61,7 @@ public class OKMBookmark implements BookmarkModule {
 	@Override
 	public Bookmark get(String token, int bmId) throws AccessDeniedException, RepositoryException,
 			DatabaseException {
-		log.debug("get({}, {})", new Object[]{token, bmId});
+		log.debug("get({}, {})", token, bmId);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		Bookmark bookmark = bm.get(token, bmId);
 		log.debug("get: {}", bookmark);
@@ -80,7 +80,7 @@ public class OKMBookmark implements BookmarkModule {
 	@Override
 	public Bookmark rename(String token, int bmId, String newName) throws AccessDeniedException,
 			RepositoryException, DatabaseException {
-		log.debug("rename({}, {}, {})", new Object[]{token, bmId, newName});
+		log.debug("rename({}, {}, {})", token, bmId, newName);
 		BookmarkModule bm = ModuleManager.getBookmarkModule();
 		Bookmark bookmark = bm.rename(token, bmId, newName);
 		log.debug("rename: {}", bookmark);

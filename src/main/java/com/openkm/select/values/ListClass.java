@@ -32,7 +32,7 @@ import java.util.List;
 public class ListClass implements OptionSelectValues {
 	@Override
 	public List<Option> getOptions() {
-		List<Option> options = new ArrayList<Option>();
+		List<Option> options = new ArrayList<>();
 		try {
 			List<String> userList = OKMAuth.getInstance().getUsers(null);
 			for (String user : userList) {
@@ -43,7 +43,7 @@ public class ListClass implements OptionSelectValues {
 			}
 
 		} catch (Exception e) {
-			System.out.println("Exception occured: " + e.getMessage());
+			System.out.println("Exception occurred: " + e.getMessage());
 		}
 		return options;
 	}

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -35,11 +35,11 @@ import java.util.Map;
  */
 @RemoteServiceRelativePath("../extension/Zoho")
 public interface OKMZohoService extends RemoteService {
-	public String getTicket() throws OKMException;
+	String getTicket() throws OKMException;
 
-	public Map<String, String> getZohoWriterUrl(String uuid, String lang) throws OKMException;
+	Map<String, String> getZohoWriterUrl(String uuid, String lang) throws OKMException;
 
-	public Map<String, String> getZohoSheetUrl(String uuid, String lang) throws OKMException;
+	Map<String, String> getZohoSheetUrl(String uuid, String lang) throws OKMException;
 
-	public void closeZohoWriter(String id);
+	void closeZohoWriter(String id);
 }

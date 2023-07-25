@@ -30,9 +30,10 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class ArchiveUtils {
 	private static Logger log = LoggerFactory.getLogger(ArchiveUtils.class);
@@ -41,7 +42,7 @@ public class ArchiveUtils {
 	 * Create ZIP archive from file
 	 */
 	public static void createZip(File path, OutputStream os) throws IOException {
-		log.debug("createZip({}, {})", new Object[]{path, os});
+		log.debug("createZip({}, {})", path, os);
 
 		if (path.exists() && path.canRead()) {
 			ZipArchiveOutputStream zaos = new ZipArchiveOutputStream(os);
@@ -73,7 +74,7 @@ public class ArchiveUtils {
 	 * Recursively create ZIP archive from directory
 	 */
 	public static void createZip(File path, String root, OutputStream os) throws IOException {
-		log.debug("createZip({}, {}, {})", new Object[]{path, root, os});
+		log.debug("createZip({}, {}, {})", path, root, os);
 
 		if (path.exists() && path.canRead()) {
 			ZipArchiveOutputStream zaos = new ZipArchiveOutputStream(os);
@@ -104,7 +105,7 @@ public class ArchiveUtils {
 	 * Recursively create ZIP archive from directory helper utility
 	 */
 	private static void createZipHelper(File fs, ZipArchiveOutputStream zaos, String zePath) throws IOException {
-		log.debug("createZipHelper({}, {}, {})", new Object[]{fs, zaos, zePath});
+		log.debug("createZipHelper({}, {}, {})", fs, zaos, zePath);
 		File[] files = fs.listFiles();
 
 		for (int i = 0; i < files.length; i++) {
@@ -133,7 +134,7 @@ public class ArchiveUtils {
 	 * Recursively create JAR archive from directory
 	 */
 	public static void createJar(File path, String root, OutputStream os) throws IOException {
-		log.debug("createJar({}, {}, {})", new Object[]{path, root, os});
+		log.debug("createJar({}, {}, {})", path, root, os);
 
 		if (path.exists() && path.canRead()) {
 			JarArchiveOutputStream jaos = new JarArchiveOutputStream(os);
@@ -164,22 +165,22 @@ public class ArchiveUtils {
 	 * Recursively create JAR archive from directory helper utility
 	 */
 	private static void createJarHelper(File fs, JarArchiveOutputStream jaos, String zePath) throws IOException {
-		log.debug("createJarHelper({}, {}, {})", new Object[]{fs, jaos, zePath});
+		log.debug("createJarHelper({}, {}, {})", fs, jaos, zePath);
 		File[] files = fs.listFiles();
 
-		for (int i = 0; i < files.length; i++) {
-			if (files[i].isDirectory()) {
-				log.debug("DIRECTORY {}", files[i]);
-				JarArchiveEntry jae = new JarArchiveEntry(zePath + "/" + files[i].getName() + "/");
+		for (File file : files) {
+			if (file.isDirectory()) {
+				log.debug("DIRECTORY {}", file);
+				JarArchiveEntry jae = new JarArchiveEntry(zePath + "/" + file.getName() + "/");
 				jaos.putArchiveEntry(jae);
 				jaos.closeArchiveEntry();
 
-				createJarHelper(files[i], jaos, zePath + "/" + files[i].getName());
+				createJarHelper(file, jaos, zePath + "/" + file.getName());
 			} else {
-				log.debug("FILE {}", files[i]);
-				JarArchiveEntry jae = new JarArchiveEntry(zePath + "/" + files[i].getName());
+				log.debug("FILE {}", file);
+				JarArchiveEntry jae = new JarArchiveEntry(zePath + "/" + file.getName());
 				jaos.putArchiveEntry(jae);
-				FileInputStream fis = new FileInputStream(files[i]);
+				FileInputStream fis = new FileInputStream(file);
 				IOUtils.copy(fis, jaos);
 				fis.close();
 				jaos.closeArchiveEntry();
@@ -187,39 +188,5 @@ public class ArchiveUtils {
 		}
 
 		log.debug("createJarHelper: void");
-	}
-
-	/**
-	 * Read file from ZIP
-	 */
-	public static byte[] readFileFromZip(ZipInputStream zis, String filename) throws IOException {
-		ZipEntry zi = null;
-		byte content[] = null;
-
-		while ((zi = zis.getNextEntry()) != null) {
-			if (filename.equals(zi.getName())) {
-				IOUtils.toByteArray(zis);
-				break;
-			}
-		}
-
-		return content;
-	}
-
-	/**
-	 * Read file from ZIP
-	 */
-	public static InputStream getInputStreamFromZip(ZipInputStream zis, String filename) throws IOException {
-		ZipEntry zi = null;
-		InputStream is = null;
-
-		while ((zi = zis.getNextEntry()) != null) {
-			if (filename.equals(zi.getName())) {
-				is = zis;
-				break;
-			}
-		}
-
-		return is;
 	}
 }

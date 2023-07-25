@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -49,7 +49,7 @@ import java.util.Map;
  *
  */
 public class DatabaseRecordSelectPopup extends DialogBox {
-	private final OKMKeyValueServiceAsync keyValueService = (OKMKeyValueServiceAsync) GWT.create(OKMKeyValueService.class);
+	private final OKMKeyValueServiceAsync keyValueService = GWT.create(OKMKeyValueService.class);
 
 	private VerticalPanel vPanel;
 	private ScrollPanel scrollDatabaseRecordPanel;
@@ -71,7 +71,7 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		super(false, true);
 		this.suggestBox = suggestBox;
 
-		tables = new ArrayList<String>();
+		tables = new ArrayList<>();
 		if (suggestBox.getTable() != null) {
 			tables.add(suggestBox.getTable());
 		}
@@ -181,7 +181,7 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		keyValueService.getKeyValues(tables, MessageFormat.format(suggestBox.getFilterQuery(), record.getText()), new AsyncCallback<List<GWTKeyValue>>() {
 			@Override
 			public void onSuccess(List<GWTKeyValue> result) {
-				rowKeyValueMap = new HashMap<Integer, GWTKeyValue>();
+				rowKeyValueMap = new HashMap<>();
 				for (GWTKeyValue keyValue : result) {
 					int row = recordTabla.getRowCount();
 					rowKeyValueMap.put(row, keyValue);
@@ -207,9 +207,10 @@ public class DatabaseRecordSelectPopup extends DialogBox {
 		record.setText("");
 		record.setReadOnly(false);
 		acceptButton.setEnabled(false);
-		rowKeyValueMap = new HashMap<Integer, GWTKeyValue>();
+		rowKeyValueMap = new HashMap<>();
 		super.show();
 		record.setFocus(true);
+
 		// Case must show by default all values
 		if (suggestBox.getFilterMinLen() == 0) {
 			findFilteredDatabaseRecords();

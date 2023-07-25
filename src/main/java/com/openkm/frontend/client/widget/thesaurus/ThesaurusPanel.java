@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -35,7 +35,6 @@ import com.openkm.frontend.client.Main;
 import com.openkm.frontend.client.service.OKMThesaurusService;
 import com.openkm.frontend.client.service.OKMThesaurusServiceAsync;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -45,7 +44,7 @@ import java.util.List;
  *
  */
 public class ThesaurusPanel extends Composite {
-	private final OKMThesaurusServiceAsync thesaurusService = (OKMThesaurusServiceAsync) GWT.create(OKMThesaurusService.class);
+	private final OKMThesaurusServiceAsync thesaurusService = GWT.create(OKMThesaurusService.class);
 
 	private static final int TAB_HEIGHT = 20;
 	private final int TAB_TREE = 0;
@@ -166,8 +165,8 @@ public class ThesaurusPanel extends Composite {
 	final AsyncCallback<List<String>> callbackGetKeywords = new AsyncCallback<List<String>>() {
 		public void onSuccess(List<String> result) {
 			removeAllRows();
-			for (Iterator<String> it = result.iterator(); it.hasNext(); ) {
-				keywordTable.setHTML(keywordTable.getRowCount(), 0, it.next());
+			for (String s : result) {
+				keywordTable.setHTML(keywordTable.getRowCount(), 0, s);
 			}
 			status.unsetFlagKeywords();
 		}

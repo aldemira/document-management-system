@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -47,7 +47,7 @@ public class ResourceFactoryImpl implements ResourceFactory {
 		Path path = null;
 
 		if (url.startsWith("/" + Config.CONTEXT + "/webdav")) {
-			// STRIP PRECEEDING PATH
+			// STRIP PRECEDING PATH
 			path = srcPath.getStripFirst().getStripFirst();
 		} else {
 			path = Path.path(url);

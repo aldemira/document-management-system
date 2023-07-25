@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -21,19 +21,17 @@
 
 package com.openkm.extension.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.openkm.core.Config;
-
 import net.xeoh.plugins.base.Plugin;
 import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.impl.PluginManagerFactory;
 import net.xeoh.plugins.base.options.addpluginsfrom.OptionReportAfter;
 import net.xeoh.plugins.base.util.PluginManagerUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Base for implementing core extension managers.
@@ -69,7 +67,7 @@ public class ExtensionManager {
 	 */
 	public <P extends Plugin> List<P> getPlugins(final Class<P> plugin) {
 		PluginManagerUtil pmu = new PluginManagerUtil(pm);
-		return new ArrayList<P>(pmu.getPlugins(plugin));
+		return new ArrayList<>(pmu.getPlugins(plugin));
 	}
 
 	/**

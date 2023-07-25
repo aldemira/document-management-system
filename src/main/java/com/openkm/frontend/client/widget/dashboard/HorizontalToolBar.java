@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -29,7 +29,6 @@ import com.openkm.frontend.client.extension.widget.toolbar.ToolBarBoxExtension;
 import com.openkm.frontend.client.util.OKMBundleResources;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -39,7 +38,6 @@ import java.util.List;
  *
  */
 public class HorizontalToolBar extends Composite {
-
 	private HorizontalPanel hPanel;
 	private ToolBarBox user;
 	private ToolBarBox mail;
@@ -69,7 +67,7 @@ public class HorizontalToolBar extends Composite {
 	 * HorizontalToolBar
 	 */
 	public HorizontalToolBar() {
-		widgetExtensionList = new ArrayList<ToolBarBoxExtension>();
+		widgetExtensionList = new ArrayList<>();
 		hPanel = new HorizontalPanel();
 		user = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.userIcon()), Main.i18n("dashboard.tab.user"));
 		mail = new ToolBarBox(new Image(OKMBundleResources.INSTANCE.mailIcon()), Main.i18n("dashboard.tab.mail"));
@@ -259,13 +257,11 @@ public class HorizontalToolBar extends Composite {
 
 	/**
 	 * selectedExtension
-	 *
-	 * @return
 	 */
 	public int getSelectedExtension() {
 		int count = 0;
-		for (Iterator<ToolBarBoxExtension> it = widgetExtensionList.iterator(); it.hasNext(); ) {
-			if (it.next().equals(enabledWidget)) {
+		for (ToolBarBoxExtension widgets : widgetExtensionList) {
+			if (widgets.equals(enabledWidget)) {
 				return count;
 			}
 			count++;
@@ -277,8 +273,7 @@ public class HorizontalToolBar extends Composite {
 	 * init
 	 */
 	public void init() {
-		for (Iterator<ToolBarBoxExtension> it = widgetExtensionList.iterator(); it.hasNext(); ) {
-			ToolBarBoxExtension extension = it.next();
+		for (ToolBarBoxExtension extension : widgetExtensionList) {
 			hPanel.add(extension);
 			hPanel.setCellWidth(extension, "80px");
 			extension.addMouseOverHandler(mouseOverHandler);
@@ -300,8 +295,6 @@ public class HorizontalToolBar extends Composite {
 
 	/**
 	 * addToolBarBoxExtension
-	 *
-	 * @param extension
 	 */
 	public void addToolBarBoxExtension(ToolBarBoxExtension extension) {
 		widgetExtensionList.add(extension);
@@ -309,13 +302,11 @@ public class HorizontalToolBar extends Composite {
 
 	/**
 	 * showToolBoxExtension
-	 *
-	 * @param widget
 	 */
 	public void showToolBoxExtension(ToolBarBoxExtension extension) {
 		enabledWidget.removeStyleName("okm-ToolBar-Big-selected");
-		((Widget) extension).setStyleName("okm-ToolBar-Big-selected");
-		enabledWidget = ((Widget) extension);
+		extension.setStyleName("okm-ToolBar-Big-selected");
+		enabledWidget = extension;
 		Main.get().mainPanel.dashboard.changeView(UIDashboardConstants.DASHBOARD_EXTENSION);
 	}
 }

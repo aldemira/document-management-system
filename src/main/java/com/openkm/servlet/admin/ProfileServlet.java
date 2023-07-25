@@ -74,22 +74,8 @@ public class ProfileServlet extends BaseServlet {
 			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
 				list(userId, request, response);
 			}
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (NoSuchAlgorithmException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (AccessDeniedException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (ParseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (WorkflowException e) {
+		} catch (DatabaseException | NoSuchAlgorithmException | AccessDeniedException | RepositoryException |
+				 ParseException | WorkflowException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		}
@@ -98,9 +84,9 @@ public class ProfileServlet extends BaseServlet {
 	/**
 	 * New user
 	 */
-	private void create(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException,
-			AccessDeniedException, RepositoryException, ParseException, WorkflowException {
-		log.debug("create({}, {}, {})", new Object[]{userId, request, response});
+	private void create(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException, AccessDeniedException, RepositoryException, ParseException, WorkflowException {
+		log.debug("create({}, {}, {})", userId, request, response);
 
 		if (WebUtils.getBoolean(request, "persist")) {
 			Profile prf = getUserProfile(request);
@@ -127,9 +113,10 @@ public class ProfileServlet extends BaseServlet {
 	/**
 	 * Edit user
 	 */
-	private void edit(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException,
-			DatabaseException, NoSuchAlgorithmException, AccessDeniedException, RepositoryException, ParseException, WorkflowException {
-		log.debug("edit({}, {}, {})", new Object[]{userId, request, response});
+	private void edit(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException, NoSuchAlgorithmException, AccessDeniedException, RepositoryException,
+			ParseException, WorkflowException {
+		log.debug("edit({}, {}, {})", userId, request, response);
 
 		if (WebUtils.getBoolean(request, "persist")) {
 			Profile prf = getUserProfile(request);
@@ -147,7 +134,7 @@ public class ProfileServlet extends BaseServlet {
 			sc.setAttribute("pgroups", OKMPropertyGroup.getInstance().getAllGroups(null));
 			sc.setAttribute("wflows", OKMWorkflow.getInstance().findLatestProcessDefinitions(null));
 			sc.setAttribute("prf", ProfileDAO.findByPk(prfId));
-			List<String> pgProperties = new ArrayList<String>();
+			List<String> pgProperties = new ArrayList<>();
 
 			for (PropertyGroup pgrp : OKMPropertyGroup.getInstance().getAllGroups(null)) {
 				for (FormElement fe : OKMPropertyGroup.getInstance().getPropertyGroupForm(null, pgrp.getName())) {
@@ -168,7 +155,7 @@ public class ProfileServlet extends BaseServlet {
 	private void delete(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException, DatabaseException, NoSuchAlgorithmException, AccessDeniedException, RepositoryException, ParseException,
 			WorkflowException {
-		log.debug("delete({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("delete({}, {}, {})", userId, request, response);
 
 		if (WebUtils.getBoolean(request, "persist")) {
 			int prfId = WebUtils.getInt(request, "prf_id");
@@ -197,7 +184,7 @@ public class ProfileServlet extends BaseServlet {
 	 */
 	private void clone(String userId, HttpServletRequest request, HttpServletResponse response) throws DatabaseException,
 			IOException, ParseException, AccessDeniedException, RepositoryException, WorkflowException, ServletException {
-		log.debug("clone({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("clone({}, {}, {})", userId, request, response);
 
 		if (WebUtils.getBoolean(request, "persist")) {
 			Profile prf = getUserProfile(request);
@@ -226,8 +213,9 @@ public class ProfileServlet extends BaseServlet {
 	/**
 	 * List user profiles
 	 */
-	private void list(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException {
-		log.debug("list({}, {}, {})", new Object[]{userId, request, response});
+	private void list(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
+		log.debug("list({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		sc.setAttribute("userProfiles", ProfileDAO.findAll(false));
 		sc.getRequestDispatcher("/admin/profile_list.jsp").forward(request, response);
@@ -255,15 +243,15 @@ public class ProfileServlet extends BaseServlet {
 		prf.getPrfMisc().setAcrobatPluginPreview(WebUtils.getBoolean(request, "prf_misc_acrobat_plugin_preview"));
 		prf.getPrfMisc().setIncreaseVersion(WebUtils.getBoolean(request, "prf_misc_increase_version"));
 		prf.getPrfMisc().setSentMailStorage(WebUtils.getString(request, "prf_misc_sent_mail_storage"));
-		prf.getPrfMisc().setExtensions(new HashSet<String>(WebUtils.getStringList(request, "prf_misc_extensions")));
-		prf.getPrfMisc().setReports(new HashSet<Long>(WebUtils.getLongList(request, "prf_misc_reports")));
-		prf.getPrfMisc().setWorkflows(new HashSet<String>(WebUtils.getStringList(request, "prf_misc_workflows")));
+		prf.getPrfMisc().setExtensions(new HashSet<>(WebUtils.getStringList(request, "prf_misc_extensions")));
+		prf.getPrfMisc().setReports(new HashSet<>(WebUtils.getLongList(request, "prf_misc_reports")));
+		prf.getPrfMisc().setWorkflows(new HashSet<>(WebUtils.getStringList(request, "prf_misc_workflows")));
 
 		// Wizard
 		prf.getPrfWizard().setKeywordsEnabled(WebUtils.getBoolean(request, "prf_wizard_keywords"));
 		prf.getPrfWizard().setCategoriesEnabled(WebUtils.getBoolean(request, "prf_wizard_categories"));
-		prf.getPrfWizard().setPropertyGroups(new HashSet<String>(WebUtils.getStringList(request, "prf_wizard_property_groups")));
-		prf.getPrfWizard().setWorkflows(new HashSet<String>(WebUtils.getStringList(request, "prf_wizard_workflows")));
+		prf.getPrfWizard().setPropertyGroups(new HashSet<>(WebUtils.getStringList(request, "prf_wizard_property_groups")));
+		prf.getPrfWizard().setWorkflows(new HashSet<>(WebUtils.getStringList(request, "prf_wizard_workflows")));
 
 		// Chat
 		prf.getPrfChat().setChatEnabled(WebUtils.getBoolean(request, "prf_chat_enabled"));

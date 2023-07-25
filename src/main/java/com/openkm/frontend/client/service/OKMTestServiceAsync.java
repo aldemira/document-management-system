@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -27,17 +27,16 @@ import com.openkm.frontend.client.bean.GWTFolder;
 
 import java.util.List;
 
-
 /**
  * @author jllort
  *
  */
 public interface OKMTestServiceAsync {
-	public void StringTest(int size, AsyncCallback<String> callback);
+	void StringTest(int size, AsyncCallback<String> callback);
 
-	public void folderText(int size, AsyncCallback<List<GWTFolder>> callback);
+	void folderText(int size, AsyncCallback<List<GWTFolder>> callback);
 
-	public void documentText(int size, AsyncCallback<List<GWTDocument>> callback);
+	void documentText(int size, AsyncCallback<List<GWTDocument>> callback);
 
-	public void RPCTimeout(int seconds, AsyncCallback<?> callback);
+	void RPCTimeout(int seconds, AsyncCallback<?> callback);
 }

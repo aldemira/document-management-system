@@ -49,7 +49,7 @@ public class PendingTaskProcessor {
 	private static final String END = "end";
 	private static Type statusObjType = new TypeToken<LinkedList<NodeStatus>>() {
 	}.getType();
-	private LinkedList<NodeStatus> status = new LinkedList<NodeStatus>();
+	private LinkedList<NodeStatus> status = new LinkedList<>();
 	private PendingTask pt = null;
 
 	public PendingTaskProcessor(PendingTask pt) {
@@ -128,7 +128,7 @@ public class PendingTaskProcessor {
 	@SuppressWarnings("unchecked")
 	private void processInDepthHelper(Session session, NodeBase parentNode, ProcessInDepthTask task) throws DatabaseException,
 			InterruptedException {
-		log.debug("processInDepthHelper({}, {}, {}", new Object[]{session, parentNode, task});
+		log.debug("processInDepthHelper({}, {}, {}", session, parentNode, task);
 
 		if (!PendingTaskExecutor.running) {
 			log.info("### ### ### Executor flag disabled ### ### ###");

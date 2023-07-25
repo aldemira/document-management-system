@@ -66,6 +66,13 @@ import java.util.*;
  */
 public class FileBrowser extends Composite implements OriginPanel, HasDocumentEvent, HasFolderEvent, HasMailEvent,
 		HasDocumentHandlerExtension, HasFolderHandlerExtension, HasMailHandlerExtension {
+	private final OKMPaginationServiceAsync paginationService = GWT.create(OKMPaginationService.class);
+	private final OKMDocumentServiceAsync documentService = GWT.create(OKMDocumentService.class);
+	private final OKMMassiveServiceAsync massiveService = GWT.create(OKMMassiveService.class);
+	private final OKMFolderServiceAsync folderService = GWT.create(OKMFolderService.class);
+	private final OKMNotifyServiceAsync notifyService = GWT.create(OKMNotifyService.class);
+	private final OKMMailServiceAsync mailService = GWT.create(OKMMailService.class);
+
 	public static final int STATUS_SIZE = 26;
 
 	// Refreshing next controler values
@@ -87,15 +94,6 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 
 	// Number of columns
 	private int numberOfColumns = 0;
-
-	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
-	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT
-			.create(OKMDocumentService.class);
-	private final OKMNotifyServiceAsync notifyService = (OKMNotifyServiceAsync) GWT.create(OKMNotifyService.class);
-	private final OKMMailServiceAsync mailService = (OKMMailServiceAsync) GWT.create(OKMMailService.class);
-	private final OKMMassiveServiceAsync massiveService = (OKMMassiveServiceAsync) GWT.create(OKMMassiveService.class);
-	private final OKMPaginationServiceAsync paginationService = (OKMPaginationServiceAsync) GWT
-			.create(OKMPaginationService.class);
 
 	private HTML separator;
 	public VerticalPanel panel;
@@ -159,11 +157,11 @@ public class FileBrowser extends Composite implements OriginPanel, HasDocumentEv
 	public FileBrowser() {
 		// Sets the actual view and view values hashMap object
 		actualView = UIDesktopConstants.NAVIGATOR_TAXONOMY;
-		viewValues = new HashMap<String, Controller>();
-		docHandlerExtensionList = new ArrayList<DocumentHandlerExtension>();
-		folderHandlerExtensionList = new ArrayList<FolderHandlerExtension>();
-		mailHandlerExtensionList = new ArrayList<MailHandlerExtension>();
-		mapFilter = new LinkedHashMap<String, GWTFilter>();
+		viewValues = new HashMap<>();
+		docHandlerExtensionList = new ArrayList<>();
+		folderHandlerExtensionList = new ArrayList<>();
+		mailHandlerExtensionList = new ArrayList<>();
+		mapFilter = new LinkedHashMap<>();
 
 		panel = new VerticalPanel();
 		filePath = new FilePath();

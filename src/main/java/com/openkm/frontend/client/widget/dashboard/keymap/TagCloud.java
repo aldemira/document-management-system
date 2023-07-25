@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.openkm.frontend.client.bean.GWTKeyword;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -60,7 +59,7 @@ public class TagCloud extends Composite {
 	 */
 	public int getLabelSize(int frequency) {
 		// Lineal interpolation
-		//int multiplier = (MAX_FONT_SIZE-MIN_FONT_SIZE)/(maxFrequency-minFrequency);  
+		//int multiplier = (MAX_FONT_SIZE-MIN_FONT_SIZE)/(maxFrequency-minFrequency);
 		//int fontSize = MIN_FONT_SIZE + ((maxFrequency-(maxFrequency-(frequency-minFrequency)))*multiplier);
 
 		// Logarithmic interpolation
@@ -79,8 +78,7 @@ public class TagCloud extends Composite {
 		minFrequency = 1;
 		maxFrequency = 1;
 
-		for (Iterator<GWTKeyword> it = keywordsList.iterator(); it.hasNext(); ) {
-			GWTKeyword keyword = it.next();
+		for (GWTKeyword keyword : keywordsList) {
 			if (minFrequency > keyword.getFrequency()) {
 				minFrequency = keyword.getFrequency();
 			}

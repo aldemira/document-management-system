@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -30,7 +30,10 @@ import com.openkm.util.MailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.TimerTask;
 
 public class UserMailImporter extends TimerTask {
 	private static final Logger log = LoggerFactory.getLogger(UserMailImporter.class);
@@ -56,7 +59,7 @@ public class UserMailImporter extends TimerTask {
 			log.warn("*** User mail importer already running ***");
 		} else {
 			running = true;
-			exceptionMessages = new ArrayList<String>();
+			exceptionMessages = new ArrayList<>();
 			log.info("*** User mail importer activated ***");
 
 			try {
@@ -66,13 +69,10 @@ public class UserMailImporter extends TimerTask {
 				} else {
 					Collection<String> users = OKMAuth.getInstance().getUsers(token);
 
-					for (Iterator<String> usrIt = users.iterator(); usrIt.hasNext(); ) {
-						String user = usrIt.next();
+					for (String user : users) {
 						List<MailAccount> mailAccounts = MailAccountDAO.findByUser(user, true);
 
-						for (Iterator<MailAccount> maIt = mailAccounts.iterator(); maIt.hasNext(); ) {
-							MailAccount ma = maIt.next();
-
+						for (MailAccount ma : mailAccounts) {
 							if (Config.SYSTEM_READONLY) {
 								exceptionMessages.add("Warning: System in read-only mode");
 								log.warn("*** System in read-only mode ***");

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -38,11 +38,11 @@ import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
  *
  */
 public class FilePath extends Composite {
+	private final OKMRepositoryServiceAsync repositoryService = GWT.create(OKMRepositoryService.class);
 
 	private VerticalPanel panel;
-	private HTML path;
 	private String valuePath;
-	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
+	private HTML path;
 
 	/**
 	 * FilePath

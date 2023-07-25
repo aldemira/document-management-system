@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -33,7 +33,7 @@ import java.util.List;
  *
  */
 public class GWTSuggestBox extends GWTFormElement implements IsSerializable {
-	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
+	private List<GWTValidator> validators = new ArrayList<>();
 	private String value = "";
 	private String text = ""; // text Value
 	private String data = "";

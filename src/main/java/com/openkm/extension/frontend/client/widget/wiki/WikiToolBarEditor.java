@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -793,13 +793,10 @@ public class WikiToolBarEditor extends Composite {
 
 	/**
 	 * bbcode
-	 *
-	 * @param text
-	 * @return
 	 */
 	public static String bbcode(String text) {
 		String html = text;
-		Map<String, String> bbMap = new LinkedHashMap<String, String>();
+		Map<String, String> bbMap = new LinkedHashMap<>();
 		bbMap.put("(\r\n|\r|\n|\n\r)", "<br/>");
 		bbMap.put("\\[b\\](.+?)\\[/b\\]", "<strong>$1</strong>");
 		bbMap.put("\\[i\\](.+?)\\[/i\\]", "<span style=\"font-style:italic;\">$1</span>");

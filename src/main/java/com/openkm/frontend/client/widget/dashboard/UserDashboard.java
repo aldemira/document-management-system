@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -43,8 +43,7 @@ import java.util.List;
  *
  */
 public class UserDashboard extends Composite {
-	private final OKMDashboardServiceAsync dashboardService = (OKMDashboardServiceAsync) GWT.create(OKMDashboardService.class);
-
+	private final OKMDashboardServiceAsync dashboardService = GWT.create(OKMDashboardService.class);
 	private final int NUMBER_OF_COLUMNS = 2;
 
 	private HorizontalPanel hPanel;

@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 public class BaseNotificationModule {
@@ -48,9 +47,9 @@ public class BaseNotificationModule {
 	 * @param eventType Type of modification event
 	 */
 	public static void checkSubscriptions(NodeBase node, String user, String eventType, String comment) {
-		log.debug("checkSubscriptions({}, {}, {}, {})", new Object[]{node, user, eventType, comment});
-		Set<String> users = new HashSet<String>();
-		Set<String> mails = new HashSet<String>();
+		log.debug("checkSubscriptions({}, {}, {}, {})", node, user, eventType, comment);
+		Set<String> users = new HashSet<>();
+		Set<String> mails = new HashSet<>();
 
 		try {
 			for (String usr : checkSubscriptionsHelper(node.getUuid())) {
@@ -87,8 +86,7 @@ public class BaseNotificationModule {
 		 * Twitter notification
 		 */
 		try {
-			if (users != null && !users.isEmpty() && !Config.SUBSCRIPTION_TWITTER_USER.equals("")
-					&& !Config.SUBSCRIPTION_TWITTER_PASSWORD.equals("")) {
+			if (!users.isEmpty() && !Config.SUBSCRIPTION_TWITTER_USER.equals("") && !Config.SUBSCRIPTION_TWITTER_PASSWORD.equals("")) {
 				String path = NodeBaseDAO.getInstance().getPathFromUuid(node.getUuid());
 				CommonNotificationModule.sendTwitterSubscription(user, path, eventType, comment, users);
 			}
@@ -112,9 +110,7 @@ public class BaseNotificationModule {
 		if (!Config.ROOT_NODE_UUID.equals(parentUuid)) {
 			Set<String> tmp = checkSubscriptionsHelper(parentUuid);
 
-			for (Iterator<String> it = tmp.iterator(); it.hasNext(); ) {
-				String usr = it.next();
-
+			for (String usr : tmp) {
 				if (!subscriptors.contains(usr)) {
 					subscriptors.add(usr);
 				}

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -32,7 +32,6 @@ import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.widget.dashboard.Status;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -46,8 +45,8 @@ public class KeywordWidget extends Composite {
 	private VerticalPanel vPanel;
 	private FlexTable table;
 	private Header header;
-	private Map<String, String> selectedMap = new HashMap<String, String>();
-	private Map<String, String> keywordTableMap = new HashMap<String, String>();
+	private Map<String, String> selectedMap = new HashMap<>();
+	private Map<String, String> keywordTableMap = new HashMap<>();
 	public Status status;
 	private boolean zoom = false;
 
@@ -122,17 +121,15 @@ public class KeywordWidget extends Composite {
 	 * Unselect all rows
 	 */
 	public void unselectAllRows() {
-		for (Iterator<String> it = selectedMap.keySet().iterator(); it.hasNext(); ) {
-			int row = Integer.valueOf(selectedMap.get(it.next()));
+		for (String s : selectedMap.keySet()) {
+			int row = Integer.parseInt(selectedMap.get(s));
 			styleRow(row, false);
 		}
-		selectedMap = new HashMap<String, String>();
+		selectedMap = new HashMap<>();
 	}
 
 	/**
 	 * Adds a keyword
-	 *
-	 * @param keyword
 	 */
 	public void add(GWTKeyword keyword) {
 		int row = table.getRowCount();
@@ -155,18 +152,16 @@ public class KeywordWidget extends Composite {
 	 * Initializes table values
 	 */
 	public void reset() {
-		selectedMap = new HashMap<String, String>();
-		keywordTableMap = new HashMap<String, String>();
+		selectedMap = new HashMap<>();
+		keywordTableMap = new HashMap<>();
 		removeAllRows();
 	}
 
 	/**
 	 * Sets the header text
-	 *
-	 * @param text
 	 */
 	public void setHeaderText(String text) {
-		selectedMap = new HashMap<String, String>();
+		selectedMap = new HashMap<>();
 		header.setHeaderText(text);
 	}
 
@@ -192,7 +187,6 @@ public class KeywordWidget extends Composite {
 	 *
 	 */
 	private class Header extends HorizontalPanel implements HasClickHandlers {
-
 		private Image zoomImage;
 		private HTML headerText;
 
@@ -299,12 +293,12 @@ public class KeywordWidget extends Composite {
 	 */
 	public void decreaseKeywordRate(String keyword) {
 		if (keywordTableMap.containsKey(keyword)) {
-			int row = Integer.valueOf(keywordTableMap.get(keyword));
-			int value = Integer.valueOf(table.getHTML(row, 1)) - 1;
+			int row = Integer.parseInt(keywordTableMap.get(keyword));
+			int value = Integer.parseInt(table.getHTML(row, 1)) - 1;
 			if (value > 0) {
 				table.setHTML(row, 1, "" + value);
 			} else {
-				// This case is not possible in KeyMapDashBoard controls case <=0 
+				// This case is not possible in KeyMapDashBoard controls case <=0
 				table.setHTML(row, 1, "0");
 			}
 		}

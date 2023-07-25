@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -132,7 +132,7 @@ public class StatsGraphServlet extends BaseServlet {
 	/**
 	 * Generate disk statistics
 	 */
-	public JFreeChart diskStats() throws IOException, ServletException {
+	public JFreeChart diskStats() {
 		String repHome = null;
 
 		// Allow absolute repository path
@@ -264,7 +264,7 @@ public class StatsGraphServlet extends BaseServlet {
 	/**
 	 * Convert a piechartdata to xml
 	 *
-	 * @author puspendu.banerjee@gmail.com 
+	 * @author puspendu.banerjee@gmail.com
 	 */
 	public String repoStatsXML(final String title, final DefaultPieDataset dataset) throws
 			IOException, ServletException {

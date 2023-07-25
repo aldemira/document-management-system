@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -39,7 +39,6 @@ import java.util.List;
  * KeyValueServlet
  *
  * @author jllort
- *
  */
 public class KeyValueServlet extends OKMRemoteServiceServlet implements OKMKeyValueService {
 	private static Logger log = LoggerFactory.getLogger(KeyValueServlet.class);
@@ -49,7 +48,7 @@ public class KeyValueServlet extends OKMRemoteServiceServlet implements OKMKeyVa
 	public List<GWTKeyValue> getKeyValues(List<String> tables, String query) throws OKMException {
 		log.debug("getKeyValues({},{}})", tables, query);
 		updateSessionManager();
-		List<GWTKeyValue> keyValues = new ArrayList<GWTKeyValue>();
+		List<GWTKeyValue> keyValues = new ArrayList<>();
 
 		try {
 			for (KeyValue keyValue : KeyValueDAO.getKeyValues(tables, query)) {

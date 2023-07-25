@@ -28,8 +28,8 @@ import com.openkm.bean.ContentInfo;
 import com.openkm.bean.ExtendedAttributes;
 import com.openkm.bean.Folder;
 import com.openkm.bean.Repository;
-import com.openkm.core.*;
 import com.openkm.core.Config;
+import com.openkm.core.*;
 import com.openkm.dao.NodeBaseDAO;
 import com.openkm.dao.NodeFolderDAO;
 import com.openkm.dao.PendingTaskDAO;
@@ -90,7 +90,7 @@ public class DbFolderModule implements FolderModule {
 				fld.setPath(parentPath + "/" + name);
 
 				// AUTOMATION - PRE
-				Map<String, Object> env = new HashMap<String, Object>();
+				Map<String, Object> env = new HashMap<>();
 				env.put(AutomationUtils.PARENT_UUID, parentUuid);
 				env.put(AutomationUtils.PARENT_PATH, parentPath);
 				env.put(AutomationUtils.PARENT_NODE, parentFolder);
@@ -98,8 +98,8 @@ public class DbFolderModule implements FolderModule {
 				parentFolder = (NodeFolder) env.get(AutomationUtils.PARENT_NODE);
 
 				// Create node
-				NodeFolder fldNode = BaseFolderModule.create(auth.getName(), parentFolder, name, fld.getCreated(), new HashSet<String>(),
-						new HashSet<String>(), new HashSet<NodeProperty>(), new ArrayList<NodeNote>(), null);
+				NodeFolder fldNode = BaseFolderModule.create(auth.getName(), parentFolder, name, fld.getCreated(), new HashSet<>(),
+						new HashSet<>(), new HashSet<>(), new ArrayList<>(), null);
 
 				// AUTOMATION - POST
 				env.put(AutomationUtils.FOLDER_NODE, fldNode);
@@ -115,8 +115,6 @@ public class DbFolderModule implements FolderModule {
 			}
 		} catch (DatabaseException e) {
 			throw e;
-			// } catch (ExtensionException e) {
-			// throw e;
 		} finally {
 			if (token != null) {
 				PrincipalUtils.setAuthentication(oldAuth);
@@ -311,13 +309,7 @@ public class DbFolderModule implements FolderModule {
 
 			// Activity log - Already inside DAO
 			// UserActivity.log(auth.getName(), "PURGE_FOLDER", fldUuid, fldPath, null);
-		} catch (IOException e) {
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (ParseException e) {
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (NoSuchGroupException e) {
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (MessagingException e) {
+		} catch (IOException | ParseException | NoSuchGroupException | MessagingException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
 			throw e;
@@ -333,7 +325,7 @@ public class DbFolderModule implements FolderModule {
 	@Override
 	public Folder rename(String token, String fldId, String newName) throws PathNotFoundException, ItemExistsException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("rename({}, {}, {})", new Object[]{token, fldId, newName});
+		log.debug("rename({}, {}, {})", token, fldId, newName);
 		Folder renamedFolder = null;
 		Authentication auth = null, oldAuth = null;
 		String fldPath = null;
@@ -398,9 +390,9 @@ public class DbFolderModule implements FolderModule {
 	}
 
 	@Override
-	public void move(String token, String fldId, String dstId) throws PathNotFoundException, ItemExistsException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("move({}, {}, {})", new Object[]{token, fldId, dstId});
+	public void move(String token, String fldId, String dstId) throws PathNotFoundException, ItemExistsException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("move({}, {}, {})", token, fldId, dstId);
 		Authentication auth = null, oldAuth = null;
 		String fldPath = null;
 		String fldUuid = null;
@@ -476,7 +468,7 @@ public class DbFolderModule implements FolderModule {
 	@Override
 	public void copy(String token, String fldId, String dstId) throws PathNotFoundException, ItemExistsException, AccessDeniedException,
 			RepositoryException, IOException, AutomationException, DatabaseException, UserQuotaExceededException {
-		log.debug("copy({}, {}, {})", new Object[]{token, fldId, dstId});
+		log.debug("copy({}, {}, {})", token, fldId, dstId);
 		extendedCopy(token, fldId, dstId, new ExtendedAttributes());
 	}
 
@@ -484,7 +476,7 @@ public class DbFolderModule implements FolderModule {
 	public void extendedCopy(String token, String fldId, String dstId, ExtendedAttributes extAttr) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, IOException, AutomationException, DatabaseException,
 			UserQuotaExceededException {
-		log.debug("extendedCopy({}, {}, {})", new Object[]{token, fldId, dstId});
+		log.debug("extendedCopy({}, {}, {})", token, fldId, dstId);
 		Authentication auth = null, oldAuth = null;
 		String fldPath = null;
 		String fldUuid = null;
@@ -550,7 +542,7 @@ public class DbFolderModule implements FolderModule {
 			DatabaseException {
 		log.debug("getChildren({}, {})", token, fldId);
 		long begin = System.currentTimeMillis();
-		List<Folder> children = new ArrayList<Folder>();
+		List<Folder> children = new ArrayList<>();
 		Authentication auth = null, oldAuth = null;
 		String fldPath = null;
 		String fldUuid = null;

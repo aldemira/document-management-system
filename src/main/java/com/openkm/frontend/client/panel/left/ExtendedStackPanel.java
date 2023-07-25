@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -31,7 +31,6 @@ import com.openkm.frontend.client.extension.event.handler.NavigatorHandlerExtens
 import com.openkm.frontend.client.extension.event.hashandler.HasNavigatorHandlerExtension;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ExtendedStackPanel extends StackLayoutPanel implements HasNavigatorEvent, HasNavigatorHandlerExtension {
@@ -51,7 +50,7 @@ public class ExtendedStackPanel extends StackLayoutPanel implements HasNavigator
 
 	public ExtendedStackPanel() {
 		super(Unit.PX);
-		navHandlerExtensionList = new ArrayList<NavigatorHandlerExtension>();
+		navHandlerExtensionList = new ArrayList<>();
 	}
 
 	@Override
@@ -435,8 +434,8 @@ public class ExtendedStackPanel extends StackLayoutPanel implements HasNavigator
 
 	@Override
 	public void fireEvent(NavigatorEventConstant event) {
-		for (Iterator<NavigatorHandlerExtension> it = navHandlerExtensionList.iterator(); it.hasNext(); ) {
-			it.next().onChange(event);
+		for (NavigatorHandlerExtension navigatorHandlerExtension : navHandlerExtensionList) {
+			navigatorHandlerExtension.onChange(event);
 		}
 	}
 }

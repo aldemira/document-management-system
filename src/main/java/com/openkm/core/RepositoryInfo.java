@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -58,9 +58,7 @@ public class RepositoryInfo extends TimerTask {
 					foldersByContext = okmStats.getFoldersByContext(token);
 					documentsByContext = okmStats.getDocumentsByContext(token);
 					documentsSizeByContext = okmStats.getDocumentsSizeByContext(token);
-				} catch (RepositoryException e) {
-					log.error(e.getMessage(), e);
-				} catch (DatabaseException e) {
+				} catch (RepositoryException | DatabaseException e) {
 					log.error(e.getMessage(), e);
 				}
 			} finally {

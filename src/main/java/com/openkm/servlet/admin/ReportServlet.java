@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -58,7 +58,7 @@ import java.util.*;
 public class ReportServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(ReportServlet.class);
-	private static Map<String, String> types = new LinkedHashMap<String, String>();
+	private static Map<String, String> types = new LinkedHashMap<>();
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException,
 			ServletException {
@@ -101,18 +101,6 @@ public class ReportServlet extends BaseServlet {
 			} else {
 				list(userId, request, response);
 			}
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (JRException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (EvalError e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (ParseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
@@ -136,9 +124,7 @@ public class ReportServlet extends BaseServlet {
 				List<FileItem> items = upload.parseRequest(request);
 				Report rp = new Report();
 
-				for (Iterator<FileItem> it = items.iterator(); it.hasNext(); ) {
-					FileItem item = it.next();
-
+				for (FileItem item : items) {
 					if (item.isFormField()) {
 						if (item.getFieldName().equals("action")) {
 							action = item.getString("UTF-8");
@@ -184,10 +170,7 @@ public class ReportServlet extends BaseServlet {
 					list(userId, request, response);
 				}
 			}
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (FileUploadException e) {
+		} catch (DatabaseException | FileUploadException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		}
@@ -196,9 +179,9 @@ public class ReportServlet extends BaseServlet {
 	/**
 	 * List registered reports
 	 */
-	private void list(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
-		log.debug("list({}, {}, {})", new Object[]{userId, request, response});
+	private void list(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
+		log.debug("list({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		List<Report> list = ReportDAO.findAll();
 		sc.setAttribute("reports", list);
@@ -209,9 +192,9 @@ public class ReportServlet extends BaseServlet {
 	/**
 	 * Show report parameters, previous step to execution
 	 */
-	private void getParams(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException, ParseException {
-		log.debug("getParams({}, {}, {})", new Object[]{userId, request, response});
+	private void getParams(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException, ParseException {
+		log.debug("getParams({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		int rpId = WebUtils.getInt(request, "rp_id");
 		List<FormElement> params = ReportUtils.getReportParameters(rpId);
@@ -226,9 +209,9 @@ public class ReportServlet extends BaseServlet {
 	/**
 	 * Execute report
 	 */
-	private void execute(String userId, HttpServletRequest request, HttpServletResponse response) throws
-			IOException, DatabaseException, JRException, EvalError, ParseException {
-		log.debug("execute({}, {}, {})", new Object[]{userId, request, response});
+	private void execute(String userId, HttpServletRequest request, HttpServletResponse response) throws IOException,
+			DatabaseException, JRException, EvalError, ParseException {
+		log.debug("execute({}, {}, {})", userId, request, response);
 		int rpId = WebUtils.getInt(request, "rp_id");
 		int format = WebUtils.getInt(request, "format", ReportUtils.OUTPUT_PDF);
 		Report rp = ReportDAO.findByPk(rpId);
@@ -237,7 +220,7 @@ public class ReportServlet extends BaseServlet {
 		String fileName = rp.getFileName().substring(0, rp.getFileName().indexOf('.')) + ReportUtils.FILE_EXTENSION[format];
 
 		// Set default report parameters
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		String host = com.openkm.core.Config.APPLICATION_URL;
 		params.put("host", host.substring(0, host.lastIndexOf("/") + 1));
 
@@ -276,13 +259,13 @@ public class ReportServlet extends BaseServlet {
 	/**
 	 * List reports parameters
 	 */
-	private void paramList(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException, ParseException {
-		log.debug("paramList({}, {}, {})", new Object[]{userId, request, response});
+	private void paramList(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException, ParseException {
+		log.debug("paramList({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		int rpId = WebUtils.getInt(request, "rp_id");
 		List<FormElement> params = ReportUtils.getReportParameters(rpId);
-		List<Map<String, String>> fMaps = new ArrayList<Map<String, String>>();
+		List<Map<String, String>> fMaps = new ArrayList<>();
 
 		for (FormElement fe : params) {
 			fMaps.add(FormUtils.toString(fe));

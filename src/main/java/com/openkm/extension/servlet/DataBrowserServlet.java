@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -21,24 +21,6 @@
 
 package com.openkm.extension.servlet;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.openkm.api.OKMDocument;
 import com.openkm.api.OKMFolder;
 import com.openkm.api.OKMRepository;
@@ -52,6 +34,16 @@ import com.openkm.util.EnvironmentDetector;
 import com.openkm.util.PathUtils;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WebUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Data browser servlet
@@ -74,12 +66,6 @@ public class DataBrowserServlet extends BaseServlet {
 			} else if (action.equals("repo")) {
 				repositoryList(request, response);
 			}
-		} catch (PathNotFoundException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
@@ -97,8 +83,8 @@ public class DataBrowserServlet extends BaseServlet {
 		String dst = WebUtils.getString(request, "dst");
 		String root = WebUtils.getString(request, "root");
 		File dir = new File(path.isEmpty() ? EnvironmentDetector.getUserHome() : path);
-		List<Map<String, String>> folders = new ArrayList<Map<String, String>>();
-		List<Map<String, String>> documents = new ArrayList<Map<String, String>>();
+		List<Map<String, String>> folders = new ArrayList<>();
+		List<Map<String, String>> documents = new ArrayList<>();
 		boolean browseParent = false;
 
 		if (!root.equals("")) {
@@ -109,7 +95,7 @@ public class DataBrowserServlet extends BaseServlet {
 
 		// Add parent folder link
 		if (browseParent) {
-			Map<String, String> item = new HashMap<String, String>();
+			Map<String, String> item = new HashMap<>();
 			File parent = dir.getParentFile();
 			item.put("name", "&lt;PARENT FOLDER&gt;");
 			item.put("path", fixPath(parent.getPath()));
@@ -118,7 +104,7 @@ public class DataBrowserServlet extends BaseServlet {
 		}
 
 		for (File f : dir.listFiles()) {
-			Map<String, String> item = new HashMap<String, String>();
+			Map<String, String> item = new HashMap<>();
 
 			if (f.isDirectory() && !f.isHidden()) {
 				item.put("name", f.getName());
@@ -181,14 +167,14 @@ public class DataBrowserServlet extends BaseServlet {
 		String sel = WebUtils.getString(request, "sel", SEL_BOTH);
 		String dst = WebUtils.getString(request, "dst");
 		String root = WebUtils.getString(request, "root", "/");
-		List<Map<String, String>> folders = new ArrayList<Map<String, String>>();
-		List<Map<String, String>> documents = new ArrayList<Map<String, String>>();
+		List<Map<String, String>> folders = new ArrayList<>();
+		List<Map<String, String>> documents = new ArrayList<>();
 
 		if (!root.equals(path)) {
 			// Add parent folder link
-		    Folder fld = OKMFolder.getInstance().getProperties(null, uuid);   
-            String pathParent = PathUtils.getParent(fld.getPath()); 
-			Map<String, String> item = new HashMap<String, String>();
+		    Folder fld = OKMFolder.getInstance().getProperties(null, uuid);
+            String pathParent = PathUtils.getParent(fld.getPath());
+			Map<String, String> item = new HashMap<>();
 			item.put("name", "&lt;PARENT FOLDER&gt;");
 			item.put("path", PathUtils.getParent(path));
 			item.put("uuid", OKMRepository.getInstance().getNodeUuid(null, pathParent));
@@ -197,11 +183,11 @@ public class DataBrowserServlet extends BaseServlet {
 		}
 
 		for (Folder fld : OKMFolder.getInstance().getChildren(null, uuid)) {
-			Map<String, String> item = new HashMap<String, String>();
+			Map<String, String> item = new HashMap<>();
 			item.put("name", PathUtils.getName(fld.getPath()));
 			item.put("path", fld.getPath());
 			item.put("uuid", fld.getUuid());
-			
+
 			if (sel.equals(SEL_BOTH) || sel.equals(SEL_FOLDER)) {
 				item.put("sel", "true");
 			} else {
@@ -213,7 +199,7 @@ public class DataBrowserServlet extends BaseServlet {
 
 		if (sel.equals(SEL_BOTH) || sel.equals(SEL_DOCUMENT)) {
 			for (Document doc : OKMDocument.getInstance().getChildren(null, uuid)) {
-				Map<String, String> item = new HashMap<String, String>();
+				Map<String, String> item = new HashMap<>();
 				item.put("name", PathUtils.getName(doc.getPath()));
 				item.put("path", doc.getPath());
 				item.put("uuid", doc.getUuid());
@@ -244,8 +230,7 @@ public class DataBrowserServlet extends BaseServlet {
 	/**
 	 * Specialized comparator.
 	 */
-	private class MapComparator implements Comparator<Map<String, String>> {
-
+	private static class MapComparator implements Comparator<Map<String, String>> {
 		@Override
 		public int compare(Map<String, String> o1, Map<String, String> o2) {
 			return o1.get("name").compareToIgnoreCase(o2.get("name"));

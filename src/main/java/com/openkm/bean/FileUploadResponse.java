@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -35,16 +35,14 @@ import java.util.List;
  */
 public class FileUploadResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	private boolean hasAutomation = false;
-	private String path = "";
-	private List<String> groupsList = new ArrayList<String>();
-	private List<String> workflowList = new ArrayList<String>();
+	private List<String> groupsList = new ArrayList<>();
+	private List<String> workflowList = new ArrayList<>();
 	private boolean showWizardCategories = false;
 	private boolean showWizardKeywords = false;
 	private boolean digitalSignature = false;
-
+	private boolean hasAutomation = false;
 	private String error = "";
+	private String path = "";
 
 	public String getPath() {
 		return path;
@@ -101,10 +99,10 @@ public class FileUploadResponse implements Serializable {
 	public void setError(String error) {
 		this.error = error;
 	}
-	
+
     public void setError(String errorCode, String errorMessage) {
         this.error = errorCode + "|" + errorMessage;
-    }	
+    }
 
 	public boolean isDigitalSignature() {
 		return digitalSignature;

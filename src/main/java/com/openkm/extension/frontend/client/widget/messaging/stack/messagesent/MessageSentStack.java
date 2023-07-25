@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -37,16 +37,9 @@ import java.util.List;
  * MessageSendStack
  *
  * @author jllort
- *
- */
-
-/**
- * @author jllort
- *
  */
 public class MessageSentStack extends Composite {
-
-	private final OKMMessageServiceAsync messageService = (OKMMessageServiceAsync) GWT.create(OKMMessageService.class);
+	private final OKMMessageServiceAsync messageService = GWT.create(OKMMessageService.class);
 
 	private ExtendedFlexTable table;
 	private boolean firstTime = true;
@@ -242,4 +235,3 @@ public class MessageSentStack extends Composite {
 		}
 	}
 }
-	

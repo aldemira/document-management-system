@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -32,12 +32,11 @@ import com.google.gwt.resources.client.ImageResource;
  *
  */
 public interface OKMExtensionBundleExampleResources extends ClientBundle {
-
-	public static final OKMExtensionBundleExampleResources INSTANCE = GWT.create(OKMExtensionBundleExampleResources.class);
+	OKMExtensionBundleExampleResources INSTANCE = GWT.create(OKMExtensionBundleExampleResources.class);
 
 	@Source("com/openkm/extension/frontend/public/img/box.png")
-	public ImageResource box();
+	ImageResource box();
 
 	@Source("com/openkm/extension/frontend/public/img/general.png")
-	public ImageResource general();
+	ImageResource general();
 }

@@ -127,8 +127,8 @@ public class RDFREpository {
 	 * loadTerms
 	 */
 	private void loadTerms() {
-		terms = new ArrayList<Term>();
-		keywords = new ArrayList<String>();
+		terms = new ArrayList<>();
+		keywords = new ArrayList<>();
 		RepositoryConnection con = null;
 		TupleQuery query;
 
@@ -150,9 +150,7 @@ public class RDFREpository {
 				}
 			} catch (RepositoryException e) {
 				log.error("could not obtain connection to respository", e);
-			} catch (MalformedQueryException e) {
-				log.error(e.getMessage(), e);
-			} catch (QueryEvaluationException e) {
+			} catch (MalformedQueryException | QueryEvaluationException e) {
 				log.error(e.getMessage(), e);
 			} finally {
 				try {

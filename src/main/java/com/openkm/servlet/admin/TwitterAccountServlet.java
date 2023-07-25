@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -63,10 +63,7 @@ public class TwitterAccountServlet extends BaseServlet {
 			if (action.equals("") || WebUtils.getBoolean(request, "persist")) {
 				list(userId, request, response);
 			}
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (NoSuchAlgorithmException e) {
+		} catch (DatabaseException | NoSuchAlgorithmException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		}
@@ -75,9 +72,9 @@ public class TwitterAccountServlet extends BaseServlet {
 	/**
 	 * New twitter account
 	 */
-	private void create(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
-		log.info("create({}, {}, {})", new Object[]{userId, request, response});
+	private void create(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
+		log.info("create({}, {}, {})", userId, request, response);
 
 		if (WebUtils.getBoolean(request, "persist")) {
 			TwitterAccount ta = new TwitterAccount();
@@ -104,9 +101,9 @@ public class TwitterAccountServlet extends BaseServlet {
 	/**
 	 * Edit twitter account
 	 */
-	private void edit(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("edit({}, {}, {})", new Object[]{userId, request, response});
+	private void edit(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException, NoSuchAlgorithmException {
+		log.debug("edit({}, {}, {})", userId, request, response);
 
 		if (WebUtils.getBoolean(request, "persist")) {
 			TwitterAccount ta = new TwitterAccount();
@@ -133,9 +130,9 @@ public class TwitterAccountServlet extends BaseServlet {
 	/**
 	 * Update twitter account
 	 */
-	private void delete(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException, NoSuchAlgorithmException {
-		log.debug("delete({}, {}, {})", new Object[]{userId, request, response});
+	private void delete(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException, NoSuchAlgorithmException {
+		log.debug("delete({}, {}, {})", userId, request, response);
 
 		if (WebUtils.getBoolean(request, "persist")) {
 			int taId = WebUtils.getInt(request, "ta_id");
@@ -158,9 +155,9 @@ public class TwitterAccountServlet extends BaseServlet {
 	/**
 	 * List twitter accounts
 	 */
-	private void list(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
-		log.debug("list({}, {}, {})", new Object[]{userId, request, response});
+	private void list(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
+		log.debug("list({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		String usrId = WebUtils.getString(request, "ta_user");
 		sc.setAttribute("ta_user", usrId);

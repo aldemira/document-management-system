@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -31,24 +31,24 @@ public class FolderMetadata {
 	private String path;
 	private Calendar created;
 	private String description;
-	private Set<String> keywords = new HashSet<String>();
-	private Set<CategoryMetadata> categories = new HashSet<CategoryMetadata>();
+	private Set<String> keywords = new HashSet<>();
+	private Set<CategoryMetadata> categories = new HashSet<>();
 
 	// mix:notification
-	private Set<String> subscriptors = new HashSet<String>();
+	private Set<String> subscriptors = new HashSet<>();
 
 	// mix:scripting
 	private String scripting;
 
 	// okm:notes
-	private List<NoteMetadata> notes = new ArrayList<NoteMetadata>();
+	private List<NoteMetadata> notes = new ArrayList<>();
 
 	// mix:property_group
-	private List<PropertyGroupMetadata> propertyGroups = new ArrayList<PropertyGroupMetadata>();
+	private List<PropertyGroupMetadata> propertyGroups = new ArrayList<>();
 
 	// mix:accessControlled
-	private Map<String, Integer> grantedUsers = new HashMap<String, Integer>();
-	private Map<String, Integer> grantedRoles = new HashMap<String, Integer>();
+	private Map<String, Integer> grantedUsers = new HashMap<>();
+	private Map<String, Integer> grantedRoles = new HashMap<>();
 
 	public String getUuid() {
 		return uuid;

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -114,12 +114,12 @@ public class AutomationRule implements Serializable {
 	@OrderBy("order ASC")
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "AVL_RULE", referencedColumnName = "ARL_ID")
-	private List<AutomationValidation> validations = new ArrayList<AutomationValidation>();
+	private List<AutomationValidation> validations = new ArrayList<>();
 
 	@OrderBy("order ASC")
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "AAC_RULE", referencedColumnName = "ARL_ID")
-	private List<AutomationAction> actions = new ArrayList<AutomationAction>();
+	private List<AutomationAction> actions = new ArrayList<>();
 
 	public long getId() {
 		return id;

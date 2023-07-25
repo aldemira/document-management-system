@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -42,8 +42,7 @@ import java.util.Map;
  *
  */
 public class ProposedQueryReceivedStack extends Composite {
-
-	private final OKMProposedQueryServiceAsync proposedQueryService = (OKMProposedQueryServiceAsync) GWT.create(OKMProposedQueryService.class);
+	private final OKMProposedQueryServiceAsync proposedQueryService = GWT.create(OKMProposedQueryService.class);
 
 	private ExtendedFlexTable table;
 	private boolean firstTime = true;
@@ -56,8 +55,7 @@ public class ProposedQueryReceivedStack extends Composite {
 	 * Propose
 	 */
 	public ProposedQueryReceivedStack() {
-		userSeen = new HashMap<String, Long>();
-
+		userSeen = new HashMap<>();
 		menuPopup = new MenuPopup();
 		menuPopup.setStyleName("okm-MenuPopup");
 
@@ -274,4 +272,3 @@ public class ProposedQueryReceivedStack extends Composite {
 		return notSeen;
 	}
 }
-	

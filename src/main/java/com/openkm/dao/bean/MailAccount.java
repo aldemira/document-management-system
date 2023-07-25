@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -43,7 +43,7 @@ public class MailAccount implements Serializable {
 	private boolean mailMarkSeen = true;
 	private boolean mailMarkDeleted = false;
 	private long mailLastUid = 0;
-	private Set<MailFilter> mailFilters = new HashSet<MailFilter>();
+	private Set<MailFilter> mailFilters = new HashSet<>();
 	private Set<MailImportError> mailImportErrors = new HashSet<>();
 	private boolean active = false;
 
@@ -142,7 +142,7 @@ public class MailAccount implements Serializable {
 	public void setMailLastUid(long mailLastUid) {
 		this.mailLastUid = mailLastUid;
 	}
-	
+
 	public Set<MailImportError> getMailImportErrors() {
 		return mailImportErrors;
 	}
@@ -165,7 +165,7 @@ public class MailAccount implements Serializable {
 		sb.append(", mailMarkDeleted=").append(mailMarkDeleted);
 		sb.append(", mailLastUid=").append(mailLastUid);
 		sb.append(", active=").append(active);
-		sb.append(", mailFilters=").append(mailFilters);		
+		sb.append(", mailFilters=").append(mailFilters);
 		sb.append(", mailAccountFolders=").append(mailImportErrors.isEmpty() ? "" : mailImportErrors.toString());
 		sb.append("}");
 		return sb.toString();

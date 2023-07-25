@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -47,9 +47,9 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 
 	@Override
 	public List<Map<String, String>> executeValueQuery(String table, String filter, String order) throws OKMException {
-		log.debug("executeValueQuery({}, {}, {})", new Object[]{table, filter, order});
+		log.debug("executeValueQuery({}, {}, {})", table, filter, order);
 		updateSessionManager();
-		List<Map<String, String>> metadataValues = new ArrayList<Map<String, String>>();
+		List<Map<String, String>> metadataValues = new ArrayList<>();
 
 		try {
 			for (DatabaseMetadataValue dmv : DatabaseMetadataDAO.executeValueQuery(DatabaseMetadataUtils.buildQuery(table, filter, order))) {
@@ -98,7 +98,7 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 		updateSessionManager();
 
 		try {
-			return new Double(DatabaseMetadataDAO.createValue(DatabaseMetadataUtils.getDatabaseMetadataValueByMap(map)));
+			return (double) DatabaseMetadataDAO.createValue(DatabaseMetadataUtils.getDatabaseMetadataValueByMap(map));
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());
@@ -134,14 +134,14 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 	public List<List<Map<String, String>>> executeMultiValueQuery(List<String> tables, String query) throws OKMException {
 		log.debug("executeMultiValueQuery({})", query);
 		updateSessionManager();
-		List<List<Map<String, String>>> ret = new ArrayList<List<Map<String, String>>>();
+		List<List<Map<String, String>>> ret = new ArrayList<>();
 
 		try {
 			for (DatabaseMetadataValue[] dmv : DatabaseMetadataDAO.executeMultiValueQuery(DatabaseMetadataUtils.replaceVirtual(tables, query))) {
-				List<Map<String, String>> dmvRow = new ArrayList<Map<String, String>>();
+				List<Map<String, String>> dmvRow = new ArrayList<>();
 
-				for (int i = 0; i < dmv.length; i++) {
-					dmvRow.add(DatabaseMetadataUtils.getDatabaseMetadataValueMap(dmv[i]));
+				for (DatabaseMetadataValue databaseMetadataValue : dmv) {
+					dmvRow.add(DatabaseMetadataUtils.getDatabaseMetadataValueMap(databaseMetadataValue));
 				}
 
 				ret.add(dmvRow);
@@ -168,7 +168,7 @@ public class DatabaseMetadataServlet extends OKMRemoteServiceServlet implements 
 		updateSessionManager();
 
 		try {
-			return new Double(DatabaseMetadataDAO.getNextSequenceValue(table, column));
+			return (double) DatabaseMetadataDAO.getNextSequenceValue(table, column);
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMDatabaseMetadataService, ErrorCode.CAUSE_Database), e.getMessage());

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -33,15 +33,15 @@ import java.util.Map;
  *
  */
 public interface OKMDatabaseMetadataServiceAsync {
-	public void executeValueQuery(String table, String filter, String order, AsyncCallback<List<Map<String, String>>> callback);
+	void executeValueQuery(String table, String filter, String order, AsyncCallback<List<Map<String, String>>> callback);
 
-	public void updateValue(Map<String, String> map, AsyncCallback<?> callback);
+	void updateValue(Map<String, String> map, AsyncCallback<?> callback);
 
-	public void createValue(Map<String, String> map, AsyncCallback<Double> callback);
+	void createValue(Map<String, String> map, AsyncCallback<Double> callback);
 
-	public void executeMultiValueQuery(List<String> tables, String query, AsyncCallback<List<List<Map<String, String>>>> callback);
+	void executeMultiValueQuery(List<String> tables, String query, AsyncCallback<List<List<Map<String, String>>>> callback);
 
-	public void getNextSequenceValue(String table, String column, AsyncCallback<Double> callback);
+	void getNextSequenceValue(String table, String column, AsyncCallback<Double> callback);
 
-	public void deleteValue(Map<String, String> map, AsyncCallback<?> callback);
+	void deleteValue(Map<String, String> map, AsyncCallback<?> callback);
 }

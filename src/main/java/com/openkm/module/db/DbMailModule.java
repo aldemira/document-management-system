@@ -23,10 +23,12 @@ package com.openkm.module.db;
 
 import com.openkm.automation.AutomationException;
 import com.openkm.bean.*;
-import com.openkm.core.Config;
 import com.openkm.core.*;
 import com.openkm.dao.*;
-import com.openkm.dao.bean.*;
+import com.openkm.dao.bean.NodeBase;
+import com.openkm.dao.bean.NodeDocument;
+import com.openkm.dao.bean.NodeFolder;
+import com.openkm.dao.bean.NodeMail;
 import com.openkm.module.MailModule;
 import com.openkm.module.db.base.BaseDocumentModule;
 import com.openkm.module.db.base.BaseMailModule;
@@ -272,9 +274,9 @@ public class DbMailModule implements MailModule {
 				// INSIDE BaseDocumentModule.create
 
 				// Create node
-				NodeDocument docNode = BaseDocumentModule.create(PrincipalUtils.getUser(), parentPath, parentNode, docName, null, Calendar.getInstance(),
-						mimeType, is, size, new HashSet<String>(), new HashSet<String>(), new HashSet<NodeProperty>(), new ArrayList<NodeNote>(),
-						null, new Ref<FileUploadResponse>(null));
+				NodeDocument docNode = BaseDocumentModule.create(PrincipalUtils.getUser(), parentPath, parentNode, docName,
+						null, Calendar.getInstance(), mimeType, is, size, new HashSet<>(), new HashSet<>(), new HashSet<>(),
+						new ArrayList<>(), null, new Ref<>(null));
 
 				// AUTOMATION - POST
 				// INSIDE BaseDocumentModule.create
@@ -321,9 +323,9 @@ public class DbMailModule implements MailModule {
 	}
 
 	@Override
-	public void deleteAttachment(String token, String mailId, String docId) throws LockException, PathNotFoundException, AccessDeniedException,
-			RepositoryException, DatabaseException {
-		log.debug("deleteAttachment({}, {})", new Object[]{token, docId});
+	public void deleteAttachment(String token, String mailId, String docId) throws LockException, PathNotFoundException,
+			AccessDeniedException, RepositoryException, DatabaseException {
+		log.debug("deleteAttachment({}, {})", token, docId);
 		long begin = System.currentTimeMillis();
 		String mailUuid = mailId;
 		String docPath = null;
@@ -397,11 +399,11 @@ public class DbMailModule implements MailModule {
 	}
 
 	@Override
-	public List<Document> getAttachments(String token, String mailId) throws AccessDeniedException, PathNotFoundException, RepositoryException,
-			DatabaseException {
+	public List<Document> getAttachments(String token, String mailId) throws AccessDeniedException, PathNotFoundException,
+			RepositoryException, DatabaseException {
 		log.debug("getAttachments({}, {})", token, mailId);
 		long begin = System.currentTimeMillis();
-		List<Document> children = new ArrayList<Document>();
+		List<Document> children = new ArrayList<>();
 
 		try {
 			if (token != null) {
@@ -486,8 +488,8 @@ public class DbMailModule implements MailModule {
 	}
 
 	@Override
-	public void purge(String token, String mailId) throws LockException, PathNotFoundException, AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public void purge(String token, String mailId) throws LockException, PathNotFoundException, AccessDeniedException,
+			RepositoryException, DatabaseException {
 		log.debug("purge({}, {})", token, mailId);
 		@SuppressWarnings("unused")
 		Authentication auth = null, oldAuth = null;
@@ -532,13 +534,7 @@ public class DbMailModule implements MailModule {
 
 			// Activity log - Already inside DAO
 			// UserActivity.log(auth.getName(), "PURGE_MAIL", mailUuid, mailPath, null);
-		} catch (IOException e) {
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (ParseException e) {
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (NoSuchGroupException e) {
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (MessagingException e) {
+		} catch (IOException | ParseException | NoSuchGroupException | MessagingException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		} catch (DatabaseException e) {
 			throw e;

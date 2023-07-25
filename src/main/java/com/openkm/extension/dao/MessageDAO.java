@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -46,9 +46,8 @@ public class MessageDAO {
 	/**
 	 * Send message
 	 */
-	public static void send(String from, String to, String user, String subject, String content) throws
-			DatabaseException {
-		log.debug("send({}, {}, {}, {}, {})", new Object[]{from, to, user, subject, content});
+	public static void send(String from, String to, String user, String subject, String content) throws DatabaseException {
+		log.debug("send({}, {}, {}, {}, {})", from, to, user, subject, content);
 		Session session = null;
 		Transaction tx = null;
 
@@ -218,7 +217,7 @@ public class MessageDAO {
 			Query q = session.createQuery(qs);
 			q.setString("me", me);
 			List<Object[]> list = q.list();
-			Map<String, Long> ret = new HashMap<String, Long>();
+			Map<String, Long> ret = new HashMap<>();
 
 			for (Object[] item : list) {
 				ret.put((String) item[0], (Long) item[1]);

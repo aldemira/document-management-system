@@ -148,7 +148,7 @@ public class DocumentService {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response getContent(@QueryParam("docId") String docId) throws GenericException {
 		try {
-			log.debug("getContent({})", new Object[]{docId});
+			log.debug("getContent({})", docId);
 			DocumentModule dm = ModuleManager.getDocumentModule();
 			final InputStream is = dm.getContent(null, docId, false);
 			StreamingOutput stream = new StreamingOutput() {
@@ -172,7 +172,7 @@ public class DocumentService {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response getContentByVersion(@QueryParam("docId") String docId, @QueryParam("versionId") String versionId) throws GenericException {
 		try {
-			log.debug("getContentByVersion({}, {})", new Object[]{docId, versionId});
+			log.debug("getContentByVersion({}, {})", docId, versionId);
 			DocumentModule dm = ModuleManager.getDocumentModule();
 			final InputStream is = dm.getContentByVersion(null, docId, versionId);
 			StreamingOutput stream = new StreamingOutput() {
@@ -209,7 +209,7 @@ public class DocumentService {
 	@Path("/rename")
 	public Document rename(@QueryParam("docId") String docId, @QueryParam("newName") String newName) throws GenericException {
 		try {
-			log.debug("rename({}, {})", new Object[]{docId, newName});
+			log.debug("rename({}, {})", docId, newName);
 			DocumentModule dm = ModuleManager.getDocumentModule();
 			Document renamedDocument = dm.rename(null, docId, newName);
 			log.debug("rename: {}", renamedDocument);
@@ -392,7 +392,7 @@ public class DocumentService {
 			DocumentModule dm = ModuleManager.getDocumentModule();
 			boolean lock = dm.isLocked(null, docId);
 			log.debug("isLocked: void");
-			return new Boolean(lock);
+			return lock;
 		} catch (Exception e) {
 			throw new GenericException(e);
 		}
@@ -429,7 +429,7 @@ public class DocumentService {
 	@Path("/move")
 	public void move(@QueryParam("docId") String docId, @QueryParam("dstId") String dstId) throws GenericException {
 		try {
-			log.debug("move({}, {})", new Object[]{docId, dstId});
+			log.debug("move({}, {})", docId, dstId);
 			DocumentModule dm = ModuleManager.getDocumentModule();
 			dm.move(null, docId, dstId);
 			log.debug("move: void");
@@ -442,7 +442,7 @@ public class DocumentService {
 	@Path("/copy")
 	public void copy(@QueryParam("docId") String docId, @QueryParam("dstId") String dstId) throws GenericException {
 		try {
-			log.debug("copy({}, {})", new Object[]{docId, dstId});
+			log.debug("copy({}, {})", docId, dstId);
 			DocumentModule dm = ModuleManager.getDocumentModule();
 			dm.copy(null, docId, dstId);
 			log.debug("copy: void");
@@ -455,7 +455,7 @@ public class DocumentService {
 	@Path("/restoreVersion")
 	public void restoreVersion(@QueryParam("docId") String docId, @QueryParam("versionId") String versionId) throws GenericException {
 		try {
-			log.debug("restoreVersion({}, {})", new Object[]{docId, versionId});
+			log.debug("restoreVersion({}, {})", docId, versionId);
 			DocumentModule dm = ModuleManager.getDocumentModule();
 			dm.restoreVersion(null, docId, versionId);
 			log.debug("restoreVersion: void");
@@ -486,7 +486,7 @@ public class DocumentService {
 			DocumentModule dm = ModuleManager.getDocumentModule();
 			long size = dm.getVersionHistorySize(null, docId);
 			log.debug("getVersionHistorySize: {}", size);
-			return new Long(size);
+			return size;
 		} catch (Exception e) {
 			throw new GenericException(e);
 		}
@@ -501,7 +501,7 @@ public class DocumentService {
 			DocumentModule dm = ModuleManager.getDocumentModule();
 			boolean valid = dm.isValid(null, docId);
 			log.debug("isValid: {}", valid);
-			return new Boolean(valid);
+			return valid;
 		} catch (Exception e) {
 			throw new GenericException(e);
 		}
@@ -528,7 +528,7 @@ public class DocumentService {
 							 @QueryParam("propertyGroups") boolean propertyGroups, @QueryParam("notes") boolean notes,
 							 @QueryParam("wiki") boolean wiki) throws GenericException {
 		try {
-			log.debug("extendedCopy({}, {}, {}, {}, {}, {}, {}, {})", new Object[]{docId, dstId, name, categories, keywords, propertyGroups, notes, wiki});
+			log.debug("extendedCopy({}, {}, {}, {}, {}, {}, {}, {})", docId, dstId, name, categories, keywords, propertyGroups, notes, wiki);
 			DocumentModule dm = ModuleManager.getDocumentModule();
 			ExtendedAttributes extAttr = new ExtendedAttributes();
 			extAttr.setCategories(categories);

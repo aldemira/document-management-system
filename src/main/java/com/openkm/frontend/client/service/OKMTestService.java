@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -28,18 +28,16 @@ import com.openkm.frontend.client.bean.GWTFolder;
 
 import java.util.List;
 
-
 /**
  * @author jllort
- *
  */
 @RemoteServiceRelativePath("Test")
 public interface OKMTestService extends RemoteService {
-	public String StringTest(int size);
+	String StringTest(int size);
 
-	public List<GWTFolder> folderText(int size);
+	List<GWTFolder> folderText(int size);
 
-	public List<GWTDocument> documentText(int size);
+	List<GWTDocument> documentText(int size);
 
-	public void RPCTimeout(int seconds);
+	void RPCTimeout(int seconds);
 }

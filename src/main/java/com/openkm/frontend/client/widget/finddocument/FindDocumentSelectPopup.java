@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -27,7 +27,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.openkm.frontend.client.Main;
-import com.openkm.frontend.client.bean.*;
+import com.openkm.frontend.client.bean.GWTDocument;
+import com.openkm.frontend.client.bean.GWTQueryParams;
+import com.openkm.frontend.client.bean.GWTQueryResult;
+import com.openkm.frontend.client.bean.GWTResultSet;
 import com.openkm.frontend.client.constants.ui.UIDesktopConstants;
 import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
@@ -43,7 +46,7 @@ import java.util.HashMap;
  * @author jllort
  */
 public class FindDocumentSelectPopup extends DialogBox {
-	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
+	private final OKMSearchServiceAsync searchService = GWT.create(OKMSearchService.class);
 
 	public static final int ORIGIN_DEFAULT = 1;
 	public static final int ORIGIN_MAIL_EDITOR_ATTACHMENT = 2;
@@ -135,7 +138,7 @@ public class FindDocumentSelectPopup extends DialogBox {
 					gwtParams.setLastModifiedFrom(null);
 					gwtParams.setLastModifiedTo(null);
 					gwtParams.setDomain(GWTQueryParams.DOCUMENT);
-					gwtParams.setProperties(new HashMap<String, GWTPropertyParams>());
+					gwtParams.setProperties(new HashMap<>());
 
 					find(gwtParams);
 				} else {

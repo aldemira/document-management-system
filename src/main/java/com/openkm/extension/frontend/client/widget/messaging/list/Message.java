@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -42,10 +42,9 @@ import com.openkm.frontend.client.extension.comunicator.GeneralComunicator;
  *
  */
 public class Message extends Composite {
-
-	private final OKMMessageServiceAsync messageService = (OKMMessageServiceAsync) GWT.create(OKMMessageService.class);
-	private final OKMProposedQueryServiceAsync proposedQueryService = (OKMProposedQueryServiceAsync) GWT.create(OKMProposedQueryService.class);
-	private final OKMProposedSubscriptionServiceAsync proposedSubscriptionService = (OKMProposedSubscriptionServiceAsync) GWT.create(OKMProposedSubscriptionService.class);
+	private final OKMProposedSubscriptionServiceAsync proposedSubscriptionService = GWT.create(OKMProposedSubscriptionService.class);
+	private final OKMProposedQueryServiceAsync proposedQueryService = GWT.create(OKMProposedQueryService.class);
+	private final OKMMessageServiceAsync messageService = GWT.create(OKMMessageService.class);
 
 	// Number of columns
 	public static final int NUMBER_OF_COLUMNS = 6;
@@ -191,7 +190,7 @@ public class Message extends Composite {
 	 * Removes all rows except the first
 	 */
 	public void removeAllRows() {
-		// Purge all rows 
+		// Purge all rows
 		while (dataTable.getRowCount() > 0) {
 			dataTable.removeRow(0);
 		}
@@ -372,5 +371,4 @@ public class Message extends Composite {
 		}
 	}
 }
-	
-	
+

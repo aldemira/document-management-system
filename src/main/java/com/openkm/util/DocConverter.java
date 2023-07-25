@@ -215,7 +215,7 @@ public class DocConverter {
 
 		try {
 			long start = System.currentTimeMillis();
-			convert(input, mimeType, output);
+			convert(input, output);
 			log.debug("Elapse doc2pdf time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			throw new ConversionException("Error in " + mimeType + " to PDF conversion", e);
@@ -295,7 +295,7 @@ public class DocConverter {
 				IOUtils.copy(input, fos);
 				fos.flush();
 				fos.close();
-				convert(tmp, mimeType, output);
+				convert(tmp, output);
 			}
 
 			log.debug("Elapse doc2txt time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
@@ -349,7 +349,7 @@ public class DocConverter {
 
 		try {
 			long start = System.currentTimeMillis();
-			convert(input, MimeTypeConfig.MIME_RTF, output);
+			convert(input, output);
 			log.debug("Elapse rtf2html time: {}", FormatUtil.formatSeconds(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			throw new ConversionException("Error in RTF to HTML conversion", e);
@@ -372,7 +372,7 @@ public class DocConverter {
 
 		try {
 			// Performs conversion
-			HashMap<String, Object> hm = new HashMap<String, Object>();
+			HashMap<String, Object> hm = new HashMap<>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
 			String tpl = Config.SYSTEM_GHOSTSCRIPT + " ${fileIn} ${fileOut}";
@@ -407,7 +407,7 @@ public class DocConverter {
 
 		try {
 			// Performs conversion
-			HashMap<String, Object> hm = new HashMap<String, Object>();
+			HashMap<String, Object> hm = new HashMap<>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
 
@@ -440,13 +440,13 @@ public class DocConverter {
 	/**
 	 * Convert CAD files to PDF
 	 */
-	public void cad2pdf(File input, String mimeType, File output) throws ConversionException, DatabaseException, IOException {
+	public void cad2pdf(File input, String mimeType, File output) throws ConversionException {
 		log.debug("** Convert from {} to PDF **", mimeType);
 		String cmd = null;
 
 		try {
 			// Performs conversion
-			HashMap<String, Object> hm = new HashMap<String, Object>();
+			HashMap<String, Object> hm = new HashMap<>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
 			String tpl = Config.SYSTEM_DWG2DXF + " /r /ad /lw 1 /f 105 /d ${fileOut} ${fileIn}";
@@ -492,39 +492,10 @@ public class DocConverter {
 	}
 
 	/**
-	 * Convert TXT to PDF
-	 */
-	public void txt2pdf(InputStream is, File output) throws ConversionException, DatabaseException, IOException {
-		log.debug("** Convert from TXT to PDF **");
-		FileOutputStream fos = null;
-		String line = null;
-
-		try {
-			fos = new FileOutputStream(output);
-
-			// Make conversion
-			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-			Document doc = new Document(PageSize.A4);
-			PdfWriter.getInstance(doc, fos);
-			doc.open();
-
-			while ((line = br.readLine()) != null) {
-				doc.add(new Paragraph(12F, line));
-			}
-
-			doc.close();
-		} catch (DocumentException e) {
-			throw new ConversionException("Exception in conversion: " + e.getMessage(), e);
-		} finally {
-			IOUtils.closeQuietly(fos);
-		}
-	}
-
-	/**
 	 * Convert ZIP to PDF
 	 */
 	@SuppressWarnings("rawtypes")
-	public void zip2pdf(File input, File output) throws ConversionException, DatabaseException, IOException {
+	public void zip2pdf(File input, File output) throws ConversionException, IOException {
 		log.debug("** Convert from ZIP to PDF **");
 		FileOutputStream fos = null;
 		ZipFile zipFile = null;
@@ -545,9 +516,7 @@ public class DocConverter {
 
 			doc.close();
 			zipFile.close();
-		} catch (ZipException e) {
-			throw new ConversionException("Exception in conversion: " + e.getMessage(), e);
-		} catch (DocumentException e) {
+		} catch (ZipException | DocumentException e) {
 			throw new ConversionException("Exception in conversion: " + e.getMessage(), e);
 		} finally {
 			IOUtils.closeQuietly(fos);
@@ -557,7 +526,7 @@ public class DocConverter {
 	/**
 	 * Convert SRC to PDF
 	 */
-	public void src2pdf(File input, File output, String lang) throws ConversionException, DatabaseException, IOException {
+	public void src2pdf(File input, File output, String lang) throws ConversionException, IOException {
 		log.debug("** Convert from SRC to PDF **");
 		FileOutputStream fos = null;
 		FileInputStream fis = null;
@@ -589,14 +558,14 @@ public class DocConverter {
 	/**
 	 * Convert PDF to IMG (for document preview feature).
 	 */
-	public void pdf2img(File input, File output) throws ConversionException, DatabaseException, IOException {
+	public void pdf2img(File input, File output) throws ConversionException, IOException {
 		log.debug("** Convert from PDF to IMG **");
 		File tmpDir = FileUtils.createTempDir();
 		String cmd = null;
 
 		try {
 			// Performs step 1: split pdf into several images
-			HashMap<String, Object> hm = new HashMap<String, Object>();
+			HashMap<String, Object> hm = new HashMap<>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", tmpDir + File.separator + "out.jpg");
 			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " -bordercolor #666 -border 2x2 ${fileIn} ${fileOut}";
@@ -608,7 +577,7 @@ public class DocConverter {
 			}
 
 			// Performs step 2: join split images into a big one
-			hm = new HashMap<String, Object>();
+			hm = new HashMap<>();
 			StringBuilder sb = new StringBuilder();
 			File files[] = tmpDir.listFiles();
 			Arrays.sort(files, new FileOrderComparator());
@@ -719,14 +688,14 @@ public class DocConverter {
 	 * Convert DWG to DXF (for document preview feature).
 	 * Actually only tested with Acme CAD Converter 2011 v8.2.2
 	 */
-	public void dwg2dxf(File input, File output) throws ConversionException, DatabaseException, IOException {
+	public void dwg2dxf(File input, File output) throws ConversionException {
 		log.debug("** Convert from DWG to DXF **");
 		BufferedReader stdout = null;
 		String cmd = null;
 
 		try {
 			// Performs conversion
-			HashMap<String, Object> hm = new HashMap<String, Object>();
+			HashMap<String, Object> hm = new HashMap<>();
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
 			String tpl = Config.SYSTEM_DWG2DXF + " /r /ad /x14 ${fileIn} ${fileOut}";
@@ -755,14 +724,13 @@ public class DocConverter {
 	 * @param imgIn  Image to rotate.
 	 * @param imgOut Image rotated.
 	 * @param angle  Rotation angle.
-	 * @throws IOException
 	 */
 	public void rotateImage(File imgIn, File imgOut, double angle) throws ConversionException {
 		String cmd = null;
 
 		try {
 			// Performs conversion
-			HashMap<String, Object> hm = new HashMap<String, Object>();
+			HashMap<String, Object> hm = new HashMap<>();
 			hm.put("fileIn", imgIn.getPath());
 			hm.put("fileOut", imgOut.getPath());
 			String tpl = Config.SYSTEM_IMAGEMAGICK_CONVERT + " -rotate " + angle + " ${fileIn} ${fileOut}";
@@ -779,7 +747,8 @@ public class DocConverter {
 		}
 	}
 
-	public void convert(File input, String mimeType, File output) throws ConversionException, IOException {
+	public void convert(File input, File output) throws ConversionException, IOException {
+		String outExt = FileUtils.getFileExtension(output.getName());
 		File tmp = FileUtils.createTempDir();
 		String cmd = null;
 
@@ -789,8 +758,18 @@ public class DocConverter {
 			hm.put("fileIn", input.getPath());
 			hm.put("fileOut", output.getPath());
 			hm.put("tmpDir", tmp.getPath());
-			String tpl = Config.SYSTEM_OPENOFFICE_PROGRAM + " --headless --convert-to pdf --outdir ${tmpDir} ${fileIn}";
-			cmd = TemplateUtils.replace("SYSTEM_UNOCONV", tpl, hm);
+
+			if (EnvironmentDetector.isWindows()) {
+				String tpl = Config.SYSTEM_OPENOFFICE_PROGRAM + " --headless --convert-to " + outExt + " --outdir ${tmpDir} ${fileIn}";
+				cmd = TemplateUtils.replace("SYSTEM_OPENOFFICE_PROGRAM", tpl, hm);
+			} else if (EnvironmentDetector.isLinux()) {
+				String tpl = Config.SYSTEM_OPENOFFICE_PROGRAM + " --headless -env:UserInstallation=file://${tmpDir} --convert-to " + outExt + " --outdir ${tmpDir} ${fileIn}";
+				cmd = TemplateUtils.replace("SYSTEM_OPENOFFICE_PROGRAM", tpl, hm);
+			} else {
+				throw new ConversionException("Operating system not supported");
+			}
+
+			log.info("Cmd: {}", cmd);
 			ExecutionResult er = ExecutionUtils.runCmd(cmd);
 
 			if (er.getExitValue() != 0) {

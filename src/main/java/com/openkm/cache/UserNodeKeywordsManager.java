@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -32,19 +32,19 @@ import java.util.Map;
 
 public class UserNodeKeywordsManager {
 	private static Logger log = LoggerFactory.getLogger(UserNodeKeywordsManager.class);
-	private static Map<String, Map<String, UserNodeKeywords>> userNodeKeywordsMgr = new HashMap<String, Map<String, UserNodeKeywords>>();
+	private static Map<String, Map<String, UserNodeKeywords>> userNodeKeywordsMgr = new HashMap<>();
 
 	/**
 	 * Get user document keywords
 	 *
 	 * @param user The user which have the document keywords cached.
-	 * @return A Map which key is the node UUID and the value is UserNodeKeywords. 
+	 * @return A Map which key is the node UUID and the value is UserNodeKeywords.
 	 */
 	public static Map<String, UserNodeKeywords> get(String user) {
 		Map<String, UserNodeKeywords> userDocKeywords = userNodeKeywordsMgr.get(user);
 
 		if (userDocKeywords == null) {
-			userDocKeywords = new HashMap<String, UserNodeKeywords>();
+			userDocKeywords = new HashMap<>();
 		}
 
 		return userDocKeywords;
@@ -58,7 +58,7 @@ public class UserNodeKeywordsManager {
 	 * @param keyword The keyword to be cached.
 	 */
 	public static synchronized void add(String user, String nodeUuid, String keyword) {
-		log.info("add({}, {}, {})", new Object[]{user, nodeUuid, keyword});
+		log.info("add({}, {}, {})", user, nodeUuid, keyword);
 		Map<String, UserNodeKeywords> usrDocs = get(user);
 		UserNodeKeywords udk = usrDocs.get(nodeUuid);
 
@@ -116,7 +116,7 @@ public class UserNodeKeywordsManager {
 	 */
 	public static synchronized void deserialize() throws DatabaseException {
 		for (String user : UserNodeKeywordsDAO.findUsers()) {
-			Map<String, UserNodeKeywords> udkMap = new HashMap<String, UserNodeKeywords>();
+			Map<String, UserNodeKeywords> udkMap = new HashMap<>();
 
 			for (UserNodeKeywords udk : UserNodeKeywordsDAO.findByUser(user)) {
 				udkMap.put(udk.getNode(), udk);

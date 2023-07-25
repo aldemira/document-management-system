@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -21,22 +21,6 @@
 
 package com.openkm.dao;
 
-import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.openkm.automation.Action;
 import com.openkm.automation.AutomationException;
 import com.openkm.automation.Validation;
@@ -46,8 +30,17 @@ import com.openkm.dao.bean.AutomationAction;
 import com.openkm.dao.bean.AutomationRule;
 import com.openkm.dao.bean.AutomationValidation;
 import com.openkm.util.PluginUtils;
-
 import net.xeoh.plugins.base.Plugin;
+import org.hibernate.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * AutomationDAO
@@ -328,10 +321,10 @@ public class AutomationDAO {
 
 	/**
 	 * Get all metadata actions
-	 */	
+	 */
 	public List<Automation> findMetadataValidationsByAt(String at) throws URISyntaxException {
 		log.debug("findMetadataValidationsByAt()");
-		List<Automation> amList = new ArrayList<Automation>();
+		List<Automation> amList = new ArrayList<>();
 
 		for (Validation val : findValidations(false)) {
 			if (at.equals(Automation.AT_PRE)) {
@@ -351,11 +344,10 @@ public class AutomationDAO {
 	/**
 	 * Get all metadata actions
 	 */
-	public List<Automation> findMetadataActionsByAt(String at)
-			throws DatabaseException, IllegalArgumentException, SecurityException, URISyntaxException,
-			ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+	public List<Automation> findMetadataActionsByAt(String at) throws IllegalArgumentException, SecurityException,
+			URISyntaxException {
 		log.debug("findMetadataActionsByAt()");
-		List<Automation> amList = new ArrayList<Automation>();
+		List<Automation> amList = new ArrayList<>();
 
 		for (Action act : findActions(false)) {
 			if (at.equals(Automation.AT_PRE)) {
@@ -488,9 +480,8 @@ public class AutomationDAO {
 	/**
 	 * Get metadata by pk
 	 */
-	public Automation findMetadataByPk(String className) throws DatabaseException, IllegalArgumentException, SecurityException,
-			URISyntaxException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException,
-			IllegalAccessException {
+	public Automation findMetadataByPk(String className) throws IllegalArgumentException, SecurityException,
+			URISyntaxException {
 		log.debug("findMetadataByPk({})", className);
 
 		for (Action action : findActions(false)) {

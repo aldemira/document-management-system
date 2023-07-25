@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -289,9 +289,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow, Validat
 		documentLink = null;
 
 		// Print variables
-		for (Iterator<String> it = processInstance.getVariables().keySet().iterator(); it.hasNext(); ) {
-			String key = it.next();
-
+		for (String key : processInstance.getVariables().keySet()) {
 			if (processInstance.getVariables().get(key) instanceof String) {
 				final String value = (String) processInstance.getVariables().get(key);
 				int row = parameterTable.getRowCount();
@@ -309,12 +307,12 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow, Validat
 							// Validating if is document / folder / mail and displaying object path
 							documentService.isValid(docPath, new AsyncCallback<Boolean>() {
 								public void onSuccess(Boolean result) {
-									if (result.booleanValue()) {
+									if (result) {
 										writePath(documentRow, docPath, false);
 									} else {
 										folderService.isValid(docPath, new AsyncCallback<Boolean>() {
 											public void onSuccess(Boolean result) {
-												if (result.booleanValue()) {
+												if (result) {
 													writePath(documentRow, docPath, true);
 												} else {
 													// must be a mail object
@@ -351,8 +349,8 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow, Validat
 		}
 
 		// Print comments
-		for (Iterator<GWTWorkflowComment> it = processInstance.getRootToken().getComments().iterator(); it.hasNext(); ) {
-			writeComment(it.next());
+		for (GWTWorkflowComment gwtWorkflowComment : processInstance.getRootToken().getComments()) {
+			writeComment(gwtWorkflowComment);
 		}
 
 		writeAddComment();
@@ -409,7 +407,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow, Validat
 				manager.getTable().setVisible(true);
 				drawForm();
 			} else {
-				manager.setFormElements(new ArrayList<GWTFormElement>());
+				manager.setFormElements(new ArrayList<>());
 				manager.getTable().setVisible(false);
 			}
 		}
@@ -442,7 +440,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow, Validat
 	}
 
 	/**
-	 * Start user task instance 
+	 * Start user task instance
 	 */
 	public void startTaskInstance(double id) {
 		workflowService.startTaskInstance(id, callbackStartTaskInstance);
@@ -697,7 +695,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow, Validat
 			return addHandler(handler, ClickEvent.getType());
 		}
 	}
-	
+
 	@Override
 	public void validationWithPluginsFinished(boolean result) {
 		// Submit form is not visible when other buttons are declared into form.xml, in these case must not be executed the setTaskInstanceValues
@@ -705,7 +703,7 @@ public class WorkflowFormPanel extends Composite implements HasWorkflow, Validat
 			validationPassed();
 		}
 	}
-	
+
 	/**
 	 * validationPassed
 	 */

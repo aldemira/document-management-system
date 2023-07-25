@@ -102,16 +102,7 @@ public class NodeFolderDAO {
 			session.save(nFolder);
 			HibernateUtil.commit(tx);
 			log.debug("create: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (ItemExistsException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | ItemExistsException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -157,10 +148,7 @@ public class NodeFolderDAO {
 			log.trace("findByParent.Time: {}", System.currentTimeMillis() - begin);
 			log.debug("findByParent: {}", ret);
 			return ret;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -221,7 +209,7 @@ public class NodeFolderDAO {
 		final String qs = "from NodeFolder nf where :category in elements(nf.categories) order by nf.name";
 		final String sql = "select NBS_UUID from OKM_NODE_CATEGORY, OKM_NODE_FOLDER "
 				+ "where NCT_CATEGORY = :catUuid and NCT_NODE = NBS_UUID";
-		List<NodeFolder> ret = new ArrayList<NodeFolder>();
+		List<NodeFolder> ret = new ArrayList<>();
 		Session session = null;
 		Transaction tx = null;
 
@@ -259,10 +247,7 @@ public class NodeFolderDAO {
 			log.trace("findByCategory.Time: {}", System.currentTimeMillis() - begin);
 			log.debug("findByCategory: {}", ret);
 			return ret;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -282,7 +267,7 @@ public class NodeFolderDAO {
 		final String qs = "from NodeFolder nf where :keyword in elements(nf.keywords) order by nf.name";
 		final String sql = "select NBS_UUID from OKM_NODE_KEYWORD, OKM_NODE_FOLDER "
 				+ "where NKW_KEYWORD = :keyword and NKW_NODE = NBS_UUID";
-		List<NodeFolder> ret = new ArrayList<NodeFolder>();
+		List<NodeFolder> ret = new ArrayList<>();
 		Session session = null;
 		Transaction tx = null;
 
@@ -330,7 +315,7 @@ public class NodeFolderDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<NodeFolder> findByPropertyValue(String group, String property, String value) throws DatabaseException {
-		log.debug("findByPropertyValue({}, {}, {})", new Object[]{group, property, value});
+		log.debug("findByPropertyValue({}, {}, {})", group, property, value);
 		String qs = "select nb from NodeFolder nb join nb.properties nbp where nbp.group=:group and nbp.name=:property and nbp.value like :value";
 		Session session = null;
 		Transaction tx = null;
@@ -394,10 +379,7 @@ public class NodeFolderDAO {
 			HibernateUtil.commit(tx);
 			log.debug("hasChildren: {}", ret);
 			return ret;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -443,16 +425,7 @@ public class NodeFolderDAO {
 			HibernateUtil.commit(tx);
 			log.debug("rename: {}", nFld);
 			return nFld;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (ItemExistsException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | ItemExistsException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -513,16 +486,7 @@ public class NodeFolderDAO {
 			SystemProfiling.log(uuid, System.currentTimeMillis() - begin);
 			log.trace("move.Time: {}", System.currentTimeMillis() - begin);
 			log.debug("move: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (ItemExistsException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | ItemExistsException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -537,7 +501,7 @@ public class NodeFolderDAO {
 	 * Delete folder
 	 */
 	public void delete(String name, String uuid, String trashUuid) throws PathNotFoundException, AccessDeniedException, DatabaseException {
-		log.debug("delete({}, {}, {})", new Object[]{name, uuid, trashUuid});
+		log.debug("delete({}, {}, {})", name, uuid, trashUuid);
 		long begin = System.currentTimeMillis();
 		Session session = null;
 		Transaction tx = null;
@@ -579,13 +543,7 @@ public class NodeFolderDAO {
 			SystemProfiling.log(uuid, System.currentTimeMillis() - begin);
 			log.trace("delete.Time: {}", System.currentTimeMillis() - begin);
 			log.debug("delete: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -616,7 +574,7 @@ public class NodeFolderDAO {
 	 */
 	public Set<NodeFolder> resolveCategories(Set<String> categories) throws DatabaseException {
 		log.debug("resolveCategories({})", categories);
-		Set<NodeFolder> ret = new HashSet<NodeFolder>();
+		Set<NodeFolder> ret = new HashSet<>();
 		Session session = null;
 		Transaction tx = null;
 
@@ -675,16 +633,7 @@ public class NodeFolderDAO {
 			SystemProfiling.log(uuid + ", " + deleteBase, System.currentTimeMillis() - begin);
 			log.trace("purgue.Time: {}", System.currentTimeMillis() - begin);
 			log.debug("purgue: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (IOException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | IOException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -727,7 +676,7 @@ public class NodeFolderDAO {
 			// Security Check
 			NodeBase nBase = (NodeBase) session.get(NodeFolder.class, uuid);
 
-			if (nBase != null && nBase instanceof NodeFolder) {
+			if (nBase instanceof NodeFolder) {
 				SecurityHelper.checkRead(nBase);
 				return true;
 			}

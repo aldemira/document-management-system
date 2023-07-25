@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -37,13 +37,13 @@ import java.util.List;
  */
 @RemoteServiceRelativePath("General")
 public interface OKMGeneralService extends RemoteService {
-	public GWTFileUploadingStatus getFileUploadStatus();
+	GWTFileUploadingStatus getFileUploadStatus();
 
-	public GWTConverterStatus getConversionStatus();
+	GWTConverterStatus getConversionStatus();
 
-	public GWTTestMail testMailConnection(String protocol, String host, String user, String password, String mailFolder);
+	GWTTestMail testMailConnection(String protocol, String host, String user, String password, String mailFolder);
 
-	public List<String> getEnabledExtensions() throws OKMException;
+	List<String> getEnabledExtensions() throws OKMException;
 
-	public GWTConfig getConfigValue(String key) throws OKMException;
+	GWTConfig getConfigValue(String key) throws OKMException;
 }

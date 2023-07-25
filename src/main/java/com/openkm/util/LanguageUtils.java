@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -33,21 +33,19 @@ import java.util.Map;
  * LanguageUtils
  *
  * @author jllort
- *
  */
 public class LanguageUtils {
 
 	/**
 	 * getTranslations
-	 * @throws Exception
 	 */
 	public static Map<String, String> getTranslations(String lang, String module[]) throws DatabaseException {
-		Map<String, String> translations = new HashMap<String, String>();
+		Map<String, String> translations = new HashMap<>();
 
 		// By default english is used to complete non defined translations
 		Language baseLang = LanguageDAO.findByPk(Language.DEFAULT);
 		Language language = LanguageDAO.findByPk(lang);
-		Map<String, String> keys = new HashMap<String, String>();
+		Map<String, String> keys = new HashMap<>();
 
 		// Getting keys
 		if (language != null) {

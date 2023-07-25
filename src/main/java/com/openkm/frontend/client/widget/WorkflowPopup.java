@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -37,7 +37,6 @@ import com.openkm.frontend.client.widget.wizard.WorkflowWidget;
 import com.openkm.frontend.client.widget.wizard.WorkflowWidgetToFire;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -47,7 +46,7 @@ import java.util.List;
  *
  */
 public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
-	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
+	private final OKMWorkflowServiceAsync workflowService = GWT.create(OKMWorkflowService.class);
 
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
@@ -135,9 +134,7 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 			listBox.clear();
 			listBox.addItem("", ""); // Adds empty value
 
-			for (Iterator<GWTProcessDefinition> it = result.iterator(); it.hasNext(); ) {
-				GWTProcessDefinition processDefinition = it.next();
-
+			for (GWTProcessDefinition processDefinition : result) {
 				if (Main.get().workspaceUserProperties.getWorkspace().getMiscWorkflowList().contains(processDefinition.getName())) {
 					listBox.addItem(processDefinition.getName(), processDefinition.getName());
 				}
@@ -225,7 +222,7 @@ public class WorkflowPopup extends DialogBox implements WorkflowWidgetToFire {
 				}
 			}
 
-			workflowWidget = new WorkflowWidget(listBox.getValue(listBox.getSelectedIndex()), uuid, this, new HashMap<String, Object>());
+			workflowWidget = new WorkflowWidget(listBox.getValue(listBox.getSelectedIndex()), uuid, this, new HashMap<>());
 			listBox.setVisible(false);
 			sp.add(workflowWidget);
 			workflowWidget.runProcessDefinition();

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ResourceFactoryFactoryImpl implements ResourceFactoryFactory {
-	Logger log = LoggerFactory.getLogger(ResourceFactoryFactoryImpl.class);
+	private Logger log = LoggerFactory.getLogger(ResourceFactoryFactoryImpl.class);
 	private static AuthenticationService authenticationService;
 	private static ResourceFactory resourceFactory;
 
@@ -49,9 +49,6 @@ public class ResourceFactoryFactoryImpl implements ResourceFactoryFactory {
 		if (authenticationService == null) {
 			authenticationService = new AuthenticationService();
 			resourceFactory = new ResourceFactoryImpl();
-			//FileSystemResourceFactory fs = new FileSystemResourceFactory();
-			//fs.setAllowDirectoryBrowsing(true);
-			//resourceFactory = fs;
 		}
 	}
 }

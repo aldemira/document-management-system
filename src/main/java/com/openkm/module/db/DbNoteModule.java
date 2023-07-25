@@ -26,7 +26,7 @@ public class DbNoteModule implements NoteModule {
 	@Override
 	public Note add(String token, String nodeId, String text) throws LockException, PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("add({}, {}, {})", new Object[]{token, nodeId, text});
+		log.debug("add({}, {}, {})", token, nodeId, text);
 		Note newNote = null;
 		Authentication auth = null, oldAuth = null;
 		String nodePath = null;
@@ -55,6 +55,7 @@ public class DbNoteModule implements NoteModule {
 			NodeBase node = NodeBaseDAO.getInstance().findByPk(nodeUuid);
 
 			text = FormatUtil.sanitizeInput(text);
+			text = FormatUtil.cleanXSS(text);
 			NodeNote nNote = BaseNoteModule.create(nodeUuid, auth.getName(), text);
 			newNote = BaseNoteModule.getProperties(nNote, nNote.getUuid());
 
@@ -191,6 +192,8 @@ public class DbNoteModule implements NoteModule {
 
 			if (auth.getName().equals(nNote.getAuthor())) {
 				text = FormatUtil.sanitizeInput(text);
+				text = FormatUtil.cleanXSS(text);
+
 				nNote.setText(text);
 				NodeNoteDAO.getInstance().update(nNote);
 			} else {
@@ -218,7 +221,7 @@ public class DbNoteModule implements NoteModule {
 	public List<Note> list(String token, String nodeId) throws AccessDeniedException, PathNotFoundException, RepositoryException,
 			DatabaseException {
 		log.debug("list({}, {})", token, nodeId);
-		List<Note> childs = new ArrayList<Note>();
+		List<Note> childs = new ArrayList<>();
 		Authentication auth = null, oldAuth = null;
 		String nodePath = null;
 		String nodeUuid = null;

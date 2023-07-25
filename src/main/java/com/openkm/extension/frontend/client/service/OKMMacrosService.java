@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -36,7 +36,7 @@ import java.util.List;
  */
 @RemoteServiceRelativePath("../extension/Macros")
 public interface OKMMacrosService extends RemoteService {
-	public List<GWTMacros> getActions() throws OKMException;
+	List<GWTMacros> getActions() throws OKMException;
 
-	public void executeAction(GWTMacros action, String path) throws OKMException;
+	void executeAction(GWTMacros action, String path) throws OKMException;
 }

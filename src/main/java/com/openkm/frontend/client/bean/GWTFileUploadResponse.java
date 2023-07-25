@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -39,17 +39,17 @@ import java.util.List;
  *   - Uploader Applet
  *   - Scanner Applet
  *   - Crypto Applet
- *   - Editor Applet 
+ *   - Editor Applet
  */
 public class GWTFileUploadResponse implements IsSerializable {
-	private boolean hasAutomation = false;
-	private String path = "";
-	private List<String> groupsList = new ArrayList<String>();
-	private List<String> workflowList = new ArrayList<String>();
-	private boolean showWizardCategories = false;
-	private boolean showWizardKeywords = false;
+	private List<String> groupsList = new ArrayList<>();
+	private List<String> workflowList = new ArrayList<>();
 	private boolean showWizardOCRDataCapture = false;
-	private boolean digitalSignature = false;
+	private boolean showWizardCategories;
+	private boolean showWizardKeywords;
+	private boolean digitalSignature;
+	private boolean hasAutomation;
+	private String path = "";
 	private String error = "";
 
 	/**

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -30,8 +30,7 @@ public class PresentationMLContentHandler extends MsOffice2007ContentHandler {
 		return "ppt/slides/slide";
 	}
 
-	public void startElement(String namespaceURI, String localName,
-	                         String rawName, Attributes atts) throws SAXException {
+	public void startElement(String namespaceURI, String localName, String rawName, Attributes atts) {
 		if (rawName.equals("a:t")) {
 			appendChar = true;
 		}
@@ -43,7 +42,7 @@ public class PresentationMLContentHandler extends MsOffice2007ContentHandler {
 		}
 	}
 
-	public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
+	public void endElement(String namespaceURI, String localName, String qName) {
 		if (qName.equals("a:p")) {
 			content.append("\n");
 		}

@@ -24,7 +24,6 @@ package com.openkm.core;
 import com.openkm.bean.ConfigStoredFile;
 import com.openkm.dao.ConfigDAO;
 import com.openkm.dao.SearchDAO;
-import com.openkm.extractor.RegisteredExtractors;
 import com.openkm.module.db.stuff.DbSimpleAccessManager;
 import com.openkm.module.db.stuff.FsDataStore;
 import com.openkm.principal.DatabasePrincipalAdapter;
@@ -51,17 +50,14 @@ import java.util.Properties;
 import java.util.TreeMap;
 
 public class Config {
-	private static Logger log = LoggerFactory.getLogger(Config.class);
-	public static TreeMap<String, String> values = new TreeMap<String, String>();
+	private static final Logger log = LoggerFactory.getLogger(Config.class);
+	public static TreeMap<String, String> values = new TreeMap<>();
 	public static final String DEFAULT_CONTEXT = "OpenKM";
 
 	// Server specific configuration
 	public static final String HOME_DIR = EnvironmentDetector.getServerHomeDir();
-	public static final String TMP_DIR = EnvironmentDetector.getTempDir();
 	public static final String LOG_DIR = EnvironmentDetector.getServerLogDir();
-	public static final String NULL_DEVICE = EnvironmentDetector.getNullDevice();
 	public static final String JNDI_BASE = EnvironmentDetector.getServerJndiBase();
-	public static final boolean IN_SERVER = EnvironmentDetector.inServer();
 	public static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
 	public static final URI PLUGIN_DIR = new File(Config.HOME_DIR + File.separator + "plugins").toURI();
 	public static final String WEBAPPS_DIR = Config.HOME_DIR + File.separator + "webapps";
@@ -76,7 +72,6 @@ public class Config {
 
 	// Configuration files
 	public static final String OPENKM_CONFIG = "OpenKM.cfg";
-	public static final String NODE_DEFINITIONS = "CustomNodes.cnd";
 	public static String CONTEXT;
 	public static String INSTANCE_HOME;
 	public static String INSTANCE_DIRNAME = "instances";
@@ -431,11 +426,11 @@ public class Config {
 	public static String PRINCIPAL_LDAP_REFERRAL;
 	public static boolean PRINCIPAL_LDAP_USERS_FROM_ROLES;
 
-	public static List<String> PRINCIPAL_LDAP_USER_SEARCH_BASE = new ArrayList<String>(); // ou=people,dc=openkm,dc=com
+	public static List<String> PRINCIPAL_LDAP_USER_SEARCH_BASE = new ArrayList<>(); // ou=people,dc=openkm,dc=com
 	public static String PRINCIPAL_LDAP_USER_SEARCH_FILTER; // (&(objectClass=posixAccount)(!(objectClass=gosaUserTemplate)))
 	public static String PRINCIPAL_LDAP_USER_ATTRIBUTE; // uid
 
-	public static List<String> PRINCIPAL_LDAP_ROLE_SEARCH_BASE = new ArrayList<String>(); // ou=groups,dc=openkm,dc=com
+	public static List<String> PRINCIPAL_LDAP_ROLE_SEARCH_BASE = new ArrayList<>(); // ou=groups,dc=openkm,dc=com
 	public static String PRINCIPAL_LDAP_ROLE_SEARCH_FILTER; // (&(objectClass=posixGroup)(cn=*)(|(description=*OpenKM*)(cn=users)))
 	public static String PRINCIPAL_LDAP_ROLE_ATTRIBUTE; // cn
 
@@ -1153,9 +1148,7 @@ public class Config {
 			for (Entry<String, String> entry : values.entrySet()) {
 				log.info("RELOAD - {}={}", entry.getKey(), entry.getValue());
 			}
-		} catch (DatabaseException e) {
-			log.error("** Error reading configuration table **");
-		} catch (IOException e) {
+		} catch (DatabaseException | IOException e) {
 			log.error("** Error reading configuration table **");
 		} catch (Exception e) {
 			log.error("** Unknown error: {} **", e.getMessage());

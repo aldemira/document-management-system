@@ -67,9 +67,8 @@ public class OMRHelper {
 	/**
 	 * trainingTemplate
 	 */
-	public static Map<String, File> trainingTemplate(File template) throws IOException, InvalidFileStructureException,
-			InvalidImageIndexException, UnsupportedTypeException, MissingParameterException, WrongParameterException {
-		Map<String, File> fileMap = new HashMap<String, File>();
+	public static Map<String, File> trainingTemplate(File template) throws IOException {
+		Map<String, File> fileMap = new HashMap<>();
 		Gray8Image grayimage = ImageUtil.readImage(template.getCanonicalPath());
 		ImageManipulation image = new ImageManipulation(grayimage);
 		image.locateConcentricCircles();
@@ -89,7 +88,7 @@ public class OMRHelper {
 	public static Map<String, String> process(File fileToProcess, long omId) throws IOException, OMRException, DatabaseException,
 			InvalidFileStructureException, InvalidImageIndexException, UnsupportedTypeException, MissingParameterException,
 			WrongParameterException {
-		Map<String, String> values = new HashMap<String, String>();
+		Map<String, String> values = new HashMap<>();
 		Omr omr = OmrDAO.getInstance().findByPk(omId);
 		InputStream asc = new ByteArrayInputStream(omr.getAscFileContent());
 		InputStream config = new ByteArrayInputStream(omr.getConfigFileContent());
@@ -164,7 +163,7 @@ public class OMRHelper {
 	public static void storeMetadata(Map<String, String> results, String docPath) throws IOException, ParseException,
 			PathNotFoundException, RepositoryException, DatabaseException, NoSuchGroupException, LockException, AccessDeniedException,
 			ExtensionException, AutomationException, NoSuchPropertyException, OMRException {
-		List<String> groups = new ArrayList<String>();
+		List<String> groups = new ArrayList<>();
 
 		for (String key : results.keySet()) {
 			if (key.contains(":")) {
@@ -190,7 +189,7 @@ public class OMRHelper {
 
 			// convert okg to okp ( property format )
 			String propertyBeginning = grpName.replace("okg", "okp");
-			Map<String, String> properties = new HashMap<String, String>();
+			Map<String, String> properties = new HashMap<>();
 
 			for (String key : results.keySet()) {
 				if (key.startsWith(propertyBeginning)) {
@@ -204,8 +203,6 @@ public class OMRHelper {
 									throw new OMRException(
 											"Found multiple value in a non multiple select. White space indicates multiple value");
 								} else {
-									// Change " " to ";" the way to pass
-									// multiple values into setPropertiesSimple
 									value = value.replaceAll(" ", ";");
 								}
 							}
@@ -242,39 +239,11 @@ public class OMRHelper {
 			// process
 			Map<String, String> results = OMRHelper.process(fileToProcess, omId);
 			OMRHelper.storeMetadata(results, docPath);
-		} catch (IOException e) {
-			throw e;
-		} catch (PathNotFoundException e) {
-			throw e;
-		} catch (AccessDeniedException e) {
-			throw e;
-		} catch (RepositoryException e) {
-			throw e;
-		} catch (DatabaseException e) {
-			throw e;
-		} catch (OMRException e) {
-			throw e;
-		} catch (NoSuchGroupException e) {
-			throw e;
-		} catch (LockException e) {
-			throw e;
-		} catch (ExtensionException e) {
-			throw e;
-		} catch (ParseException e) {
-			throw e;
-		} catch (NoSuchPropertyException e) {
-			throw e;
-		} catch (AutomationException e) {
-			throw e;
-		} catch (InvalidFileStructureException e) {
-			throw e;
-		} catch (InvalidImageIndexException e) {
-			throw e;
-		} catch (UnsupportedTypeException e) {
-			throw e;
-		} catch (MissingParameterException e) {
-			throw e;
-		} catch (WrongParameterException e) {
+		} catch (IOException | PathNotFoundException | AccessDeniedException | RepositoryException | DatabaseException |
+				 OMRException | NoSuchGroupException | LockException | ExtensionException | ParseException |
+				 NoSuchPropertyException | AutomationException | InvalidFileStructureException |
+				 InvalidImageIndexException | UnsupportedTypeException | MissingParameterException |
+				 WrongParameterException e) {
 			throw e;
 		} finally {
 			FileUtils.deleteQuietly(fileToProcess);

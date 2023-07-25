@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -30,11 +30,10 @@ import com.openkm.frontend.client.bean.GWTUserConfig;
  * OKMUserConfigService
  *
  * @author jllort
- *
  */
 @RemoteServiceRelativePath("UserConfig")
 public interface OKMUserConfigService extends RemoteService {
-	public void setUserHome(String path) throws OKMException;
+	void setUserHome(String path) throws OKMException;
 
-	public GWTUserConfig getUserHome() throws OKMException;
+	GWTUserConfig getUserHome() throws OKMException;
 }

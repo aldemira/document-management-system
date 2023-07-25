@@ -22,8 +22,8 @@
 package com.openkm.dao;
 
 import com.openkm.bean.*;
-import com.openkm.core.*;
 import com.openkm.core.Config;
+import com.openkm.core.*;
 import com.openkm.dao.bean.*;
 import com.openkm.extension.dao.WikiPageDAO;
 import com.openkm.extension.dao.bean.WikiPage;
@@ -319,7 +319,7 @@ public class NodeBaseDAO {
 	 */
 	public Map<String, Integer> getUserPermissions(String uuid) throws PathNotFoundException, DatabaseException {
 		log.debug("getUserPermissions({})", uuid);
-		Map<String, Integer> ret = new HashMap<String, Integer>();
+		Map<String, Integer> ret = new HashMap<>();
 		Session session = null;
 		Transaction tx = null;
 
@@ -338,10 +338,7 @@ public class NodeBaseDAO {
 			HibernateUtil.commit(tx);
 			log.debug("getUserPermissions: {}", ret);
 			return ret;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -380,13 +377,7 @@ public class NodeBaseDAO {
 
 			HibernateUtil.commit(tx);
 			log.debug("grantUserPermissions: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -481,13 +472,7 @@ public class NodeBaseDAO {
 
 			HibernateUtil.commit(tx);
 			log.debug("revokeUserPermissions: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -563,7 +548,7 @@ public class NodeBaseDAO {
 	 */
 	public Map<String, Integer> getRolePermissions(String uuid) throws PathNotFoundException, DatabaseException {
 		log.debug("getRolePermissions({})", uuid);
-		Map<String, Integer> ret = new HashMap<String, Integer>();
+		Map<String, Integer> ret = new HashMap<>();
 		Session session = null;
 		Transaction tx = null;
 
@@ -582,10 +567,7 @@ public class NodeBaseDAO {
 			HibernateUtil.commit(tx);
 			log.debug("getRolePermissions: {}", ret);
 			return ret;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -601,7 +583,7 @@ public class NodeBaseDAO {
 	 */
 	public void grantRolePermissions(String uuid, String role, int permissions, boolean recursive) throws PathNotFoundException,
 			AccessDeniedException, DatabaseException {
-		log.debug("grantRolePermissions({}, {}, {}, {})", new Object[]{uuid, role, permissions, recursive});
+		log.debug("grantRolePermissions({}, {}, {}, {})", uuid, role, permissions, recursive);
 		Session session = null;
 		Transaction tx = null;
 
@@ -624,13 +606,7 @@ public class NodeBaseDAO {
 
 			HibernateUtil.commit(tx);
 			log.debug("grantRolePermissions: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -702,7 +678,7 @@ public class NodeBaseDAO {
 	 */
 	public void revokeRolePermissions(String uuid, String role, int permissions, boolean recursive) throws PathNotFoundException,
 			AccessDeniedException, DatabaseException {
-		log.debug("revokeRolePermissions({}, {}, {}, {})", new Object[]{uuid, role, permissions, recursive});
+		log.debug("revokeRolePermissions({}, {}, {}, {})", uuid, role, permissions, recursive);
 		Session session = null;
 		Transaction tx = null;
 
@@ -725,13 +701,7 @@ public class NodeBaseDAO {
 
 			HibernateUtil.commit(tx);
 			log.debug("revokeRolePermissions: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -806,9 +776,9 @@ public class NodeBaseDAO {
 	 * Change security of multiples nodes
 	 */
 	public void changeSecurity(String uuid, Map<String, Integer> grantUsers, Map<String, Integer> revokeUsers,
-	                           Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles, boolean recursive) throws PathNotFoundException,
+			Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles, boolean recursive) throws PathNotFoundException,
 			AccessDeniedException, DatabaseException {
-		log.debug("changeSecurity({}, {}, {}, {})", new Object[]{uuid, grantUsers, revokeUsers, grantRoles, revokeRoles, recursive});
+		log.debug("changeSecurity({}, {}, {}, {}, {}, {})", uuid, grantUsers, revokeUsers, grantRoles, revokeRoles, recursive);
 		Session session = null;
 		Transaction tx = null;
 
@@ -832,13 +802,7 @@ public class NodeBaseDAO {
 
 			HibernateUtil.commit(tx);
 			log.debug("grantRolePermissions: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -857,7 +821,7 @@ public class NodeBaseDAO {
 	public int changeSecurity(Session session, NodeBase node, Map<String, Integer> grantUsers, Map<String, Integer> revokeUsers,
 	                          Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles, boolean recursive) throws PathNotFoundException,
 			AccessDeniedException, DatabaseException, HibernateException {
-		log.debug("changeSecurity({}, {}, {}, {}, {})", new Object[]{node.getUuid(), grantUsers, revokeUsers, grantRoles, revokeRoles});
+		log.debug("changeSecurity({}, {}, {}, {}, {})", node.getUuid(), grantUsers, revokeUsers, grantRoles, revokeRoles);
 		boolean canModify = true;
 
 		// Security Check
@@ -933,7 +897,7 @@ public class NodeBaseDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public int changeSecurityInDepth(Session session, NodeBase node, Map<String, Integer> grantUsers, Map<String, Integer> revokeUsers,
-	                                 Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles) throws PathNotFoundException, AccessDeniedException,
+			Map<String, Integer> grantRoles, Map<String, Integer> revokeRoles) throws PathNotFoundException, AccessDeniedException,
 			DatabaseException, HibernateException {
 		int total = changeSecurity(session, node, grantUsers, revokeUsers, grantRoles, revokeRoles, true);
 
@@ -977,13 +941,7 @@ public class NodeBaseDAO {
 			session.update(node);
 			HibernateUtil.commit(tx);
 			log.debug("addCategory: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -1015,13 +973,7 @@ public class NodeBaseDAO {
 			session.update(node);
 			HibernateUtil.commit(tx);
 			log.debug("removeCategory: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -1054,10 +1006,7 @@ public class NodeBaseDAO {
 
 			log.debug("hasCategory: {}", check);
 			return check;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -1072,7 +1021,7 @@ public class NodeBaseDAO {
 	 * Test for category in use
 	 */
 	public boolean isCategoryInUse(String catUuid) throws DatabaseException {
-		log.debug("isCategoryInUse({}, {})", catUuid);
+		log.debug("isCategoryInUse({})", catUuid);
 		final String qs = "from NodeBase nb where :category in elements(nb.categories)";
 		final String sql = "select NCT_NODE from OKM_NODE_CATEGORY where NCT_CATEGORY = :catUuid";
 		Session session = null;
@@ -1130,13 +1079,7 @@ public class NodeBaseDAO {
 			session.update(node);
 			HibernateUtil.commit(tx);
 			log.debug("addKeyword: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -1168,13 +1111,7 @@ public class NodeBaseDAO {
 			session.update(node);
 			HibernateUtil.commit(tx);
 			log.debug("removeCategory: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -1207,10 +1144,7 @@ public class NodeBaseDAO {
 
 			log.debug("hasKeyword: {}", check);
 			return check;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -1244,10 +1178,7 @@ public class NodeBaseDAO {
 			session.update(node);
 			HibernateUtil.commit(tx);
 			log.debug("subscribe: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -1278,10 +1209,7 @@ public class NodeBaseDAO {
 			session.update(node);
 			HibernateUtil.commit(tx);
 			log.debug("unsubscribe: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -1310,110 +1238,6 @@ public class NodeBaseDAO {
 			Hibernate.initialize(subscriptors);
 			log.debug("getSubscriptors: {}", subscriptors);
 			return subscriptors;
-		} catch (PathNotFoundException e) {
-			throw e;
-		} catch (HibernateException e) {
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-
-	/**
-	 * Set node script
-	 */
-	public void setScript(String uuid, String code) throws PathNotFoundException, AccessDeniedException, DatabaseException {
-		log.debug("setScript({}, {})", uuid, code);
-		Session session = null;
-		Transaction tx = null;
-
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-
-			// Security Check
-			NodeBase node = (NodeBase) session.load(NodeBase.class, uuid);
-			SecurityHelper.checkRead(node);
-			SecurityHelper.checkWrite(node);
-
-			node.setScripting(true);
-			node.setScriptCode(code);
-			session.update(node);
-			HibernateUtil.commit(tx);
-			log.debug("setScript: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-
-	/**
-	 * Remove node script
-	 */
-	public void removeScript(String uuid) throws PathNotFoundException, AccessDeniedException, DatabaseException {
-		log.debug("removeScript({}, {})", uuid);
-		Session session = null;
-		Transaction tx = null;
-
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-
-			// Security Check
-			NodeBase node = (NodeBase) session.load(NodeBase.class, uuid);
-			SecurityHelper.checkRead(node);
-			SecurityHelper.checkWrite(node);
-
-			node.setScripting(false);
-			node.setScriptCode(null);
-			session.update(node);
-			HibernateUtil.commit(tx);
-			log.debug("removeScript: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-
-	/**
-	 * Obtain script code
-	 */
-	public String getScript(String uuid) throws PathNotFoundException, DatabaseException {
-		log.debug("setScript({}, {})", uuid);
-		Session session = null;
-
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-
-			// Security Check
-			NodeBase node = (NodeBase) session.load(NodeBase.class, uuid);
-			SecurityHelper.checkRead(node);
-
-			String code = node.getScriptCode();
-			log.debug("setScript: {}", code);
-			return code;
 		} catch (PathNotFoundException e) {
 			throw e;
 		} catch (HibernateException e) {
@@ -1520,8 +1344,8 @@ public class NodeBaseDAO {
 	 *
 	 * @see com.openkm.module.db.DbStatsModule
 	 */
-	public long getCount(String nodeType) throws PathNotFoundException, DatabaseException {
-		log.debug("getCount({})", new Object[]{nodeType});
+	public long getCount(String nodeType) throws DatabaseException {
+		log.debug("getCount({})", nodeType);
 		String qs = "select count(*) from " + nodeType + " nt";
 		long begin = System.currentTimeMillis();
 		Session session = null;
@@ -1554,7 +1378,7 @@ public class NodeBaseDAO {
 	 * @see com.openkm.module.db.DbStatsModule
 	 */
 	public long getCount(String nodeType, String context) throws PathNotFoundException, DatabaseException {
-		log.debug("getCount({}, {})", new Object[]{nodeType, context});
+		log.debug("getCount({}, {})", nodeType, context);
 		String qs = "select count(*) from " + nodeType + " nt where nt.context = :context";
 		long begin = System.currentTimeMillis();
 		Session session = null;
@@ -1588,7 +1412,7 @@ public class NodeBaseDAO {
 	 * @see com.openkm.module.db.DbStatsModule
 	 */
 	public long getBaseCount(String nodeType, String path) throws PathNotFoundException, DatabaseException {
-		log.debug("getBaseCount({}, {})", new Object[]{nodeType, path});
+		log.debug("getBaseCount({}, {})", nodeType, path);
 		String qs = "select coalesce(count(*), 0) from NodeFolder n where n.parent=:parent";
 		long begin = System.currentTimeMillis();
 		Session session = null;
@@ -1623,7 +1447,7 @@ public class NodeBaseDAO {
 	 * @see com.openkm.module.db.DbStatsModule
 	 */
 	public long getSubtreeCount(String nodeType, String path, int depth) throws PathNotFoundException, DatabaseException {
-		log.debug("getSubtreeCount({}, {}, {})", new Object[]{nodeType, path, depth});
+		log.debug("getSubtreeCount({}, {}, {})", nodeType, path, depth);
 		long begin = System.currentTimeMillis();
 		Session session = null;
 		Transaction tx = null;
@@ -1641,10 +1465,7 @@ public class NodeBaseDAO {
 			log.trace("getSubtreeCount.Path: {}, Time: {}", path, System.currentTimeMillis() - begin);
 			log.debug("getSubtreeCount: {}", total);
 			return total;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -1661,7 +1482,7 @@ public class NodeBaseDAO {
 	@SuppressWarnings("unchecked")
 	private long getSubtreeCountHelper(Session session, String nodeType, String parentUuid, int depth, int level)
 			throws HibernateException, DatabaseException {
-		log.debug("getSubtreeCountHelper({}, {}, {},  {})", new Object[]{nodeType, parentUuid, depth, level});
+		log.debug("getSubtreeCountHelper({}, {}, {},  {})", nodeType, parentUuid, depth, level);
 		String qs = "from NodeBase n where n.parent=:parent";
 		Query q = session.createQuery(qs).setCacheable(true);
 		q.setString("parent", parentUuid);
@@ -1710,10 +1531,7 @@ public class NodeBaseDAO {
 			log.trace("subTreeHasMoreThanNodes.Path: {}, Time: {}", path, System.currentTimeMillis() - begin);
 			log.debug("subTreeHasMoreThanNodes: {}", ret);
 			return ret;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -1730,7 +1548,7 @@ public class NodeBaseDAO {
 	@SuppressWarnings("unchecked")
 	private long subTreeHasMoreThanNodesHelper(Session session, String parentUuid, long maxNodes, long curNodes) throws HibernateException,
 			DatabaseException {
-		log.debug("getSubtreeCountHelper({}, {}, {})", new Object[]{parentUuid, maxNodes, curNodes});
+		log.debug("getSubtreeCountHelper({}, {}, {})", parentUuid, maxNodes, curNodes);
 		String qs = "from NodeBase n where n.parent=:parent";
 		Query q = session.createQuery(qs).setCacheable(true);
 		q.setString("parent", parentUuid);
@@ -1878,13 +1696,7 @@ public class NodeBaseDAO {
 			session.update(node);
 			HibernateUtil.commit(tx);
 			log.debug("addPropertyGroup: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -1928,13 +1740,7 @@ public class NodeBaseDAO {
 			session.update(node);
 			HibernateUtil.commit(tx);
 			log.debug("removePropertyGroup: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -1969,10 +1775,7 @@ public class NodeBaseDAO {
 			HibernateUtil.commit(tx);
 			log.debug("getPropertyGroups: {}", ret);
 			return ret;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -1989,7 +1792,7 @@ public class NodeBaseDAO {
 	public Map<String, String> getProperties(String uuid, String grpName) throws PathNotFoundException, DatabaseException {
 		log.debug("getProperties({}, {})", uuid, grpName);
 		long begin = System.currentTimeMillis();
-		Map<String, String> ret = new HashMap<String, String>();
+		Map<String, String> ret = new HashMap<>();
 		Session session = null;
 		Transaction tx = null;
 
@@ -2012,10 +1815,7 @@ public class NodeBaseDAO {
 			log.trace("getProperties.Time: {}", System.currentTimeMillis() - begin);
 			log.debug("getProperties: {}", ret);
 			return ret;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -2030,7 +1830,7 @@ public class NodeBaseDAO {
 	 * Get single property value from property group
 	 */
 	public String getProperty(String uuid, String grpName, String propName) throws PathNotFoundException, DatabaseException {
-		log.debug("getProperty({}, {}, {})", new Object[]{uuid, grpName, propName});
+		log.debug("getProperty({}, {}, {})", uuid, grpName, propName);
 		long begin = System.currentTimeMillis();
 		String propValue = null;
 		Session session = null;
@@ -2056,10 +1856,7 @@ public class NodeBaseDAO {
 			log.trace("getProperty.Time: {}", System.currentTimeMillis() - begin);
 			log.debug("getProperty: {}", propValue);
 			return propValue;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -2097,14 +1894,14 @@ public class NodeBaseDAO {
 			nBase.setCategories(catIds);
 		}
 	}
-	
+
 	/**
 	 * Set properties from property group
 	 */
 	public Map<String, String> setProperties(String uuid, String grpName, Map<String, String> properties) throws PathNotFoundException,
 			AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("setProperties({}, {}, {})", new Object[]{uuid, grpName, properties});
-		Map<String, String> ret = new HashMap<String, String>();
+		log.debug("setProperties({}, {}, {})", uuid, grpName, properties);
+		Map<String, String> ret = new HashMap<>();
 		Session session = null;
 		Transaction tx = null;
 
@@ -2121,7 +1918,7 @@ public class NodeBaseDAO {
 				SecurityHelper.checkExtended(node, Permission.PROPERTY_GROUP);
 			}
 
-			Set<NodeProperty> tmp = new HashSet<NodeProperty>();
+			Set<NodeProperty> tmp = new HashSet<>();
 
 			for (Entry<String, String> prop : properties.entrySet()) {
 				boolean alreadyAssigned = false;
@@ -2129,7 +1926,7 @@ public class NodeBaseDAO {
 				// Set new property group values
 				for (NodeProperty nodProp : node.getProperties()) {
 					if (grpName.equals(nodProp.getGroup()) && prop.getKey().equals(nodProp.getName())) {
-						log.debug("UPDATE - Group: {}, Property: {}, Value: {}", new Object[]{grpName, prop.getKey(), prop.getValue()});
+						log.debug("UPDATE - Group: {}, Property: {}, Value: {}", grpName, prop.getKey(), prop.getValue());
 						nodProp.setValue(prop.getValue());
 						alreadyAssigned = true;
 
@@ -2137,7 +1934,7 @@ public class NodeBaseDAO {
 						tmp.add(nodProp);
 					} else if (nodProp.getValue() != null && !nodProp.getValue().isEmpty()) {
 						if (!tmp.contains(nodProp)) {
-							log.debug("KEEP - Group: {}, Property: {}, Value: {}", new Object[]{nodProp.getGroup(), nodProp.getName(), nodProp.getValue()});
+							log.debug("KEEP - Group: {}, Property: {}, Value: {}", nodProp.getGroup(), nodProp.getName(), nodProp.getValue());
 
 							// TODO: Workaround for Hibernate Search
 							tmp.add(nodProp);
@@ -2146,7 +1943,7 @@ public class NodeBaseDAO {
 				}
 
 				if (!alreadyAssigned) {
-					log.debug("ADD - Group: {}, Property: {}, Value: {}", new Object[]{grpName, prop.getKey(), prop.getValue()});
+					log.debug("ADD - Group: {}, Property: {}, Value: {}", grpName, prop.getKey(), prop.getValue());
 					NodeProperty nodProp = new NodeProperty();
 					nodProp.setNode(node);
 					nodProp.setGroup(grpName);
@@ -2163,13 +1960,7 @@ public class NodeBaseDAO {
 			HibernateUtil.commit(tx);
 			log.debug("setProperties: {}", ret);
 			return ret;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -2233,7 +2024,7 @@ public class NodeBaseDAO {
 
 	public void copyAttributes(String srcUuid, String dstUuid, ExtendedAttributes extAttr) throws PathNotFoundException,
 			AccessDeniedException, DatabaseException {
-		log.info("copyAttributes({}, {}, {})", new Object[]{srcUuid, dstUuid, extAttr});
+		log.info("copyAttributes({}, {}, {})", srcUuid, dstUuid, extAttr);
 		Session session = null;
 		Transaction tx = null;
 
@@ -2294,13 +2085,7 @@ public class NodeBaseDAO {
 			session.update(dstNode);
 			HibernateUtil.commit(tx);
 			log.debug("copyAttributes: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {

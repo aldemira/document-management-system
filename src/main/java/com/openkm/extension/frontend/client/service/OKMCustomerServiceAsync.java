@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -32,7 +32,8 @@ import com.openkm.extension.frontend.client.bean.GWTExtendedSecurity;
  *
  */
 public interface OKMCustomerServiceAsync extends RemoteService {
-	public void addExtendedSecurity(GWTExtendedSecurity security, boolean recursive, AsyncCallback<Double> callback);
 
-	public void removeExtendedSecurity(GWTExtendedSecurity security, boolean recursive, AsyncCallback<?> callback);
+	void addExtendedSecurity(GWTExtendedSecurity security, boolean recursive, AsyncCallback<Double> callback);
+
+	void removeExtendedSecurity(GWTExtendedSecurity security, boolean recursive, AsyncCallback<?> callback);
 }

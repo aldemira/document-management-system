@@ -86,16 +86,7 @@ public class NodeMailDAO {
 			session.save(nMail);
 			HibernateUtil.commit(tx);
 			log.debug("create: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (ItemExistsException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | ItemExistsException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -171,10 +162,7 @@ public class NodeMailDAO {
 			log.trace("findByParent.Time: {}", System.currentTimeMillis() - begin);
 			log.debug("findByParent: {}", ret);
 			return ret;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -245,7 +233,7 @@ public class NodeMailDAO {
 		final String qs = "from NodeMail nm where :category in elements(nm.categories) order by nm.name";
 		final String sql = "select NBS_UUID from OKM_NODE_CATEGORY, OKM_NODE_MAIL " +
 				"where NCT_CATEGORY = :catUuid and NCT_NODE = NBS_UUID";
-		List<NodeMail> ret = new ArrayList<NodeMail>();
+		List<NodeMail> ret = new ArrayList<>();
 		Session session = null;
 		Transaction tx = null;
 
@@ -283,10 +271,7 @@ public class NodeMailDAO {
 			log.trace("findByCategory.Time: {}", System.currentTimeMillis() - begin);
 			log.debug("findByCategory: {}", ret);
 			return ret;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -306,7 +291,7 @@ public class NodeMailDAO {
 		final String qs = "from NodeMail nm where :keyword in elements(nm.keywords) order by nm.name";
 		final String sql = "select NBS_UUID from OKM_NODE_KEYWORD, OKM_NODE_MAIL " +
 				"where NKW_KEYWORD = :keyword and NKW_NODE = NBS_UUID";
-		List<NodeMail> ret = new ArrayList<NodeMail>();
+		List<NodeMail> ret = new ArrayList<>();
 		Session session = null;
 		Transaction tx = null;
 
@@ -354,7 +339,7 @@ public class NodeMailDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<NodeMail> findByPropertyValue(String group, String property, String value) throws DatabaseException {
-		log.debug("findByPropertyValue({}, {}, {})", property, value);
+		log.debug("findByPropertyValue({}, {})", property, value);
 		String qs = "select nb from NodeMail nb join nb.properties nbp where nbp.group=:group and nbp.name=:property and nbp.value like :value";
 		Session session = null;
 		Transaction tx = null;
@@ -418,10 +403,7 @@ public class NodeMailDAO {
 			HibernateUtil.commit(tx);
 			log.debug("hasChildren: {}", ret);
 			return ret;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -467,16 +449,7 @@ public class NodeMailDAO {
 			HibernateUtil.commit(tx);
 			log.debug("rename: {}", nMail);
 			return nMail;
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (ItemExistsException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | ItemExistsException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -531,16 +504,7 @@ public class NodeMailDAO {
 			SystemProfiling.log(uuid, System.currentTimeMillis() - begin);
 			log.trace("move.Time: {}", System.currentTimeMillis() - begin);
 			log.debug("move: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (ItemExistsException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException | ItemExistsException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -554,9 +518,9 @@ public class NodeMailDAO {
 	/**
 	 * Delete mail
 	 */
-	public void delete(String name, String uuid, String trashUuid) throws PathNotFoundException,
-			AccessDeniedException, DatabaseException {
-		log.debug("delete({}, {}, {})", new Object[]{name, uuid, trashUuid});
+	public void delete(String name, String uuid, String trashUuid) throws PathNotFoundException, AccessDeniedException,
+			DatabaseException {
+		log.debug("delete({}, {}, {})", name, uuid, trashUuid);
 		long begin = System.currentTimeMillis();
 		Session session = null;
 		Transaction tx = null;
@@ -598,13 +562,7 @@ public class NodeMailDAO {
 			SystemProfiling.log(uuid, System.currentTimeMillis() - begin);
 			log.trace("delete.Time: {}", System.currentTimeMillis() - begin);
 			log.debug("delete: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -647,16 +605,7 @@ public class NodeMailDAO {
 			purgeHelper(session, nMail);
 			HibernateUtil.commit(tx);
 			log.debug("purge: void");
-		} catch (PathNotFoundException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (AccessDeniedException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (IOException e) {
-			HibernateUtil.rollback(tx);
-			throw e;
-		} catch (DatabaseException e) {
+		} catch (PathNotFoundException | AccessDeniedException | IOException | DatabaseException e) {
 			HibernateUtil.rollback(tx);
 			throw e;
 		} catch (HibernateException e) {
@@ -738,7 +687,7 @@ public class NodeMailDAO {
 			// Security Check
 			NodeBase nBase = (NodeBase) session.get(NodeMail.class, uuid);
 
-			if (nBase != null && nBase instanceof NodeMail) {
+			if (nBase instanceof NodeMail) {
 				SecurityHelper.checkRead(nBase);
 				return true;
 			}

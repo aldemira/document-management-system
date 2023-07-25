@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -39,7 +39,7 @@ public class GWTInput extends GWTFormElement implements IsSerializable {
 	public static final String TYPE_DATE = "date";
 	public static final String TYPE_LINK = "link";
 	public static final String TYPE_FOLDER = "folder";
-	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
+	private List<GWTValidator> validators = new ArrayList<>();
 	private String type = TYPE_TEXT;
 	private String value = "";
 	private Date date;

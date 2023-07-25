@@ -52,7 +52,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 
 	@Override
 	public void send(String uuid, String type, String users, String roles, String comment) throws OKMException {
-		log.debug("create({}, {}, {}, {}, {})", new Object[]{uuid, type, users, roles, comment});
+		log.debug("create({}, {}, {}, {}, {})", uuid, type, users, roles, comment);
 		updateSessionManager();
 
 		try {
@@ -65,8 +65,8 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 				to = users + roles;
 			}
 
-			List<String> userNames = new ArrayList<String>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
-			List<String> roleNames = new ArrayList<String>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
+			List<String> userNames = new ArrayList<>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
+			List<String> roleNames = new ArrayList<>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
 
 			for (String role : roleNames) {
 				List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);
@@ -92,8 +92,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_Database), e.getMessage());
 		} catch (PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
-			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_PrincipalAdapter),
-					e.getMessage());
+			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_PrincipalAdapter), e.getMessage());
 		} catch (PathNotFoundException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMProposedSubscriptionService, ErrorCode.CAUSE_PathNotFound), e.getMessage());
@@ -112,7 +111,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	@Override
 	public Map<String, Long> findProposedSubscriptionsUsersFrom() throws OKMException {
 		log.debug("findProposedSubscriptionsUsersFrom()");
-		Map<String, Long> received = new HashMap<String, Long>();
+		Map<String, Long> received = new HashMap<>();
 		updateSessionManager();
 
 		try {
@@ -123,7 +122,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 				if (unreadMap.containsKey(sender)) {
 					received.put(sender, unreadMap.get(sender));
 				} else {
-					received.put(sender, new Long(0));
+					received.put(sender, 0L);
 				}
 			}
 		} catch (DatabaseException e) {
@@ -139,7 +138,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	public List<GWTProposedSubscriptionReceived> findProposedSubscriptionByMeFromUser(String user) throws OKMException {
 		log.debug("findProposedSubscriptionByMeFromUser()");
 		updateSessionManager();
-		List<GWTProposedSubscriptionReceived> proposedQuerySubscriptionList = new ArrayList<GWTProposedSubscriptionReceived>();
+		List<GWTProposedSubscriptionReceived> proposedQuerySubscriptionList = new ArrayList<>();
 
 		try {
 			for (ProposedSubscriptionReceived proposedSubscriptionReceived : ProposedSubscriptionDAO.findProposedSubscriptionByMeFromUser(
@@ -225,7 +224,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 	public void deleteProposedSubscriptionByMeFromUser(String sender) throws OKMException {
 		log.debug("deleteProposedSubscriptionByMeFromUser()");
 		updateSessionManager();
-		List<String> IdToDelete = new ArrayList<String>();
+		List<String> IdToDelete = new ArrayList<>();
 
 		try {
 			for (ProposedSubscriptionReceived ps : ProposedSubscriptionDAO.findProposedSubscriptionByMeFromUser(getThreadLocalRequest()
@@ -236,7 +235,7 @@ public class ProposedSubscriptionServlet extends OKMRemoteServiceServlet impleme
 			}
 
 			for (String id : IdToDelete) {
-				ProposedSubscriptionDAO.deleteReceived(Integer.valueOf(id));
+				ProposedSubscriptionDAO.deleteReceived(Integer.parseInt(id));
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);

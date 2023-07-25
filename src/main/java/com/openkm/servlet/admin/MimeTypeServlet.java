@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -21,29 +21,6 @@
 
 package com.openkm.servlet.admin;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.IOUtils;
-import org.hibernate.Session;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.openkm.core.DatabaseException;
 import com.openkm.core.MimeTypeConfig;
 import com.openkm.dao.HibernateUtil;
@@ -54,6 +31,27 @@ import com.openkm.util.SecureStore;
 import com.openkm.util.UserActivity;
 import com.openkm.util.WarUtils;
 import com.openkm.util.WebUtils;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
+import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Mime type management servlet
@@ -107,11 +105,9 @@ public class MimeTypeServlet extends BaseServlet {
 				ServletFileUpload upload = new ServletFileUpload(factory);
 				List<FileItem> items = upload.parseRequest(request);
 				MimeType mt = new MimeType();
-				byte data[] = null;
+				byte[] data = null;
 
-				for (Iterator<FileItem> it = items.iterator(); it.hasNext(); ) {
-					FileItem item = it.next();
-
+				for (FileItem item : items) {
 					if (item.isFormField()) {
 						if (item.getFieldName().equals("action")) {
 							action = item.getString("UTF-8");
@@ -171,13 +167,7 @@ public class MimeTypeServlet extends BaseServlet {
 					list(userId, request, response);
 				}
 			}
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (FileUploadException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (SQLException e) {
+		} catch (DatabaseException | FileUploadException | SQLException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		} finally {
@@ -188,9 +178,9 @@ public class MimeTypeServlet extends BaseServlet {
 	/**
 	 * List registered mime types
 	 */
-	private void list(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
-		log.debug("list({}, {}, {})", new Object[]{userId, request, response});
+	private void list(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
+		log.debug("list({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		sc.setAttribute("mimeTypes", MimeTypeDAO.findAll("mt.name"));
 		sc.getRequestDispatcher("/admin/mime_list.jsp").forward(request, response);
@@ -200,9 +190,9 @@ public class MimeTypeServlet extends BaseServlet {
 	/**
 	 * Delete mime type
 	 */
-	private void delete(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
-		log.debug("delete({}, {}, {})", new Object[]{userId, request, response});
+	private void delete(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
+		log.debug("delete({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		int mtId = WebUtils.getInt(request, "mt_id");
 		MimeType mt = MimeTypeDAO.findByPk(mtId);
@@ -222,9 +212,9 @@ public class MimeTypeServlet extends BaseServlet {
 	/**
 	 * Create mime type
 	 */
-	private void create(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
-		log.debug("create({}, {}, {})", new Object[]{userId, request, response});
+	private void create(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
+		log.debug("create({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		MimeType mt = new MimeType();
 		sc.setAttribute("action", WebUtils.getString(request, "action"));
@@ -237,9 +227,9 @@ public class MimeTypeServlet extends BaseServlet {
 	/**
 	 * Edit mime type
 	 */
-	private void edit(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
-		log.debug("edit({}, {}, {})", new Object[]{userId, request, response});
+	private void edit(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
+		log.debug("edit({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		int mtId = WebUtils.getInt(request, "mt_id");
 		MimeType mt = MimeTypeDAO.findByPk(mtId);
@@ -259,8 +249,9 @@ public class MimeTypeServlet extends BaseServlet {
 	/**
 	 * Export mime types
 	 */
-	private void export(String userId, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
-		log.debug("export({}, {}, {})", new Object[]{userId, request, response});
+	private void export(String userId, HttpServletRequest request, HttpServletResponse response) throws DatabaseException,
+			IOException {
+		log.debug("export({}, {}, {})", userId, request, response);
 
 		// Disable browser cache
 		response.setHeader("Expires", "Sat, 6 May 1971 12:00:00 GMT");
@@ -270,7 +261,7 @@ public class MimeTypeServlet extends BaseServlet {
 
 		response.setHeader("Content-disposition", "inline; filename=\"" + fileName + "\"");
 		response.setContentType("text/x-sql; charset=UTF-8");
-		PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF8"), true);
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), StandardCharsets.UTF_8), true);
 		out.println("DELETE FROM OKM_MIME_TYPE_EXTENSION;");
 		out.println("DELETE FROM OKM_MIME_TYPE;");
 
@@ -302,12 +293,11 @@ public class MimeTypeServlet extends BaseServlet {
 	/**
 	 * Import mime types into database
 	 */
-	private void importMimeTypes(String userId, HttpServletRequest request, HttpServletResponse response,
-	                             final byte[] data, Session dbSession) throws DatabaseException,
-			IOException, SQLException {
-		log.debug("import({}, {}, {}, {}, {})", new Object[]{userId, request, response, data, dbSession});
+	private void importMimeTypes(String userId, HttpServletRequest request, HttpServletResponse response, final byte[] data,
+			Session dbSession) throws DatabaseException, SQLException {
+		log.debug("import({}, {}, {}, {}, {})", userId, request, response, data, dbSession);
 
-        WorkerUpdate worker = new DatabaseQueryServlet().new WorkerUpdate();
+        WorkerUpdate worker = new WorkerUpdate();
         worker.setData(data);
         dbSession.doWork(worker);
         log.debug("importMimeTypes: void");

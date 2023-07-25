@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -37,25 +37,24 @@ import com.openkm.frontend.client.service.OKMSearchServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 /**
- * User news searches 
+ * User news searches
  *
  * @author jllort
  *
  */
 public class UserNews extends Composite {
-
-	private final OKMDashboardServiceAsync dashboardService = (OKMDashboardServiceAsync) GWT.create(OKMDashboardService.class);
-	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
+	private final OKMDashboardServiceAsync dashboardService = GWT.create(OKMDashboardService.class);
+	private final OKMSearchServiceAsync searchService = GWT.create(OKMSearchService.class);
 
 	private ExtendedFlexTable table;
 	public MenuPopup menuPopup;
 	private Status status;
 	private boolean firstTime = true;
+
 	// Holds the data rows of the table this is a list of RowData Object
 	public Map<Integer, GWTQueryParams> data;
 	private int dataIndexValue = 0;
@@ -65,7 +64,7 @@ public class UserNews extends Composite {
 	 * UserNews
 	 */
 	public UserNews() {
-		data = new HashMap<Integer, GWTQueryParams>();
+		data = new HashMap<>();
 		table = new ExtendedFlexTable();
 		menuPopup = new MenuPopup();
 		menuPopup.setStyleName("okm-MenuPopup");
@@ -110,15 +109,16 @@ public class UserNews extends Composite {
 	}
 
 	/**
-	 * Call Back get search 
+	 * Call Back get search
 	 */
 	final AsyncCallback<List<GWTQueryParams>> callbackGetUserSearchs = new AsyncCallback<List<GWTQueryParams>>() {
 		public void onSuccess(List<GWTQueryParams> result) {
 			table.removeAllRows();
 
-			for (Iterator<GWTQueryParams> it = result.iterator(); it.hasNext(); ) {
-				addRow(it.next());
+			for (GWTQueryParams gwtQueryParams : result) {
+				addRow(gwtQueryParams);
 			}
+
 			if (!firstTime) {
 				status.unsetFlag_getUserNews();
 			} else {
@@ -138,7 +138,7 @@ public class UserNews extends Composite {
 	};
 
 	/**
-	 * Call Back delete search 
+	 * Call Back delete search
 	 */
 	final AsyncCallback<Object> callbackDeleteSearch = new AsyncCallback<Object>() {
 		public void onSuccess(Object result) {
@@ -285,4 +285,3 @@ public class UserNews extends Composite {
 		menuPopup.langRefresh();
 	}
 }
-	

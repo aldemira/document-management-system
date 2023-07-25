@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -90,7 +90,7 @@ public class OOTextExtractor extends AbstractTextExtractor {
 			fos.close();
 
 			// Convert to text
-			DocConverter.getInstance().convert(fIn, type, fOut);
+			DocConverter.getInstance().convert(fIn, fOut);
 			ret = FileUtils.readFileToString(fOut);
 			log.debug("TEXT: " + ret);
 			return ret;

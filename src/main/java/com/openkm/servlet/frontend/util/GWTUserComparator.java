@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -27,7 +27,6 @@ import com.openkm.frontend.client.bean.GWTUser;
  * GWTUserComparator
  *
  * @author jllort
- *
  */
 public class GWTUserComparator extends CultureComparator<GWTUser> {
 
@@ -37,22 +36,17 @@ public class GWTUserComparator extends CultureComparator<GWTUser> {
 
 	public static GWTUserComparator getInstance(String locale) {
 		try {
-			GWTUserComparator comparator = (GWTUserComparator) CultureComparator.getInstance(GWTUserComparator.class, locale);
-			return comparator;
+			return (GWTUserComparator) CultureComparator.getInstance(GWTUserComparator.class, locale);
 		} catch (Exception e) {
 			return new GWTUserComparator(locale);
 		}
 	}
 
 	public static GWTUserComparator getInstance() {
-		GWTUserComparator instance = getInstance(CultureComparator.DEFAULT_LOCALE);
-		return instance;
+		return getInstance(CultureComparator.DEFAULT_LOCALE);
 	}
 
-	public int compare(GWTUser arg0, GWTUser arg1) {
-		GWTUser first = arg0;
-		GWTUser second = arg1;
-
+	public int compare(GWTUser first, GWTUser second) {
 		return collator.compare(first.getUsername().toLowerCase(), second.getUsername().toLowerCase());
 	}
 }

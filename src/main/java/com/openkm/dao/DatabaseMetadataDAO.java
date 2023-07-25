@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -244,7 +244,7 @@ public class DatabaseMetadataDAO {
 	 */
 	public static List<DatabaseMetadataValue[]> executeMultiValueQuery(String query) throws DatabaseException {
 		log.debug("executeMultiValueQuery({})", query);
-		List<DatabaseMetadataValue[]> ret = new ArrayList<DatabaseMetadataValue[]>();
+		List<DatabaseMetadataValue[]> ret = new ArrayList<>();
 		Session session = null;
 		Transaction tx = null;
 
@@ -281,76 +281,6 @@ public class DatabaseMetadataDAO {
 		} finally {
 			HibernateUtil.close(session);
 		}
-	}
-
-	/**
-	 * Create
-	 */
-	public static long createType(DatabaseMetadataType dmt) throws DatabaseException {
-		log.debug("createType({})", dmt);
-		Session session = null;
-		Transaction tx = null;
-
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			Long id = (Long) session.save(dmt);
-			HibernateUtil.commit(tx);
-			log.debug("createType: {}", id);
-			return id;
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-	}
-
-	/**
-	 * Update
-	 */
-	public static void updateType(DatabaseMetadataType dmt) throws DatabaseException {
-		log.debug("updateType({})", dmt);
-		Session session = null;
-		Transaction tx = null;
-
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			session.update(dmt);
-			HibernateUtil.commit(tx);
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-
-		log.debug("updateType: void");
-	}
-
-	/**
-	 * Delete
-	 */
-	public static void deleteType(long dmtId) throws DatabaseException {
-		log.debug("deleteType({})", dmtId);
-		Session session = null;
-		Transaction tx = null;
-
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			DatabaseMetadataType emt = (DatabaseMetadataType) session.load(DatabaseMetadataType.class, dmtId);
-			session.delete(emt);
-			HibernateUtil.commit(tx);
-		} catch (HibernateException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} finally {
-			HibernateUtil.close(session);
-		}
-
-		log.debug("deleteType: void");
 	}
 
 	/**

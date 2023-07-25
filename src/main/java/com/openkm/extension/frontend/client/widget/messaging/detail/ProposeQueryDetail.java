@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -48,9 +48,8 @@ import com.openkm.frontend.client.service.OKMSearchServiceAsync;
  *
  */
 public class ProposeQueryDetail extends Composite {
-
-	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
-	private final OKMProposedQueryServiceAsync proposedQueryService = (OKMProposedQueryServiceAsync) GWT.create(OKMProposedQueryService.class);
+	private final OKMProposedQueryServiceAsync proposedQueryService = GWT.create(OKMProposedQueryService.class);
+	private final OKMSearchServiceAsync searchService = GWT.create(OKMSearchService.class);
 
 	private ScrollPanel scrollPanel;
 	private VerticalPanel vPanel;

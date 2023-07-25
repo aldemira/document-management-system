@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -66,7 +66,7 @@ public class CSVUtil {
 		// Getting translations
 		Map<String, String> translations = LanguageUtils.getTranslations(lang,
 				new String[]{Translation.MODULE_FRONTEND});
-		Map<String, GWTFilebrowseExtraColumn> ecMap = new HashMap<String, GWTFilebrowseExtraColumn>();
+		Map<String, GWTFilebrowseExtraColumn> ecMap;
 
 		Profile up = new Profile();
 		UserConfig uc = UserConfigDAO.findByPk(user);
@@ -144,7 +144,7 @@ public class CSVUtil {
 		// Getting translations
 		Map<String, String> translations = LanguageUtils.getTranslations(lang,
 				new String[]{Translation.MODULE_FRONTEND});
-		Map<String, GWTFilebrowseExtraColumn> ecMap = new HashMap<String, GWTFilebrowseExtraColumn>();
+		Map<String, GWTFilebrowseExtraColumn> ecMap;
 
 		Profile up = new Profile();
 		UserConfig uc = UserConfigDAO.findByPk(user);
@@ -186,9 +186,9 @@ public class CSVUtil {
 		String[] columns = new String[cols];
 		if (qr.getNode() instanceof Document) {
 			if (!qr.isAttachment()) {
-				columns = handleDocument((Document) qr.getNode(), dtf, translations, cols, up, ecMap, compact);	
+				columns = handleDocument((Document) qr.getNode(), dtf, translations, cols, up, ecMap, compact);
 			} else {
-				columns = handleDocument((Document) qr.getNode(), dtf, translations, cols, up, ecMap, compact);				
+				columns = handleDocument((Document) qr.getNode(), dtf, translations, cols, up, ecMap, compact);
 			}
 		} else if (qr.getNode() instanceof Folder) {
 			columns = handleFolder((Folder) qr.getNode(), dtf, translations, cols, up, ecMap, compact);
@@ -311,7 +311,7 @@ public class CSVUtil {
 		addExtraColumnsValues(columns, up, col, mail.getPath(), ecMap, dtf);
 		return columns;
 	}
-	
+
 	/**
 	 * numberOfExtraColumns
 	 */
@@ -368,7 +368,7 @@ public class CSVUtil {
 	private static Map<String, GWTFilebrowseExtraColumn> addExtraColumns(String[] columns, Profile up, int index)
 			throws IOException, ParseException, RepositoryException, DatabaseException, AccessDeniedException, PathNotFoundException,
 			PrincipalAdapterException, NoSuchGroupException {
-		Map<String, GWTFilebrowseExtraColumn> map = new HashMap<String, GWTFilebrowseExtraColumn>();
+		Map<String, GWTFilebrowseExtraColumn> map = new HashMap<>();
 
 		if (isValidPropertyGroup(up.getPrfFileBrowser().getColumn0())) {
 			GWTFilebrowseExtraColumn ec = GWTUtil.getExtraColumn(up.getPrfFileBrowser().getColumn0());

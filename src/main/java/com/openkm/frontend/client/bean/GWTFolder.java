@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -63,18 +63,18 @@ public class GWTFolder implements IsSerializable {
 
 	public void initMetadata(String fldPath, boolean hasChildren) {
 		setAuthor("");
-		setCategories(new HashSet<GWTFolder>());
+		setCategories(new HashSet<>());
 		setCreated(new Date());
 		setHasChildren(hasChildren);
 		setHasNotes(false);
-		setKeywords(new HashSet<String>());
+		setKeywords(new HashSet<>());
 		setName(fldPath.substring(fldPath.lastIndexOf("/") + 1));
-		setNotes(new ArrayList<GWTNote>());
+		setNotes(new ArrayList<>());
 		setPath(fldPath);
 		setParentPath(fldPath.substring(0, fldPath.lastIndexOf("/")));
 		setPermissions(GWTPermission.READ);
 		setSubscribed(false);
-		setSubscriptors(new HashSet<GWTUser>());
+		setSubscriptors(new HashSet<>());
 		setUuid("");
 		setUser(new GWTUser());
 	}

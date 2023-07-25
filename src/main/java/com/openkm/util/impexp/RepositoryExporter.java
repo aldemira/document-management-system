@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.*;
-import java.util.Iterator;
 
 public class RepositoryExporter {
 	private static Logger log = LoggerFactory.getLogger(RepositoryExporter.class);
@@ -57,9 +56,9 @@ public class RepositoryExporter {
 	 * Performs a recursive repository content export with metadata
 	 */
 	public static ImpExpStats exportDocuments(String token, String fldPath, File fs, boolean metadata, boolean history,
-	                                          Writer out, InfoDecorator deco) throws PathNotFoundException, AccessDeniedException, RepositoryException,
+				Writer out, InfoDecorator deco) throws PathNotFoundException, AccessDeniedException, RepositoryException,
 			IOException, DatabaseException, ParseException, NoSuchGroupException, MessagingException {
-		log.debug("exportDocuments({}, {}, {}, {}, {}, {}, {})", new Object[]{token, fldPath, fs, metadata, history, out, deco});
+		log.debug("exportDocuments({}, {}, {}, {}, {}, {}, {})", token, fldPath, fs, metadata, history, out, deco);
 		ImpExpStats stats;
 
 		try {
@@ -119,9 +118,9 @@ public class RepositoryExporter {
 	 * Performs a recursive repository content export with metadata
 	 */
 	private static ImpExpStats exportDocumentsHelper(String token, String fldPath, File fs, boolean metadata,
-	                                                 boolean history, Writer out, InfoDecorator deco) throws PathNotFoundException, AccessDeniedException,
+			boolean history, Writer out, InfoDecorator deco) throws PathNotFoundException, AccessDeniedException,
 			RepositoryException, IOException, DatabaseException, ParseException, NoSuchGroupException, MessagingException {
-		log.debug("exportDocumentsHelper({}, {}, {}, {}, {}, {}, {})", new Object[]{token, fldPath, fs, metadata, history, out, deco});
+		log.debug("exportDocumentsHelper({}, {}, {}, {}, {}, {}, {})", token, fldPath, fs, metadata, history, out, deco);
 		ImpExpStats stats = new ImpExpStats();
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		FolderModule fm = ModuleManager.getFolderModule();
@@ -150,9 +149,7 @@ public class RepositoryExporter {
 			}
 		}
 
-		for (Iterator<Mail> it = mm.getChildren(token, fldPath).iterator(); it.hasNext(); ) {
-			Mail mailChild = it.next();
-
+		for (Mail mailChild : mm.getChildren(token, fldPath)) {
 			try {
 				String mailName = PathUtils.decodeEntities(PathUtils.getName(mailChild.getPath()));
 
@@ -173,9 +170,7 @@ public class RepositoryExporter {
 			}
 		}
 
-		for (Iterator<Document> it = dm.getChildren(token, fldPath).iterator(); it.hasNext(); ) {
-			Document docChild = it.next();
-
+		for (Document docChild : dm.getChildren(token, fldPath)) {
 			try {
 				String fileName = PathUtils.decodeEntities(PathUtils.getName(docChild.getPath()));
 
@@ -196,8 +191,7 @@ public class RepositoryExporter {
 			}
 		}
 
-		for (Iterator<Folder> it = fm.getChildren(token, fldPath).iterator(); it.hasNext(); ) {
-			Folder fldChild = it.next();
+		for (Folder fldChild : fm.getChildren(token, fldPath)) {
 			ImpExpStats tmp = exportDocumentsHelper(token, fldChild.getPath(), fsPath, metadata, history, out, deco);
 			String dirName = PathUtils.decodeEntities(PathUtils.getName(fldChild.getPath()));
 

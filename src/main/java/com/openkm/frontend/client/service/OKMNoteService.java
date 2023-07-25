@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -32,9 +32,9 @@ import com.openkm.frontend.client.bean.GWTNote;
  */
 @RemoteServiceRelativePath("Note")
 public interface OKMNoteService extends RemoteService {
-	public GWTNote add(String nodePath, String text) throws OKMException;
+	GWTNote add(String nodePath, String text) throws OKMException;
 
-	public void delete(String notePath) throws OKMException;
+	void delete(String notePath) throws OKMException;
 
-	public String set(String notePath, String text) throws OKMException;
+	String set(String notePath, String text) throws OKMException;
 }

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -45,8 +45,8 @@ import java.util.List;
  * @author jllort
  */
 public class ForumManager extends Composite implements ForumController {
-	private final OKMForumServiceAsync forumService = (OKMForumServiceAsync) GWT.create(OKMForumService.class);
 	private final static int IE_SIZE_RECTIFICATION = (Util.getUserAgent().startsWith("ie") ? 2 : 0);
+	private final OKMForumServiceAsync forumService = GWT.create(OKMForumService.class);
 
 	// Toolbar height
 	public static final int TOOLBAR_HEADER = 25;
@@ -67,7 +67,7 @@ public class ForumManager extends Composite implements ForumController {
 	private FixedWidthFlexTable topicHeaderTable;
 	private FixedWidthGrid topicDataTable;
 
-	// Editor & Post  
+	// Editor & Post
 	private ScrollPanel scrollPanelPost;
 	private VerticalPanel vPostPanel;
 	private ForumEditor forumEditor;
@@ -245,7 +245,7 @@ public class ForumManager extends Composite implements ForumController {
 	 * Removes all rows except the first
 	 */
 	private void removeAllForumRows() {
-		// Purge all rows 
+		// Purge all rows
 		while (forumDataTable.getRowCount() > 0) {
 			forumDataTable.removeRow(0);
 		}
@@ -257,7 +257,7 @@ public class ForumManager extends Composite implements ForumController {
 	 * Removes all rows except the first
 	 */
 	private void removeAllTopicRows() {
-		// Purge all rows 
+		// Purge all rows
 		while (topicDataTable.getRowCount() > 0) {
 			topicDataTable.removeRow(0);
 		}

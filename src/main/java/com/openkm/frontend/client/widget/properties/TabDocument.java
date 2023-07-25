@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -49,7 +49,6 @@ import com.openkm.frontend.client.util.Util;
 import com.openkm.frontend.client.widget.properties.version.VersionScrollTable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -97,7 +96,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 */
 	public TabDocument() {
 		doc = new GWTDocument();
-		propertyGroupHandlerExtensionList = new ArrayList<PropertyGroupHandlerExtension>();
+		propertyGroupHandlerExtensionList = new ArrayList<>();
 		tabPanel = new TabLayoutPanel(TAB_HEIGHT, Unit.PX);
 		document = new Document();
 		notes = new Notes(Notes.DOCUMENT_NOTE);
@@ -105,14 +104,14 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		security = new SecurityScrollTable();
 		preview = new Preview();
 		panel = new VerticalPanel();
-		propertyGroup = new ArrayList<PropertyGroup>();
-		widgetExtensionList = new ArrayList<TabDocumentExtension>();
-		docHandlerExtensionList = new ArrayList<DocumentHandlerExtension>();
+		propertyGroup = new ArrayList<>();
+		widgetExtensionList = new ArrayList<>();
+		docHandlerExtensionList = new ArrayList<>();
 
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
-				final int tabIndex = event.getSelectedItem().intValue();
+				final int tabIndex = event.getSelectedItem();
 				Main.get().mainPanel.topPanel.toolBar.evaluateRemovePropertyGroup(isRemovePropertyGroupEnabled(tabIndex));
 				selectedTab = tabIndex;
 
@@ -175,13 +174,12 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		security.fillWidth();
 
 		// Setting size to extension
-		for (Iterator<TabDocumentExtension> it = widgetExtensionList.iterator(); it.hasNext(); ) {
-			it.next().setPixelSize(width, height - TAB_HEIGHT);
+		for (TabDocumentExtension tabDocumentExtension : widgetExtensionList) {
+			tabDocumentExtension.setPixelSize(width, height - TAB_HEIGHT);
 		}
 
 		if (!propertyGroup.isEmpty()) { // Sets size to propety groups
-			for (Iterator<PropertyGroup> it = propertyGroup.iterator(); it.hasNext(); ) {
-				PropertyGroup group = it.next();
+			for (PropertyGroup group : propertyGroup) {
 				group.setPixelSize(width, height - TAB_HEIGHT);
 			}
 		}
@@ -242,12 +240,15 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 		}
 
 		if (previewVisible) {
-			preview.setPreviewAvailable(doc);
+			preview.setPreviewAvailable(doc.getMimeType().equals("application/pdf")
+					|| doc.isConvertibleToPdf()
+					|| HTMLPreview.isPreviewAvailable(doc.getMimeType())
+					|| SyntaxHighlighterPreview.isPreviewAvailable(doc.getMimeType()));
 		}
 
 		if (!propertyGroup.isEmpty()) {
-			for (Iterator<PropertyGroup> it = propertyGroup.iterator(); it.hasNext(); ) {
-				tabPanel.remove(it.next());
+			for (PropertyGroup group : propertyGroup) {
+				tabPanel.remove(group);
 			}
 			propertyGroup.clear();
 		}
@@ -356,15 +357,13 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 			preview.langRefresh();
 		}
 
-		for (Iterator<TabDocumentExtension> it = widgetExtensionList.iterator(); it.hasNext(); ) {
-			TabDocumentExtension extension = it.next();
+		for (TabDocumentExtension extension : widgetExtensionList) {
 			tabPanel.add(extension, extension.getTabText());
 		}
 
 		// Refresh lang property group
 		if (!propertyGroup.isEmpty()) {
-			for (Iterator<PropertyGroup> it = propertyGroup.iterator(); it.hasNext(); ) {
-				PropertyGroup group = it.next();
+			for (PropertyGroup group : propertyGroup) {
 				tabPanel.add(group, group.getGrpLabel());
 				group.langRefresh();
 			}
@@ -411,8 +410,8 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 				propertyGroup.add(group);
 
 				// Adds property group handlers
-				for (Iterator<PropertyGroupHandlerExtension> itx = propertyGroupHandlerExtensionList.iterator(); itx.hasNext(); ) {
-					group.addPropertyGroupHandlerExtension(itx.next());
+				for (PropertyGroupHandlerExtension propertyGroupHandlerExtension : propertyGroupHandlerExtensionList) {
+					group.addPropertyGroupHandlerExtension(propertyGroupHandlerExtension);
 				}
 
 				// has update property group
@@ -494,8 +493,7 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 	 */
 	public void resizingIncubatorWidgets() {
 		if (!propertyGroup.isEmpty()) {
-			for (Iterator<PropertyGroup> it = propertyGroup.iterator(); it.hasNext(); ) {
-				PropertyGroup group = it.next();
+			for (PropertyGroup group : propertyGroup) {
 				group.setPixelSize(getOffsetWidth(), getOffsetHeight() - TAB_HEIGHT);
 			}
 		}
@@ -655,8 +653,8 @@ public class TabDocument extends Composite implements HasDocumentEvent, HasDocum
 
 	@Override
 	public void fireEvent(DocumentEventConstant event) {
-		for (Iterator<DocumentHandlerExtension> it = docHandlerExtensionList.iterator(); it.hasNext(); ) {
-			it.next().onChange(event);
+		for (DocumentHandlerExtension documentHandlerExtension : docHandlerExtensionList) {
+			documentHandlerExtension.onChange(event);
 		}
 	}
 

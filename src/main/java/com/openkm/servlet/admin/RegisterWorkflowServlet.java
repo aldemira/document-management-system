@@ -1,9 +1,6 @@
 package com.openkm.servlet.admin;
 
 import com.openkm.api.OKMWorkflow;
-import com.openkm.core.DatabaseException;
-import com.openkm.core.ParseException;
-import com.openkm.core.WorkflowException;
 import com.openkm.util.UserActivity;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -20,7 +17,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -51,9 +47,7 @@ public class RegisterWorkflowServlet extends BaseServlet {
 				List<FileItem> items = upload.parseRequest(request);
 
 				// Parse the request and get all parameters and the uploaded file
-				for (Iterator<FileItem> it = items.iterator(); it.hasNext(); ) {
-					FileItem item = it.next();
-
+				for (FileItem item : items) {
 					if (!item.isFormField()) {
 						fileName = item.getName();
 						content = item.get();
@@ -72,18 +66,6 @@ public class RegisterWorkflowServlet extends BaseServlet {
 				UserActivity.log(request.getRemoteUser(), "ADMIN_WORKFLOW_REGISTER", fileName, null, null);
 				response.sendRedirect("Workflow");
 			}
-		} catch (ParseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (WorkflowException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (IOException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);

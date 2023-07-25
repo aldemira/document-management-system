@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -32,7 +32,7 @@ public class Serializer {
 	private static Logger log = LoggerFactory.getLogger(Serializer.class);
 
 	/**
-	 * @param obj
+	 *
 	 */
 	public static void write(String filename, Object obj) {
 		FileOutputStream fos = null;
@@ -42,8 +42,6 @@ public class Serializer {
 			fos = new FileOutputStream(Config.HOME_DIR + File.separator + filename + ".ser");
 			oos = new ObjectOutputStream(fos);
 			oos.writeObject(obj);
-		} catch (FileNotFoundException e) {
-			log.error(e.getMessage());
 		} catch (IOException e) {
 			log.error(e.getMessage());
 		} finally {
@@ -53,7 +51,7 @@ public class Serializer {
 	}
 
 	/**
-	 * @param obj
+	 *
 	 */
 	public static byte[] write(Object obj) throws IOException {
 		ByteArrayOutputStream baos = null;
@@ -73,7 +71,7 @@ public class Serializer {
 	}
 
 	/**
-	 * @param obj
+	 *
 	 */
 	public static Object read(String filename) {
 		FileInputStream fis = null;
@@ -84,11 +82,7 @@ public class Serializer {
 			fis = new FileInputStream(Config.HOME_DIR + File.separator + filename + ".ser");
 			ois = new ObjectInputStream(fis);
 			obj = ois.readObject();
-		} catch (FileNotFoundException e) {
-			log.error(e.getMessage());
-		} catch (IOException e) {
-			log.error(e.getMessage());
-		} catch (ClassNotFoundException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			log.error(e.getMessage());
 		} finally {
 			IOUtils.closeQuietly(ois);
@@ -99,7 +93,7 @@ public class Serializer {
 	}
 
 	/**
-	 * @param obj
+	 *
 	 */
 	public static Object read(byte[] data) throws IOException, ClassNotFoundException {
 		ByteArrayInputStream bais = null;

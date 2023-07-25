@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -31,7 +31,6 @@ import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -41,8 +40,7 @@ import java.util.List;
  *
  */
 public class NotifyRole extends Composite {
-
-	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
+	private final OKMAuthServiceAsync authService = GWT.create(OKMAuthService.class);
 
 	private HorizontalPanel hPanel;
 	private RoleScrollTable notifyRolesTable;
@@ -128,7 +126,7 @@ public class NotifyRole extends Composite {
 				notifyRolesTable.selectLastRow();
 				rolesTable.removeSelectedRow();
 				Main.get().fileUpload.disableErrorNotify();  // Used in both widgets
-				Main.get().notifyPopup.disableErrorNotify(); // has no bad efeccts disabling 
+				Main.get().notifyPopup.disableErrorNotify(); // has no bad effects disabling
 			}
 		}
 	};
@@ -152,8 +150,8 @@ public class NotifyRole extends Composite {
 	 */
 	final AsyncCallback<List<String>> callbackAllRoles = new AsyncCallback<List<String>>() {
 		public void onSuccess(List<String> result) {
-			for (Iterator<String> it = result.iterator(); it.hasNext(); ) {
-				rolesTable.addRow(it.next());
+			for (String s : result) {
+				rolesTable.addRow(s);
 			}
 		}
 

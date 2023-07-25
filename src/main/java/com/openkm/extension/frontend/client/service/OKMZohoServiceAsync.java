@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -33,11 +33,11 @@ import java.util.Map;
  *
  */
 public interface OKMZohoServiceAsync extends RemoteService {
-	public void getTicket(AsyncCallback<String> callback);
+	void getTicket(AsyncCallback<String> callback);
 
-	public void getZohoWriterUrl(String uuid, String lang, AsyncCallback<Map<String, String>> callback);
+	void getZohoWriterUrl(String uuid, String lang, AsyncCallback<Map<String, String>> callback);
 
-	public void getZohoSheetUrl(String uuid, String lang, AsyncCallback<Map<String, String>> callback);
+	void getZohoSheetUrl(String uuid, String lang, AsyncCallback<Map<String, String>> callback);
 
-	public void closeZohoWriter(String id, AsyncCallback<?> callback);
+	void closeZohoWriter(String id, AsyncCallback<?> callback);
 }

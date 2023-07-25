@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -38,7 +38,7 @@ public class Language implements Serializable {
 	private String name;
 	private String imageContent;
 	private String imageMime;
-	private Set<Translation> translations = new HashSet<Translation>();
+	private Set<Translation> translations = new HashSet<>();
 
 	public String getId() {
 		return id;

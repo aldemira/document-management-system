@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -33,14 +33,12 @@ import com.openkm.frontend.client.service.OKMSearchService;
 import com.openkm.frontend.client.service.OKMSearchServiceAsync;
 import com.openkm.frontend.client.widget.searchin.SearchControl;
 
-import java.util.Iterator;
-
 /**
  * @author jllort
  *
  */
 public class SearchResult extends Composite {
-	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
+	private final OKMSearchServiceAsync searchService = GWT.create(OKMSearchService.class);
 
 	SimplePanel sp;
 	public SearchCompactResult searchCompactResult;
@@ -130,9 +128,7 @@ public class SearchResult extends Composite {
 		Main.get().mainPanel.search.searchBrowser.searchIn.searchControl.controlSearch.refreshControl(resultSet.getTotal());
 		removeAllRows();
 
-		for (Iterator<GWTQueryResult> it = resultSet.getResults().iterator(); it.hasNext(); ) {
-			GWTQueryResult gwtQueryResult = it.next();
-
+		for (GWTQueryResult gwtQueryResult : resultSet.getResults()) {
 			switch (resultsViewMode) {
 				case SearchControl.RESULTS_VIEW_COMPACT:
 					searchCompactResult.addRow(gwtQueryResult);

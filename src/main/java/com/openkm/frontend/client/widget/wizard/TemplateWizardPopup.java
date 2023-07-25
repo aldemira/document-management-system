@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -64,7 +64,7 @@ public class TemplateWizardPopup extends DialogBox {
 	private String destinationPath = "";
 	private List<GWTPropertyGroup> groupsList = null;
 	private List<GWTFormElement> formElementList = null;
-	private Map<String, List<Map<String, String>>> tableProperties = new HashMap<String, List<Map<String, String>>>();
+	private Map<String, List<Map<String, String>>> tableProperties = new HashMap<>();
 	private int groupIndex = 0;
 	private PropertyGroupWidget propertyGroupWidget = null;
 	private int status = STATUS_NONE;
@@ -91,13 +91,11 @@ public class TemplateWizardPopup extends DialogBox {
 
 	/**
 	 * Starting wizard
-	 *
-	 * @param docPath
 	 */
 	public void start(String docPath, String destinationPath, boolean open) {
-		groupsList = new ArrayList<GWTPropertyGroup>();
-		formElementList = new ArrayList<GWTFormElement>();
-		tableProperties = new HashMap<String, List<Map<String, String>>>();
+		groupsList = new ArrayList<>();
+		formElementList = new ArrayList<>();
+		tableProperties = new HashMap<>();
 		vPanelFired.clear();
 		actualButton = new Button("");
 		actualButton.setEnabled(false);
@@ -199,9 +197,7 @@ public class TemplateWizardPopup extends DialogBox {
 	}
 
 	/**
-	 * Accept button 
-	 *
-	 * @return
+	 * Accept button
 	 */
 	private Button acceptButton() {
 		Button button = new Button(Main.i18n("button.accept"), new ClickHandler() {
@@ -218,9 +214,7 @@ public class TemplateWizardPopup extends DialogBox {
 	}
 
 	/**
-	 * Next button 
-	 *
-	 * @return
+	 * Next button
 	 */
 	private Button nextButton() {
 		Button button = new Button(Main.i18n("button.next"), new ClickHandler() {
@@ -237,13 +231,11 @@ public class TemplateWizardPopup extends DialogBox {
 	}
 
 	private void executeActionButton() {
-		switch (status) {
-			case STATUS_PROPERTY_GROUPS:
-				if (propertyGroupWidget != null) {
-					formElementList.addAll(propertyGroupWidget.updateFormElementsValuesWithNewer());
-					showNextWizard();
-				}
-				break;
+		if (status == STATUS_PROPERTY_GROUPS) {
+			if (propertyGroupWidget != null) {
+				formElementList.addAll(propertyGroupWidget.updateFormElementsValuesWithNewer());
+				showNextWizard();
+			}
 		}
 	}
 

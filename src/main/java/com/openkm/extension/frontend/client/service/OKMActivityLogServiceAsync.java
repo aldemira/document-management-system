@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -34,5 +34,5 @@ import java.util.List;
  *
  */
 public interface OKMActivityLogServiceAsync extends RemoteService {
-	public void findByFilterByItem(String item, String action, boolean getChilds, AsyncCallback<List<GWTActivity>> callback);
+	void findByFilterByItem(String item, String action, boolean getChilds, AsyncCallback<List<GWTActivity>> callback);
 }

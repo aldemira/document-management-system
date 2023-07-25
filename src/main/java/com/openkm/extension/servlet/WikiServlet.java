@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -142,7 +142,7 @@ public class WikiServlet extends OKMRemoteServiceServlet implements OKMWikiServi
 
 	@Override
 	public List<GWTWikiPage> findAllByTitle(String title) throws OKMException {
-		List<GWTWikiPage> wikiPages = new ArrayList<GWTWikiPage>();
+		List<GWTWikiPage> wikiPages = new ArrayList<>();
 
 		try {
 			for (WikiPage wikiPage : WikiPageDAO.findAllByTitle(title)) {
@@ -213,7 +213,7 @@ public class WikiServlet extends OKMRemoteServiceServlet implements OKMWikiServi
 
 	@Override
 	public List<GWTWikiPage> findAllHistoricByTitle(String title) throws OKMException {
-		List<GWTWikiPage> wikiPages = new ArrayList<GWTWikiPage>();
+		List<GWTWikiPage> wikiPages = new ArrayList<>();
 
 		try {
 			for (WikiPage wikiPage : WikiPageDAO.findAllHistoricByTitle(title)) {

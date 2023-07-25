@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -24,7 +24,7 @@ package com.openkm.extension.core;
 import net.xeoh.plugins.base.Plugin;
 
 public interface Extension extends Plugin {
-	public String getUuid();
+	String getUuid();
 
-	public int getOrder();
+	int getOrder();
 }

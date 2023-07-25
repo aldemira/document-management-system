@@ -32,9 +32,9 @@ import com.openkm.module.db.DbDocumentModule;
 import com.openkm.util.PathUtils;
 import com.openkm.util.WarUtils;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
-import org.apache.chemistry.opencmis.commons.data.*;
 import org.apache.chemistry.opencmis.commons.data.Properties;
 import org.apache.chemistry.opencmis.commons.data.RepositoryInfo;
+import org.apache.chemistry.opencmis.commons.data.*;
 import org.apache.chemistry.opencmis.commons.definitions.*;
 import org.apache.chemistry.opencmis.commons.enums.*;
 import org.apache.chemistry.opencmis.commons.exceptions.*;
@@ -135,7 +135,7 @@ public class CmisRepository {
 		aclCapability.setAclPropagation(AclPropagation.OBJECTONLY);
 
 		// permissions
-		List<PermissionDefinition> permissions = new ArrayList<PermissionDefinition>();
+		List<PermissionDefinition> permissions = new ArrayList<>();
 		permissions.add(createPermission(CMIS_READ, "Read"));
 		permissions.add(createPermission(CMIS_WRITE, "Write"));
 		permissions.add(createPermission(CMIS_DELETE, "Delete"));
@@ -143,7 +143,7 @@ public class CmisRepository {
 		aclCapability.setPermissionDefinitionData(permissions);
 
 		// mapping
-		List<PermissionMapping> list = new ArrayList<PermissionMapping>();
+		List<PermissionMapping> list = new ArrayList<>();
 		list.add(createMapping(PermissionMapping.CAN_CREATE_DOCUMENT_FOLDER, CMIS_WRITE));
 		list.add(createMapping(PermissionMapping.CAN_CREATE_FOLDER_FOLDER, CMIS_WRITE));
 		list.add(createMapping(PermissionMapping.CAN_DELETE_CONTENT_DOCUMENT, CMIS_WRITE));
@@ -163,7 +163,7 @@ public class CmisRepository {
 		list.add(createMapping(PermissionMapping.CAN_UPDATE_PROPERTIES_OBJECT, CMIS_WRITE));
 		list.add(createMapping(PermissionMapping.CAN_VIEW_CONTENT_OBJECT, CMIS_READ));
 
-		Map<String, PermissionMapping> map = new LinkedHashMap<String, PermissionMapping>();
+		Map<String, PermissionMapping> map = new LinkedHashMap<>();
 		for (PermissionMapping pm : list) {
 			map.put(pm.getKey(), pm);
 		}
@@ -302,18 +302,10 @@ public class CmisRepository {
 			return newDoc.getPath();
 		} catch (PathNotFoundException e) {
 			throw new CmisObjectNotFoundException("Could not create document!");
-		} catch (RepositoryException e) {
-			throw new CmisStorageException("Could not create document!");
-		} catch (DatabaseException e) {
-			throw new CmisStorageException("Could not create document!");
 		} catch (ItemExistsException e) {
 			throw new CmisNameConstraintViolationException("Document already exists");
 		} catch (AccessDeniedException e) {
 			throw new CmisPermissionDeniedException("No write permission!");
-		} catch (ExtensionException e) {
-			throw new CmisStorageException("Could not create document!");
-		} catch (AutomationException e) {
-			throw new CmisStorageException("Could not create document!");
 		} catch (IOException e) {
 			throw new CmisStorageException("Could not create document: " + e.getMessage());
 		} catch (Exception e) {
@@ -419,18 +411,10 @@ public class CmisRepository {
 			return newDoc.getPath();
 		} catch (PathNotFoundException e) {
 			throw new CmisObjectNotFoundException("Could not create document!");
-		} catch (RepositoryException e) {
-			throw new CmisStorageException("Could not create document!");
-		} catch (DatabaseException e) {
-			throw new CmisStorageException("Could not create document!");
 		} catch (ItemExistsException e) {
 			throw new CmisNameConstraintViolationException("Document already exists");
 		} catch (AccessDeniedException e) {
 			throw new CmisPermissionDeniedException("No write permission!");
-		} catch (ExtensionException e) {
-			throw new CmisStorageException("Could not create document!");
-		} catch (AutomationException e) {
-			throw new CmisStorageException("Could not create document!");
 		} catch (IOException e) {
 			throw new CmisStorageException("Could not read or write content: " + e.getMessage(), e);
 		} catch (Exception e) {
@@ -483,18 +467,12 @@ public class CmisRepository {
 			return newFld.getPath();
 		} catch (PathNotFoundException e) {
 			throw new CmisObjectNotFoundException("Could not create folder!");
-		} catch (RepositoryException e) {
-			throw new CmisStorageException("Could not create folder", e);
-		} catch (DatabaseException e) {
+		} catch (RepositoryException | DatabaseException | ExtensionException | AutomationException e) {
 			throw new CmisStorageException("Could not create folder", e);
 		} catch (ItemExistsException e) {
 			throw new CmisNameConstraintViolationException("Folder already exists", e);
 		} catch (AccessDeniedException e) {
 			throw new CmisPermissionDeniedException("No write permission", e);
-		} catch (ExtensionException e) {
-			throw new CmisStorageException("Could not create folder", e);
-		} catch (AutomationException e) {
-			throw new CmisStorageException("Could not create folder", e);
 		}
 	}
 
@@ -526,20 +504,12 @@ public class CmisRepository {
 			return compileObjectType(context, node, null, false, false, objectInfos);
 		} catch (PathNotFoundException e) {
 			throw new CmisObjectNotFoundException("Could not move node", e);
-		} catch (RepositoryException e) {
-			throw new CmisStorageException("Could not move node", e);
-		} catch (DatabaseException e) {
+		} catch (RepositoryException | DatabaseException | ExtensionException | AutomationException | LockException e) {
 			throw new CmisStorageException("Could not move node", e);
 		} catch (ItemExistsException e) {
 			throw new CmisNameConstraintViolationException("Node already exists", e);
 		} catch (AccessDeniedException e) {
 			throw new CmisPermissionDeniedException("No write permission", e);
-		} catch (ExtensionException e) {
-			throw new CmisStorageException("Could not move node", e);
-		} catch (AutomationException e) {
-			throw new CmisStorageException("Could not move node", e);
-		} catch (LockException e) {
-			throw new CmisStorageException("Could not move node", e);
 		}
 	}
 
@@ -593,15 +563,7 @@ public class CmisRepository {
 			throw new CmisObjectNotFoundException(objectId, e);
 		} catch (AccessDeniedException e) {
 			throw new CmisPermissionDeniedException(e.getMessage(), e);
-		} catch (RepositoryException e) {
-			throw new CmisStorageException("Deletion failed!", e);
-		} catch (DatabaseException e) {
-			throw new CmisStorageException("Deletion failed!", e);
-		} catch (LockException e) {
-			throw new CmisStorageException("Deletion failed!", e);
-		} catch (ExtensionException e) {
-			throw new CmisStorageException("Deletion failed!", e);
-		} catch (AutomationException e) {
+		} catch (RepositoryException | DatabaseException | LockException | ExtensionException | AutomationException e) {
 			throw new CmisStorageException("Deletion failed!", e);
 		}
 	}
@@ -612,7 +574,7 @@ public class CmisRepository {
 	public FailedToDeleteData deleteTree(CallContext context, String folderId, Boolean continueOnFailure) {
 		log.debug("deleteTree({})", folderId);
 		FailedToDeleteDataImpl result = new FailedToDeleteDataImpl();
-		result.setIds(new ArrayList<String>());
+		result.setIds(new ArrayList<>());
 
 		try {
 			if (OKMFolder.getInstance().isValid(null, folderId)) {
@@ -624,11 +586,7 @@ public class CmisRepository {
 			throw new CmisObjectNotFoundException(folderId, e);
 		} catch (AccessDeniedException e) {
 			throw new CmisPermissionDeniedException(e.getMessage(), e);
-		} catch (RepositoryException e) {
-			throw new CmisStorageException("Deletion failed!", e);
-		} catch (DatabaseException e) {
-			throw new CmisStorageException("Deletion failed!", e);
-		} catch (LockException e) {
+		} catch (RepositoryException | DatabaseException | LockException e) {
 			throw new CmisStorageException("Deletion failed!", e);
 		}
 
@@ -702,15 +660,8 @@ public class CmisRepository {
 				throw new CmisPermissionDeniedException(e.getMessage(), e);
 			} catch (ItemExistsException e) {
 				throw new CmisNameConstraintViolationException(e.getMessage(), e);
-			} catch (RepositoryException e) {
-				throw new CmisStorageException("Update perties failed!", e);
-			} catch (DatabaseException e) {
-				throw new CmisStorageException("Update perties failed!", e);
-			} catch (LockException e) {
-				throw new CmisStorageException("Update perties failed!", e);
-			} catch (ExtensionException e) {
-				throw new CmisStorageException("Update perties failed!", e);
-			} catch (AutomationException e) {
+			} catch (RepositoryException | DatabaseException | LockException | ExtensionException |
+					 AutomationException e) {
 				throw new CmisStorageException("Update perties failed!", e);
 			}
 
@@ -726,7 +677,7 @@ public class CmisRepository {
 	 */
 	public ObjectData getObject(CallContext context, String objectId, String versionServicesId, String filter,
 	                            Boolean includeAllowableActions, Boolean includeAcl, ObjectInfoHandler objectInfos) {
-		log.debug("getObject({}, {}, {})", new Object[]{objectId, versionServicesId, filter});
+		log.debug("getObject({}, {}, {})", objectId, versionServicesId, filter);
 
 		// check id
 		if ((objectId == null) && (versionServicesId == null)) {
@@ -781,7 +732,7 @@ public class CmisRepository {
 	 * CMIS getContentStream.
 	 */
 	public ContentStream getContentStream(CallContext context, String objectId, BigInteger offset, BigInteger length) {
-		log.debug("getContentStream({}, {}, {})", new Object[]{objectId, offset, length});
+		log.debug("getContentStream({}, {}, {})", objectId, offset, length);
 
 		if ((offset != null) || (length != null)) {
 			throw new CmisInvalidArgumentException("Offset and Length are not supported!");
@@ -808,13 +759,7 @@ public class CmisRepository {
 			throw new CmisObjectNotFoundException(e.getMessage(), e);
 		} catch (AccessDeniedException e) {
 			throw new CmisPermissionDeniedException("No read permission!");
-		} catch (RepositoryException e) {
-			throw new CmisStorageException(e.getMessage(), e);
-		} catch (DatabaseException e) {
-			throw new CmisStorageException(e.getMessage(), e);
-		} catch (LockException e) {
-            throw new CmisStorageException(e.getMessage(), e);
-        } catch (IOException e) {
+		} catch (RepositoryException | DatabaseException | LockException | IOException e) {
 			throw new CmisStorageException(e.getMessage(), e);
 		}
 	}
@@ -823,7 +768,7 @@ public class CmisRepository {
 	 * CMIS getChildren.
 	 */
 	public ObjectInFolderList getChildren(CallContext context, String folderId, String filter, Boolean includeAllowableActions,
-	                                      Boolean includePathSegment, BigInteger maxItems, BigInteger skipCount, ObjectInfoHandler objectInfos) {
+			Boolean includePathSegment, BigInteger maxItems, BigInteger skipCount, ObjectInfoHandler objectInfos) {
 		log.debug("getChildren({})", folderId);
 
 		// split filter
@@ -859,7 +804,7 @@ public class CmisRepository {
 
 			// prepare result
 			ObjectInFolderListImpl result = new ObjectInFolderListImpl();
-			result.setObjects(new ArrayList<ObjectInFolderData>());
+			result.setObjects(new ArrayList<>());
 			result.setHasMoreItems(false);
 			int count = 0;
 
@@ -919,9 +864,7 @@ public class CmisRepository {
 			throw new CmisPermissionDeniedException(e.getMessage(), e);
 		} catch (PathNotFoundException e) {
 			throw new CmisObjectNotFoundException(e.getMessage(), e);
-		} catch (RepositoryException e) {
-			throw new CmisStorageException(e.getMessage(), e);
-		} catch (DatabaseException e) {
+		} catch (RepositoryException | DatabaseException e) {
 			throw new CmisStorageException(e.getMessage(), e);
 		}
 	}
@@ -930,7 +873,7 @@ public class CmisRepository {
 	 * CMIS getDescendants.
 	 */
 	public List<ObjectInFolderContainer> getDescendants(CallContext context, String folderId, BigInteger depth, String filter,
-	                                                    Boolean includeAllowableActions, Boolean includePathSegment, ObjectInfoHandler objectInfos, boolean foldersOnly) {
+			Boolean includeAllowableActions, Boolean includePathSegment, ObjectInfoHandler objectInfos, boolean foldersOnly) {
 		log.debug("getDescendants or getFolderTree");
 
 		// check depth
@@ -963,7 +906,7 @@ public class CmisRepository {
 			}
 
 			// get the tree
-			List<ObjectInFolderContainer> result = new ArrayList<ObjectInFolderContainer>();
+			List<ObjectInFolderContainer> result = new ArrayList<>();
 			gatherDescendants(context, fld, result, foldersOnly, d, filterCollection, iaa, ips, objectInfos);
 
 			return result;
@@ -971,9 +914,7 @@ public class CmisRepository {
 			throw new CmisPermissionDeniedException(e.getMessage(), e);
 		} catch (PathNotFoundException e) {
 			throw new CmisObjectNotFoundException(e.getMessage(), e);
-		} catch (RepositoryException e) {
-			throw new CmisStorageException(e.getMessage(), e);
-		} catch (DatabaseException e) {
+		} catch (RepositoryException | DatabaseException e) {
 			throw new CmisStorageException(e.getMessage(), e);
 		}
 	}
@@ -1029,14 +970,12 @@ public class CmisRepository {
 				result.setRelativePathSegment(PathUtils.getName(parent.getPath()));
 			}
 
-			return Collections.singletonList((ObjectParentData) result);
+			return Collections.singletonList(result);
 		} catch (AccessDeniedException e) {
 			throw new CmisPermissionDeniedException(e.getMessage(), e);
 		} catch (PathNotFoundException e) {
 			throw new CmisObjectNotFoundException(e.getMessage(), e);
-		} catch (RepositoryException e) {
-			throw new CmisStorageException(e.getMessage(), e);
-		} catch (DatabaseException e) {
+		} catch (RepositoryException | DatabaseException e) {
 			throw new CmisStorageException(e.getMessage(), e);
 		}
 	}
@@ -1046,7 +985,7 @@ public class CmisRepository {
 	 */
 	public ObjectData getObjectByPath(CallContext context, String folderPath, String filter, boolean includeAllowableActions,
 	                                  boolean includeACL, ObjectInfoHandler objectInfos) {
-		log.debug("getObjectByPath({}, {}, {})", new Object[]{folderPath, filter, includeAllowableActions});
+		log.debug("getObjectByPath({}, {}, {})", folderPath, filter, includeAllowableActions);
 
 		// split filter
 		Set<String> filterCollection = splitFilter(filter);
@@ -1068,7 +1007,7 @@ public class CmisRepository {
 	 * Gather the children of a folder.
 	 */
 	private void gatherDescendants(CallContext context, Folder fld, List<ObjectInFolderContainer> list, boolean foldersOnly, int depth,
-	                               Set<String> filter, boolean includeAllowableActions, boolean includePathSegments, ObjectInfoHandler objectInfos)
+			Set<String> filter, boolean includeAllowableActions, boolean includePathSegments, ObjectInfoHandler objectInfos)
 			throws AccessDeniedException, PathNotFoundException, RepositoryException, DatabaseException {
 		// iterate through children
 		for (Folder child : OKMFolder.getInstance().getChildren(null, fld.getPath())) {
@@ -1087,7 +1026,7 @@ public class CmisRepository {
 
 			// move to next level
 			if (depth != 1) {
-				container.setChildren(new ArrayList<ObjectInFolderContainer>());
+				container.setChildren(new ArrayList<>());
 				gatherDescendants(context, child, container.getChildren(), foldersOnly, depth - 1, filter, includeAllowableActions,
 						includePathSegments, objectInfos);
 			}
@@ -1144,7 +1083,7 @@ public class CmisRepository {
 	 */
 	private Properties compileProperties(Node node, Set<String> orgfilter, ObjectInfoImpl objectInfo) {
 		// copy filter
-		Set<String> filter = (orgfilter == null ? null : new HashSet<String>(orgfilter));
+		Set<String> filter = (orgfilter == null ? null : new HashSet<>(orgfilter));
 
 		// find base type
 		String typeId = null;
@@ -1250,7 +1189,7 @@ public class CmisRepository {
 				addPropertyBoolean(result, typeId, filter, PropertyIds.IS_LATEST_VERSION, true);
 				addPropertyBoolean(result, typeId, filter, PropertyIds.IS_MAJOR_VERSION, true);
 				addPropertyBoolean(result, typeId, filter, PropertyIds.IS_LATEST_MAJOR_VERSION, true);
-				addPropertyString(result, typeId, filter, PropertyIds.VERSION_LABEL, PathUtils.getName(node.getPath()));
+				addPropertyString(result, typeId, filter, PropertyIds.VERSION_LABEL, doc.getActualVersion().getName());
 				addPropertyId(result, typeId, filter, PropertyIds.VERSION_SERIES_ID, node.getUuid());
 				addPropertyBoolean(result, typeId, filter, PropertyIds.IS_VERSION_SERIES_CHECKED_OUT, false);
 				addPropertyString(result, typeId, filter, PropertyIds.VERSION_SERIES_CHECKED_OUT_BY, null);
@@ -1352,7 +1291,7 @@ public class CmisRepository {
 	private Properties compileProperties(String typeId, String creator, GregorianCalendar creationDate, String modifier,
 	                                     Properties properties) {
 		PropertiesImpl result = new PropertiesImpl();
-		Set<String> addedProps = new HashSet<String>();
+		Set<String> addedProps = new HashSet<>();
 
 		if ((properties == null) || (properties.getProperties() == null)) {
 			throw new CmisConstraintException("No properties!");
@@ -1667,7 +1606,7 @@ public class CmisRepository {
 	 */
 	private Acl compileAcl(Node node) {
 		AccessControlListImpl result = new AccessControlListImpl();
-		result.setAces(new ArrayList<Ace>());
+		result.setAces(new ArrayList<>());
 
 		try {
 			for (Map.Entry<String, Integer> ue : OKMAuth.getInstance().getGrantedUsers(null, node.getUuid()).entrySet()) {
@@ -1678,7 +1617,7 @@ public class CmisRepository {
 				// create ACE
 				AccessControlEntryImpl entry = new AccessControlEntryImpl();
 				entry.setPrincipal(principal);
-				entry.setPermissions(new ArrayList<String>());
+				entry.setPermissions(new ArrayList<>());
 				entry.getPermissions().add(CMIS_READ);
 
 				if (checkPermission(ue.getValue(), Permission.WRITE)) {
@@ -1755,7 +1694,7 @@ public class CmisRepository {
 			return null;
 		}
 
-		Set<String> result = new HashSet<String>();
+		Set<String> result = new HashSet<>();
 		for (String s : filter.split(",")) {
 			s = s.trim();
 			if (s.equals("*")) {
@@ -1848,9 +1787,7 @@ public class CmisRepository {
 			throw new CmisPermissionDeniedException(e.getMessage(), e);
 		} catch (PathNotFoundException e) {
 			throw new CmisObjectNotFoundException(e.getMessage(), e);
-		} catch (RepositoryException e) {
-			throw new CmisStorageException(e.getMessage(), e);
-		} catch (DatabaseException e) {
+		} catch (RepositoryException | DatabaseException e) {
 			throw new CmisStorageException(e.getMessage(), e);
 		}
 	}

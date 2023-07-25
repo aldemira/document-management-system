@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 /**
@@ -37,17 +38,17 @@ import java.util.HashMap;
  * Use OCR from http://code.google.com/p/tesseract-ocr/
  */
 @PluginImplementation
-public class Tesseract3TextExtractor extends AbstractTextExtractor {
+public class TesseractTextExtractor extends AbstractTextExtractor {
 
 	/**
 	 * Logger instance.
 	 */
-	private static final Logger log = LoggerFactory.getLogger(Tesseract3TextExtractor.class);
+	private static final Logger log = LoggerFactory.getLogger(TesseractTextExtractor.class);
 
 	/**
 	 * Creates a new <code>TextExtractor</code> instance.
 	 */
-	public Tesseract3TextExtractor() {
+	public TesseractTextExtractor() {
 		super(new String[]{"image/tiff", "image/gif", "image/jpg", "image/jpeg", "image/png"});
 	}
 
@@ -80,8 +81,7 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
 			IOUtils.copy(stream, fos);
 			fos.close();
 
-			String text = extractText(ocr, tmpFileIn);
-			return text;
+			return extractText(ocr, tmpFileIn);
 		} catch (DatabaseException e) {
 			log.warn("Failed to extract barcode text", e);
 			throw new IOException(e.getMessage(), e);
@@ -143,7 +143,7 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
 				tmpFileOut = File.createTempFile("okm", "");
 
 				// Performs OCR
-				HashMap<String, Object> hm = new HashMap<String, Object>();
+				HashMap<String, Object> hm = new HashMap<>();
 				hm.put("fileIn", tmpFileIn.getPath());
 				hm.put("fileOut", tmpFileOut.getPath());
 				cmd = TemplateUtils.replace("SYSTEM_OCR", ocr, hm);
@@ -151,7 +151,7 @@ public class Tesseract3TextExtractor extends AbstractTextExtractor {
 
 				// Read result
 				fis = new FileInputStream(tmpFileOut.getPath() + ".txt");
-				String text = IOUtils.toString(fis, "UTF-8");
+				String text = IOUtils.toString(fis, StandardCharsets.UTF_8);
 
 				// Spellchecker
 				if (Config.SYSTEM_OPENOFFICE_DICTIONARY.isEmpty()) {

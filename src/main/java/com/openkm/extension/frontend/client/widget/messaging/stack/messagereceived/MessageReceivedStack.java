@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -39,11 +39,9 @@ import java.util.Map;
  * MessageReceivedStack
  *
  * @author jllort
- *
  */
 public class MessageReceivedStack extends Composite {
-
-	private final OKMMessageServiceAsync messageService = (OKMMessageServiceAsync) GWT.create(OKMMessageService.class);
+	private final OKMMessageServiceAsync messageService = GWT.create(OKMMessageService.class);
 
 	private ExtendedFlexTable table;
 	private boolean firstTime = true;
@@ -56,7 +54,7 @@ public class MessageReceivedStack extends Composite {
 	 * Propose
 	 */
 	public MessageReceivedStack() {
-		userSeen = new HashMap<String, Long>();
+		userSeen = new HashMap<>();
 
 		menuPopup = new MenuPopup();
 		menuPopup.setStyleName("okm-MenuPopup");
@@ -270,4 +268,3 @@ public class MessageReceivedStack extends Composite {
 		return notSeen;
 	}
 }
-	

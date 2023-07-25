@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -68,8 +68,8 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 			} else {
 				to = users + roles;
 			}
-			List<String> userNames = new ArrayList<String>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
-			List<String> roleNames = new ArrayList<String>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
+			List<String> userNames = new ArrayList<>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
+			List<String> roleNames = new ArrayList<>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
 
 			for (String role : roleNames) {
 				List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);
@@ -99,7 +99,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 		updateSessionManager();
 		try {
 			String me = getThreadLocalRequest().getRemoteUser();
-			List<String> usersList = new ArrayList<String>(ProposedQueryDAO.findProposedQuerySentUsersTo(me));
+			List<String> usersList = new ArrayList<>(ProposedQueryDAO.findProposedQuerySentUsersTo(me));
 			for (String user : MessageDAO.findSentUsersTo(me)) {
 				if (!usersList.contains(user)) {
 					usersList.add(user);
@@ -125,7 +125,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	@Override
 	public Map<String, Long> findReceivedUsersFrom() throws OKMException {
 		log.debug("findReceivedUsersFrom()");
-		Map<String, Long> received = new HashMap<String, Long>();
+		Map<String, Long> received = new HashMap<>();
 		updateSessionManager();
 		try {
 			String user = getThreadLocalRequest().getRemoteUser();
@@ -134,7 +134,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 				if (unreadMap.containsKey(sender)) {
 					received.put(sender, unreadMap.get(sender));
 				} else {
-					received.put(sender, new Long(0));
+					received.put(sender, 0L);
 				}
 			}
 			return received;
@@ -147,7 +147,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	@Override
 	public List<GWTMessageSent> findSentFromMeToUser(String user) throws OKMException {
 		log.debug("findSentFromMeToUser({})", user);
-		List<GWTMessageSent> messageSentList = new ArrayList<GWTMessageSent>();
+		List<GWTMessageSent> messageSentList = new ArrayList<>();
 		updateSessionManager();
 
 		try {
@@ -216,7 +216,7 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	@Override
 	public List<GWTMessageReceived> findReceivedByMeFromUser(String user) throws OKMException {
 		log.debug("findSentFromMeToUser({})", user);
-		List<GWTMessageReceived> messageReceivedList = new ArrayList<GWTMessageReceived>();
+		List<GWTMessageReceived> messageReceivedList = new ArrayList<>();
 		updateSessionManager();
 		try {
 			for (MessageReceived messageReceived : MessageDAO.findReceivedByMeFromUser(getThreadLocalRequest().getRemoteUser(), user)) {
@@ -268,9 +268,9 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	@Override
 	public void deleteSentFromMeToUser(String user) throws OKMException {
 		log.debug("deleteSentFromMeToUser({})", user);
-		List<String> msgId = new ArrayList<String>();
-		List<String> pqId = new ArrayList<String>();
-		List<String> psId = new ArrayList<String>();
+		List<String> msgId = new ArrayList<>();
+		List<String> pqId = new ArrayList<>();
+		List<String> psId = new ArrayList<>();
 		updateSessionManager();
 
 		try {
@@ -294,15 +294,15 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 			}
 
 			for (String id : msgId) {
-				MessageDAO.deleteSent(Integer.valueOf(id));
+				MessageDAO.deleteSent(Integer.parseInt(id));
 			}
 
 			for (String id : pqId) {
-				ProposedQueryDAO.deleteSent(Integer.valueOf(id));
+				ProposedQueryDAO.deleteSent(Integer.parseInt(id));
 			}
 
 			for (String id : psId) {
-				ProposedSubscriptionDAO.deleteSent(Integer.valueOf(id));
+				ProposedSubscriptionDAO.deleteSent(Integer.parseInt(id));
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -316,14 +316,15 @@ public class MessageServlet extends OKMRemoteServiceServlet implements OKMMessag
 	@Override
 	public void deleteReceivedByMeFromUser(String user) throws OKMException {
 		log.debug("deleteReceivedByMeFromUser({})", user);
-		List<String> msgId = new ArrayList<String>();
+		List<String> msgId = new ArrayList<>();
 		updateSessionManager();
+
 		try {
 			for (MessageReceived messageReceived : MessageDAO.findReceivedByMeFromUser(getThreadLocalRequest().getRemoteUser(), user)) {
 				msgId.add(String.valueOf(messageReceived.getId()));
 			}
 			for (String id : msgId) {
-				MessageDAO.deleteReceived(Integer.valueOf(id));
+				MessageDAO.deleteReceived(Integer.parseInt(id));
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);

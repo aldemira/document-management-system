@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -38,8 +38,8 @@ public class ElizaComments {
 
 	public ElizaComments(InputStream stream) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		comments = new Vector<Comment>();
-		auxVerbs = new Vector<AuxVerb>();
+		comments = new Vector<>();
+		auxVerbs = new Vector<>();
 		lameExcuse = null;
 
 		while (true) {

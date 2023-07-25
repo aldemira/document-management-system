@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -64,14 +64,13 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 
 	@Override
 	public Object authenticate(String user, String password) {
-		// log.debug("authenticate({}, {})", new Object[] { user, password });
+		log.debug("authenticate({}, {})", user, password);
 		return "OpenKM";
 	}
 
 	@Override
 	public boolean authorise(Request request, Method method, Auth auth) {
-		// log.debug("authorise({}, {}, {})", new Object[] { request.getAbsolutePath(), method.toString(),
-		// auth.getUser() });
+		log.debug("authorise({}, {}, {})", request.getAbsolutePath(), method.toString(), auth.getUser());
 		return true;
 	}
 
@@ -233,21 +232,14 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 				lt.timeout = new LockTimeout(Long.MAX_VALUE);
 				return LockResult.success(lt);
 			}
-		} catch (LockException e) {
-			throw new RuntimeException("Failed to lock: " + fixedDocPath);
-		} catch (PathNotFoundException e) {
-			throw new RuntimeException("Failed to lock: " + fixedDocPath);
-		} catch (AccessDeniedException e) {
-			throw new RuntimeException("Failed to lock: " + fixedDocPath);
-		} catch (RepositoryException e) {
-			throw new RuntimeException("Failed to lock: " + fixedDocPath);
-		} catch (DatabaseException e) {
+		} catch (LockException | PathNotFoundException | AccessDeniedException | RepositoryException |
+				 DatabaseException e) {
 			throw new RuntimeException("Failed to lock: " + fixedDocPath);
 		}
 	}
 
 	@Override
-	public LockResult refreshLock(String token) throws NotAuthorizedException, PreConditionFailedException {
+	public LockResult refreshLock(String token) {
 		return LockResult.success(lt);
 	}
 
@@ -280,22 +272,15 @@ public class DocumentResource implements CopyableResource, DeletableResource, Ge
 			} else {
 				return null;
 			}
-		} catch (LockException e) {
-			throw new RuntimeException("Failed to lock: " + fixedDocPath);
-		} catch (AccessDeniedException e) {
-			throw new RuntimeException("Failed to lock: " + fixedDocPath);
-		} catch (PathNotFoundException e) {
-			throw new RuntimeException("Failed to lock: " + fixedDocPath);
-		} catch (RepositoryException e) {
-			throw new RuntimeException("Failed to lock: " + fixedDocPath);
-		} catch (DatabaseException e) {
+		} catch (LockException | AccessDeniedException | PathNotFoundException | RepositoryException |
+				 DatabaseException e) {
 			throw new RuntimeException("Failed to lock: " + fixedDocPath);
 		}
 	}
 
 	@Override
 	public Long getQuotaUsed() {
-		return new Long(0);
+		return 0L;
 	}
 
 	@Override

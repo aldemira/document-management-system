@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -37,7 +37,6 @@ import java.util.List;
  *
  */
 public class StartUpPopup extends DialogBox implements ClickHandler {
-
 	private final static int IE_SIZE_RECTIFICATION = (Util.getUserAgent().startsWith("ie") ? 2 : 0);
 
 	private VerticalPanel vPanel;
@@ -46,7 +45,7 @@ public class StartUpPopup extends DialogBox implements ClickHandler {
 	private FlexTable table;
 	public Button button;
 	public int actual = -1;
-	private List<HTML> msgList = new ArrayList<HTML>();
+	private List<HTML> msgList = new ArrayList<>();
 
 	public StartUpPopup() {
 		// Establishes auto-close when click outside

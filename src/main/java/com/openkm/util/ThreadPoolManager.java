@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -36,7 +36,7 @@ public class ThreadPoolManager {
 	private static Logger log = LoggerFactory.getLogger(ThreadPoolManager.class);
 	private static final int POOL_TIMEOUT = 1;
 	private static final int MAX_TIMEOUTS = 10;
-	private static List<ThreadPoolManager> createdManagers = new ArrayList<ThreadPoolManager>();
+	private static List<ThreadPoolManager> createdManagers = new ArrayList<>();
 	private ExecutorService executor;
 	private String name;
 

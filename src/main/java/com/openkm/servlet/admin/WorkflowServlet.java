@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -50,7 +50,7 @@ import java.util.Map.Entry;
 public class WorkflowServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(WorkflowServlet.class);
-	private static Map<String, String> statusFilterValues = new LinkedHashMap<String, String>();
+	private static Map<String, String> statusFilterValues = new LinkedHashMap<>();
 
 	static {
 		statusFilterValues.put("0", "All");
@@ -145,22 +145,8 @@ public class WorkflowServlet extends BaseServlet {
 			} else {
 				processDefinitionList(userId, request, response);
 			}
-		} catch (RepositoryException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (WorkflowException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (ParseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (PrincipalAdapterException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (AccessDeniedException e) {
+		} catch (RepositoryException | WorkflowException | DatabaseException | ParseException |
+				 PrincipalAdapterException | AccessDeniedException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		}
@@ -170,8 +156,9 @@ public class WorkflowServlet extends BaseServlet {
 	 * List all process definitions
 	 */
 	private void processDefinitionList(String userId, HttpServletRequest request, HttpServletResponse response) throws
-			ServletException, IOException, AccessDeniedException, com.openkm.core.RepositoryException, DatabaseException, WorkflowException {
-		log.debug("listProcessDefinition({}, {}, {})", new Object[]{userId, request, response});
+			ServletException, IOException, AccessDeniedException, com.openkm.core.RepositoryException, DatabaseException,
+			WorkflowException {
+		log.debug("listProcessDefinition({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		sc.setAttribute("processDefinitions", OKMWorkflow.getInstance().findAllProcessDefinitions(null));
 		sc.getRequestDispatcher("/admin/process_definition_list.jsp").forward(request, response);
@@ -181,9 +168,9 @@ public class WorkflowServlet extends BaseServlet {
 	/**
 	 * Delete a process definition
 	 */
-	private void processDefinitionDelete(String userId, HttpServletRequest request,
-	                                     HttpServletResponse response) throws AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("deleteProcessDefinition({}, {}, {})", new Object[]{userId, request, response});
+	private void processDefinitionDelete(String userId, HttpServletRequest request, HttpServletResponse response) throws
+			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
+		log.debug("deleteProcessDefinition({}, {}, {})", userId, request, response);
 		long pdid = WebUtils.getLong(request, "pdid");
 		OKMWorkflow.getInstance().deleteProcessDefinition(null, pdid);
 
@@ -196,17 +183,17 @@ public class WorkflowServlet extends BaseServlet {
 	 * View process definition
 	 */
 	private void processDefinitionView(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, AccessDeniedException, RepositoryException, DatabaseException, WorkflowException,
-			ParseException {
-		log.debug("viewProcessDefinition({}, {}, {})", new Object[]{userId, request, response});
+			throws ServletException, IOException, AccessDeniedException, RepositoryException, DatabaseException,
+			WorkflowException, ParseException {
+		log.debug("viewProcessDefinition({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		long pdid = WebUtils.getLong(request, "pdid");
 		int statusFilter = WebUtils.getInt(request, "statusFilter", 1);
 		Map<String, List<FormElement>> procDefForms = OKMWorkflow.getInstance().getProcessDefinitionForms(null, pdid);
-		Map<String, List<Map<String, String>>> pdf = new HashMap<String, List<Map<String, String>>>();
+		Map<String, List<Map<String, String>>> pdf = new HashMap<>();
 
 		for (String key : procDefForms.keySet()) {
-			List<Map<String, String>> value = new ArrayList<Map<String, String>>();
+			List<Map<String, String>> value = new ArrayList<>();
 
 			for (FormElement fe : procDefForms.get(key)) {
 				value.add(FormUtils.toString(fe));
@@ -216,7 +203,7 @@ public class WorkflowServlet extends BaseServlet {
 		}
 
 		// Filter process instances by status
-		List<ProcessInstance> processInstances = new ArrayList<ProcessInstance>();
+		List<ProcessInstance> processInstances = new ArrayList<>();
 
 		for (ProcessInstance pi : OKMWorkflow.getInstance().findProcessInstances(null, pdid)) {
 			if (statusFilter == 1) { // Running
@@ -247,11 +234,11 @@ public class WorkflowServlet extends BaseServlet {
 	private void processInstanceView(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, RepositoryException, DatabaseException, WorkflowException,
 			PrincipalAdapterException, AccessDeniedException {
-		log.debug("processInstanceView({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("processInstanceView({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		long piid = WebUtils.getLong(request, "piid");
 		ProcessInstance pi = OKMWorkflow.getInstance().getProcessInstance(null, piid);
-		Map<String, String> vars = new HashMap<String, String>();
+		Map<String, String> vars = new HashMap<>();
 
 		for (Entry<String, Object> entry : pi.getVariables().entrySet()) {
 			vars.put(entry.getKey(), FormatUtil.formatObject(entry.getValue()));
@@ -282,7 +269,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void processInstanceDelete(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("processInstanceDelete({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("processInstanceDelete({}, {}, {})", userId, request, response);
 		long piid = WebUtils.getLong(request, "piid");
 		OKMWorkflow.getInstance().deleteProcessInstance(null, piid);
 
@@ -296,7 +283,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void processInstanceEnd(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("processInstanceEnd({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("processInstanceEnd({}, {}, {})", userId, request, response);
 		long piid = WebUtils.getLong(request, "piid");
 		OKMWorkflow.getInstance().endProcessInstance(null, piid);
 
@@ -310,7 +297,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void processInstanceResume(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("processInstanceResume({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("processInstanceResume({}, {}, {})", userId, request, response);
 		long piid = WebUtils.getLong(request, "piid");
 		OKMWorkflow.getInstance().resumeProcessInstance(null, piid);
 
@@ -324,7 +311,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void processInstanceSuspend(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("processInstanceSuspend({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("processInstanceSuspend({}, {}, {})", userId, request, response);
 		long piid = WebUtils.getLong(request, "piid");
 		OKMWorkflow.getInstance().suspendProcessInstance(null, piid);
 
@@ -338,7 +325,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void processInstanceAddComment(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			DatabaseException, WorkflowException, AccessDeniedException, RepositoryException {
-		log.debug("processInstanceAddComment({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("processInstanceAddComment({}, {}, {})", userId, request, response);
 		long tid = WebUtils.getLong(request, "tid");
 		String message = WebUtils.getString(request, "message");
 
@@ -356,7 +343,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void processInstanceVariableDelete(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("processInstanceVariableDelete({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("processInstanceVariableDelete({}, {}, {})", userId, request, response);
 		long piid = WebUtils.getLong(request, "piid");
 		String name = WebUtils.getString(request, "name");
 		OKMWorkflow.getInstance().deleteProcessInstanceVariable(null, piid, name);
@@ -371,7 +358,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void processInstanceVariableAdd(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("processInstanceVariableAdd({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("processInstanceVariableAdd({}, {}, {})", userId, request, response);
 		long piid = WebUtils.getLong(request, "piid");
 		String name = WebUtils.getString(request, "name");
 		String value = WebUtils.getString(request, "value");
@@ -388,7 +375,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void taskInstanceSetActor(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("taskInstanceSetActor({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("taskInstanceSetActor({}, {}, {})", userId, request, response);
 		long tiid = WebUtils.getLong(request, "tiid");
 		String actor = WebUtils.getString(request, "actor");
 		OKMWorkflow.getInstance().setTaskInstanceActorId(null, tiid, actor);
@@ -402,15 +389,16 @@ public class WorkflowServlet extends BaseServlet {
 	 * View task instance
 	 */
 	private void taskInstanceView(String userId, HttpServletRequest request, HttpServletResponse response) throws
-			ServletException, IOException, RepositoryException, DatabaseException, WorkflowException,
-			ParseException, AccessDeniedException {
-		log.debug("taskInstanceView({}, {}, {})", new Object[]{userId, request, response});
+			ServletException, IOException, RepositoryException, DatabaseException, WorkflowException, ParseException,
+			AccessDeniedException {
+		log.debug("taskInstanceView({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		long tiid = WebUtils.getLong(request, "tiid");
 		TaskInstance ti = OKMWorkflow.getInstance().getTaskInstance(null, tiid);
-		Map<String, List<FormElement>> procDefForms = OKMWorkflow.getInstance().getProcessDefinitionForms(null, ti.getProcessInstance().getProcessDefinition().getId());
-		List<Map<String, String>> pdf = new ArrayList<Map<String, String>>();
-		Map<String, String> vars = new HashMap<String, String>();
+		Map<String, List<FormElement>> procDefForms = OKMWorkflow.getInstance().getProcessDefinitionForms(null,
+				ti.getProcessInstance().getProcessDefinition().getId());
+		List<Map<String, String>> pdf = new ArrayList<>();
+		Map<String, String> vars = new HashMap<>();
 		List<FormElement> fes = procDefForms.get(ti.getName());
 
 		if (fes != null) {
@@ -440,7 +428,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void taskInstanceStart(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("taskInstanceStart({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("taskInstanceStart({}, {}, {})", userId, request, response);
 		long tiid = WebUtils.getLong(request, "tiid");
 		OKMWorkflow.getInstance().startTaskInstance(null, tiid);
 
@@ -454,7 +442,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void taskInstanceEnd(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("taskInstanceEnd({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("taskInstanceEnd({}, {}, {})", userId, request, response);
 		long tiid = WebUtils.getLong(request, "tiid");
 		String transition = WebUtils.getString(request, "transition", null);
 		OKMWorkflow.getInstance().endTaskInstance(null, tiid, transition);
@@ -469,7 +457,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void taskInstanceSuspend(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("taskInstanceSuspend({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("taskInstanceSuspend({}, {}, {})", userId, request, response);
 		long tiid = WebUtils.getLong(request, "tiid");
 		OKMWorkflow.getInstance().suspendTaskInstance(null, tiid);
 
@@ -483,7 +471,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void taskInstanceAddComment(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			DatabaseException, WorkflowException, AccessDeniedException, RepositoryException {
-		log.debug("processInstanceAddComment({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("processInstanceAddComment({}, {}, {})", userId, request, response);
 		long tiid = WebUtils.getLong(request, "tiid");
 		String message = WebUtils.getString(request, "message");
 
@@ -501,7 +489,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void taskInstanceVariableDelete(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("taskInstanceVariableDelete({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("taskInstanceVariableDelete({}, {}, {})", userId, request, response);
 		long tiid = WebUtils.getLong(request, "tiid");
 		String name = WebUtils.getString(request, "name");
 		OKMWorkflow.getInstance().deleteTaskInstanceVariable(null, tiid, name);
@@ -516,7 +504,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void taskInstanceVariableAdd(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("taskInstanceVariableAdd({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("taskInstanceVariableAdd({}, {}, {})", userId, request, response);
 		long tiid = WebUtils.getLong(request, "tiid");
 		String name = WebUtils.getString(request, "name");
 		String value = WebUtils.getString(request, "value");
@@ -533,7 +521,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void taskInstanceResume(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("taskInstanceResume({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("taskInstanceResume({}, {}, {})", userId, request, response);
 		long tiid = WebUtils.getLong(request, "tiid");
 		OKMWorkflow.getInstance().resumeTaskInstance(null, tiid);
 
@@ -547,7 +535,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void tokenSuspend(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("tokenSuspend({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("tokenSuspend({}, {}, {})", userId, request, response);
 		long tid = WebUtils.getLong(request, "tid");
 		OKMWorkflow.getInstance().suspendToken(null, tid);
 
@@ -561,7 +549,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void tokenResume(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("tokenResume({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("tokenResume({}, {}, {})", userId, request, response);
 		long tid = WebUtils.getLong(request, "tid");
 		OKMWorkflow.getInstance().resumeToken(null, tid);
 
@@ -575,7 +563,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void tokenEnd(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("tokenEnd({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("tokenEnd({}, {}, {})", userId, request, response);
 		long tid = WebUtils.getLong(request, "tid");
 		OKMWorkflow.getInstance().endToken(null, tid);
 
@@ -589,7 +577,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void tokenSetNode(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws DatabaseException, WorkflowException, AccessDeniedException, RepositoryException {
-		log.debug("tokenSetNode({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("tokenSetNode({}, {}, {})", userId, request, response);
 		long tid = WebUtils.getLong(request, "tid");
 		String node = WebUtils.getString(request, "node");
 		OKMWorkflow.getInstance().setTokenNode(null, tid, node);
@@ -604,7 +592,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void tokenSignal(String userId, HttpServletRequest request, HttpServletResponse response)
 			throws DatabaseException, WorkflowException, AccessDeniedException, RepositoryException {
-		log.debug("tokenSignal({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("tokenSignal({}, {}, {})", userId, request, response);
 		long tid = WebUtils.getLong(request, "tid");
 		String transition = WebUtils.getString(request, "transition");
 		OKMWorkflow.getInstance().sendTokenSignal(null, tid, transition);
@@ -619,7 +607,7 @@ public class WorkflowServlet extends BaseServlet {
 	 */
 	private void tokenView(String userId, HttpServletRequest request, HttpServletResponse response) throws
 			ServletException, IOException, AccessDeniedException, RepositoryException, DatabaseException, WorkflowException {
-		log.debug("tokenView({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("tokenView({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		long tid = WebUtils.getLong(request, "tid");
 		sc.setAttribute("token", OKMWorkflow.getInstance().getToken(null, tid));

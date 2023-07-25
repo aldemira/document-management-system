@@ -250,7 +250,7 @@ public class RepositoryService {
 			RepositoryModule rm = ModuleManager.getRepositoryModule();
 			boolean has = rm.hasNode(null, nodeId);
 			log.debug("hasNode: {}", has);
-			return new Boolean(has);
+			return has;
 		} catch (Exception e) {
 			throw new GenericException(e);
 		}
@@ -305,8 +305,7 @@ public class RepositoryService {
 							   @QueryParam("propertyGroups") boolean propertyGroups, @QueryParam("notes") boolean notes,
 							   @QueryParam("wiki") boolean wiki) throws GenericException {
 		try {
-			log.debug("copyAttributes({}, {}, {}, {}, {}, {}, {})",
-					new Object[]{nodeId, dstId, categories, keywords, propertyGroups, notes, wiki});
+			log.debug("copyAttributes({}, {}, {}, {}, {}, {}, {})", nodeId, dstId, categories, keywords, propertyGroups, notes, wiki);
 			RepositoryModule rm = ModuleManager.getRepositoryModule();
 			ExtendedAttributes extAttr = new ExtendedAttributes();
 			extAttr.setCategories(categories);

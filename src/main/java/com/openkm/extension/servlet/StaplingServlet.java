@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -84,7 +84,7 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 		log.debug("add({}, {})", id, nodeUuid);
 		updateSessionManager();
 		try {
-			StapleGroup stapleGroup = StapleGroupDAO.findByPk(new Long(id).longValue());
+			StapleGroup stapleGroup = StapleGroupDAO.findByPk(new Long(id));
 			boolean found = false;
 
 			for (Staple st : stapleGroup.getStaples()) {
@@ -115,7 +115,7 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 	public List<GWTStapleGroup> getAll(String uuid) throws OKMException {
 		log.debug("getAll({})", uuid);
 		updateSessionManager();
-		List<GWTStapleGroup> stapList = new ArrayList<GWTStapleGroup>();
+		List<GWTStapleGroup> stapList = new ArrayList<>();
 
 		try {
 			for (StapleGroup sg : StapleGroupDAO.findAll(uuid)) {
@@ -152,18 +152,18 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 		log.debug("removeAllStapleByUuid({})", nodeUuid);
 		updateSessionManager();
 		try {
-			List<Long> idToDelete = new ArrayList<Long>();
+			List<Long> idToDelete = new ArrayList<>();
 
 			for (StapleGroup sg : StapleGroupDAO.findAll(nodeUuid)) {
 				for (Staple staple : sg.getStaples()) {
 					if (staple.getNode().equals(nodeUuid)) {
-						idToDelete.add(new Long(staple.getId()));
+						idToDelete.add(staple.getId());
 					}
 				}
 			}
 
 			for (Long id : idToDelete) {
-				StapleGroupDAO.deleteStaple(id.longValue());
+				StapleGroupDAO.deleteStaple(id);
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -179,7 +179,7 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 		log.debug("remove({})", id);
 		updateSessionManager();
 		try {
-			StapleGroupDAO.delete(new Long(id).longValue());
+			StapleGroupDAO.delete(new Long(id));
 		} catch (NumberFormatException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormat), e.getMessage());
@@ -194,7 +194,7 @@ public class StaplingServlet extends OKMRemoteServiceServlet implements OKMStapl
 		log.debug("removeStaple({})", id);
 		updateSessionManager();
 		try {
-			StapleGroupDAO.deleteStaple(new Long(id).longValue());
+			StapleGroupDAO.deleteStaple(new Long(id));
 		} catch (NumberFormatException e) {
 			log.error(e.getMessage(), e);
 			throw new OKMException(ErrorCode.get(ErrorCode.ORIGIN_OKMStaplingService, ErrorCode.CAUSE_NumberFormat), e.getMessage());

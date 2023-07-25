@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -42,7 +42,7 @@ import com.openkm.frontend.client.widget.base.handler.CaptionHandler;
  * @author jllort
  */
 public class HTMLEditorPopup extends DialogBox implements CaptionHandler {
-	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
+	private final OKMDocumentServiceAsync documentService = GWT.create(OKMDocumentService.class);
 
 	// Popup size
 	public static final int DEFAULT_WIDTH = 900;

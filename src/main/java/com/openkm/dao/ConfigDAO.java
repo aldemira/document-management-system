@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -143,7 +143,7 @@ public class ConfigDAO {
 	 * Find by pk with a default value
 	 */
 	private static String getProperty(String key, String defaultValue, String type) throws DatabaseException {
-		log.debug("getProperty({}, {}, {})", new Object[]{key, defaultValue, type});
+		log.debug("getProperty({}, {}, {})", key, defaultValue, type);
 		Session session = null;
 		Transaction tx = null;
 
@@ -215,7 +215,7 @@ public class ConfigDAO {
 	public static long getLong(String key, long defaultValue) throws DatabaseException {
 		return Long.parseLong(getProperty(key, Long.toString(defaultValue), Config.LONG));
 	}
-	
+
 	/**
 	 * Find by pk with a default value
 	 */
@@ -334,14 +334,14 @@ public class ConfigDAO {
 	 * Find by pk with a default value
 	 */
 	public static List<String> getList(String key, String defaultValue) throws DatabaseException {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		String dbValue = getProperty(key, defaultValue, Config.LIST);
 		StringTokenizer st = new StringTokenizer(dbValue, "\t\n\r\f");
 
 		while (st.hasMoreTokens()) {
 			String tk = st.nextToken().trim();
 
-			if (tk != null && !tk.equals("")) {
+			if (!tk.equals("")) {
 				list.add(tk);
 			}
 		}

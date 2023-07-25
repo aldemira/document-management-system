@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -234,7 +234,7 @@ public class OKMDashboard implements DashboardModule {
 	@Override
 	public void visiteNode(String token, String source, String node, Calendar date) throws AccessDeniedException,
 			RepositoryException, DatabaseException {
-		log.debug("visiteNode({}, {}, {}, {})", new Object[]{token, source, node, date});
+		log.debug("visiteNode({}, {}, {}, {})", token, source, node, date);
 		DashboardModule dm = ModuleManager.getDashboardModule();
 		dm.visiteNode(token, source, node, date);
 		log.debug("visiteNode: void");

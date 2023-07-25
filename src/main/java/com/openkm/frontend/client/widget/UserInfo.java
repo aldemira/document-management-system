@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserInfo extends Composite {
-	private final OKMChatServiceAsync chatService = (OKMChatServiceAsync) GWT.create(OKMChatService.class);
+	private final OKMChatServiceAsync chatService = GWT.create(OKMChatService.class);
 
 	public static final int USERS_IN_ROOM_REFRESHING_TIME = 1000;
 	private static final int NEW_ROOM_REFRESHING_TIME = 1000;
@@ -73,9 +73,9 @@ public class UserInfo extends Composite {
 	 * UserInfo
 	 */
 	public UserInfo() {
-		widgetExtensionList = new ArrayList<UserInfoExtension>();
-		connectUsersList = new ArrayList<GWTUser>();
-		chatRoomList = new ArrayList<ChatRoomDialogBox>();
+		widgetExtensionList = new ArrayList<>();
+		connectUsersList = new ArrayList<>();
+		chatRoomList = new ArrayList<>();
 		img = new Image(OKMBundleResources.INSTANCE.openkmConnected());
 		panel = new HorizontalPanel();
 		panel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);

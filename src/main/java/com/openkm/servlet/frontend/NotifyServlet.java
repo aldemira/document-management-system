@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -23,11 +23,7 @@ package com.openkm.servlet.frontend;
 
 import com.openkm.api.OKMAuth;
 import com.openkm.api.OKMNotification;
-import com.openkm.core.AccessDeniedException;
-import com.openkm.core.DatabaseException;
-import com.openkm.core.LockException;
-import com.openkm.core.PathNotFoundException;
-import com.openkm.core.RepositoryException;
+import com.openkm.core.*;
 import com.openkm.frontend.client.OKMException;
 import com.openkm.frontend.client.constants.service.ErrorCode;
 import com.openkm.frontend.client.service.OKMNotifyService;
@@ -105,12 +101,12 @@ public class NotifyServlet extends OKMRemoteServiceServlet implements OKMNotifyS
 	@Override
 	public void notify(String docPath, String mails, String users, String roles, String message, boolean attachment) throws
 			OKMException {
-		log.debug("notify({}, {}, {}, {}, {})", new Object[]{docPath, mails, users, roles, message, attachment});
+		log.debug("notify({}, {}, {}, {}, {}, {})", docPath, mails, users, roles, message, attachment);
 		updateSessionManager();
 
 		try {
-			List<String> userNames = new ArrayList<String>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
-			List<String> roleNames = new ArrayList<String>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
+			List<String> userNames = new ArrayList<>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
+			List<String> roleNames = new ArrayList<>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
 
 			for (String role : roleNames) {
 				List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);

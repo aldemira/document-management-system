@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -32,10 +32,10 @@ import java.util.Date;
  *
  */
 public class GWTMessageSent implements IsSerializable {
-	private Date sentDate;
-	private GWTTextMessageSent textMessageSent;
-	private GWTProposedQuerySent proposedQuerySent;
 	private GWTProposedSubscriptionSent proposedSubscriptionSent;
+	private GWTProposedQuerySent proposedQuerySent;
+	private GWTTextMessageSent textMessageSent;
+	private Date sentDate;
 
 	public GWTProposedSubscriptionSent getProposedSubscriptionSent() {
 		return proposedSubscriptionSent;

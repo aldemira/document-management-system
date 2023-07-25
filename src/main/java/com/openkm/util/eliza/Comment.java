@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -35,8 +35,8 @@ public class Comment {
 	protected int answerIndex;
 
 	public Comment(BufferedReader reader) throws IOException {
-		phrases = new Vector<String>();
-		answers = new Vector<String>();
+		phrases = new Vector<>();
+		answers = new Vector<>();
 		answerIndex = 0;
 
 		while (true) {

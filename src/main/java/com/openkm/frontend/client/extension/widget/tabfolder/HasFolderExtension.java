@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -31,10 +31,10 @@ import com.openkm.frontend.client.bean.GWTFolder;
  */
 public interface HasFolderExtension {
 
-	public abstract String getTabText();
+	String getTabText();
 
-	public abstract void set(GWTFolder doc);
+	void set(GWTFolder doc);
 
-	public abstract void setVisibleButtons(boolean visible);
+	void setVisibleButtons(boolean visible);
 
 }

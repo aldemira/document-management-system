@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -126,7 +126,7 @@ public class WorkflowWidget extends Composite implements ValidatorToFire {
 				drawForm();
 				workflowWidgetToFire.hasPendingProcessDefinitionForms();
 			} else {
-				manager.setFormElements(new ArrayList<GWTFormElement>());
+				manager.setFormElements(new ArrayList<>());
 				runProcessDefinitionWithValues();
 			}
 		}

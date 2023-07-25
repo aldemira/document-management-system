@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -38,8 +38,6 @@ import com.openkm.frontend.client.service.OKMSearchServiceAsync;
 import com.openkm.frontend.client.util.CommonUI;
 import com.openkm.frontend.client.util.Util;
 
-import java.util.Iterator;
-
 /**
  * FindSimilarDocumentSelectPopup
  *
@@ -47,7 +45,7 @@ import java.util.Iterator;
  *
  */
 public class FindSimilarDocumentSelectPopup extends DialogBox {
-	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
+	private final OKMSearchServiceAsync searchService = GWT.create(OKMSearchService.class);
 
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
@@ -151,7 +149,7 @@ public class FindSimilarDocumentSelectPopup extends DialogBox {
 	}
 
 	/**
-	 * Shows the popup 
+	 * Shows the popup
 	 */
 	public void show() {
 		initButtons();
@@ -239,9 +237,7 @@ public class FindSimilarDocumentSelectPopup extends DialogBox {
 			GWTResultSet resultSet = result;
 			removeAllRows();
 
-			for (Iterator<GWTQueryResult> it = resultSet.getResults().iterator(); it.hasNext(); ) {
-				GWTQueryResult gwtQueryResult = it.next();
-
+			for (GWTQueryResult gwtQueryResult : resultSet.getResults()) {
 				if (gwtQueryResult.getDocument() != null) {
 					GWTDocument doc = gwtQueryResult.getDocument();
 					int rows = documentTable.getRowCount();
@@ -274,9 +270,7 @@ public class FindSimilarDocumentSelectPopup extends DialogBox {
 				GWTResultSet resultSet = result;
 				removeAllRows();
 
-				for (Iterator<GWTQueryResult> it = resultSet.getResults().iterator(); it.hasNext(); ) {
-					GWTQueryResult gwtQueryResult = it.next();
-
+				for (GWTQueryResult gwtQueryResult : resultSet.getResults()) {
 					if (gwtQueryResult.getDocument() != null) {
 						GWTDocument doc = gwtQueryResult.getDocument();
 						int rows = documentTable.getRowCount();

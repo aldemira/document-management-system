@@ -39,7 +39,10 @@ import org.owasp.encoder.Encode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * ForumServlet
@@ -54,7 +57,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	public List<GWTForumTopic> getTopicsByForum(long id) throws OKMException {
 		log.debug("getTopicsByForum({})", id);
 		updateSessionManager();
-		List<GWTForumTopic> topicList = new ArrayList<GWTForumTopic>();
+		List<GWTForumTopic> topicList = new ArrayList<>();
 
 		try {
 			for (ForumTopic topic : ForumDAO.findByPk(id).getTopics()) {
@@ -74,7 +77,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	public List<GWTForumTopic> getTopicsByNode(String uuid) throws OKMException {
 		log.debug("getTopicsByNode({})", uuid);
 		updateSessionManager();
-		List<GWTForumTopic> topicList = new ArrayList<GWTForumTopic>();
+		List<GWTForumTopic> topicList = new ArrayList<>();
 
 		try {
 			for (ForumTopic topic : ForumDAO.findAllTopicsByNode(uuid)) {
@@ -92,7 +95,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 
 	@Override
 	public GWTForumTopic createTopic(long id, String nodeUuid, GWTForumTopic topic) throws OKMException {
-		log.debug("createTopic({}, {}, {})", new Object[]{id, nodeUuid, topic});
+		log.debug("createTopic({}, {}, {})", id, nodeUuid, topic);
 		updateSessionManager();
 
 		try {
@@ -122,8 +125,8 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 			ForumDAO.update(forum);
 			ForumTopic ft = new ForumTopic();
 
-			for (Iterator<ForumTopic> it = forum.getTopics().iterator(); it.hasNext(); ) {
-				ft = it.next();
+			for (ForumTopic forumTopic : forum.getTopics()) {
+				ft = forumTopic;
 			}
 
 			log.debug("getTopicsByUuid: {}", ft);
@@ -151,7 +154,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 
 	@Override
 	public void createPost(long forumId, long topicId, GWTForumPost post) throws OKMException {
-		log.debug("createPost({}, {}, {})", new Object[]{forumId, topicId, post.getSubject()});
+		log.debug("createPost({}, {}, {})", forumId, topicId, post.getSubject());
 		updateSessionManager();
 
 		try {
@@ -222,7 +225,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 				Forum forum = ForumDAO.findByPk(forumId);
 				forum.setNumPosts(forum.getNumPosts() - 1);
 				ForumDAO.update(forum); // Updating forum
-				return new Boolean(true);
+				return Boolean.TRUE;
 			} else {
 				Forum forum = ForumDAO.findByPk(forumId);
 				forum.setNumPosts(forum.getNumPosts() - 1);
@@ -236,7 +239,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 				}
 
 				ForumDAO.update(forum); // Deleting topic
-				return new Boolean(false);
+				return Boolean.FALSE;
 			}
 		} catch (DatabaseException e) {
 			log.error(e.getMessage(), e);
@@ -269,7 +272,7 @@ public class ForumServlet extends OKMRemoteServiceServlet implements OKMForumSer
 	@Override
 	public List<GWTForum> getAllForum() throws OKMException {
 		log.debug("getAllForum()");
-		List<GWTForum> forumList = new ArrayList<GWTForum>();
+		List<GWTForum> forumList = new ArrayList<>();
 		updateSessionManager();
 
 		try {

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -45,8 +45,8 @@ import com.openkm.frontend.client.service.OKMNotifyServiceAsync;
  * @author jllort
  */
 public class ProposedSubscriptionReceivedDetail extends Composite {
-	private final OKMNotifyServiceAsync notifyService = (OKMNotifyServiceAsync) GWT.create(OKMNotifyService.class);
-	private final OKMProposedSubscriptionServiceAsync proposedSubscriptionService = (OKMProposedSubscriptionServiceAsync) GWT.create(OKMProposedSubscriptionService.class);
+	private final OKMProposedSubscriptionServiceAsync proposedSubscriptionService = GWT.create(OKMProposedSubscriptionService.class);
+	private final OKMNotifyServiceAsync notifyService = GWT.create(OKMNotifyService.class);
 
 	private ScrollPanel scrollPanel;
 	private VerticalPanel vPanel;

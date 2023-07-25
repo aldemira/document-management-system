@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -29,6 +29,6 @@ package com.openkm.frontend.client.extension.widget.tabdocument;
  */
 public interface HasDocumentExtension {
 
-	public abstract String getTabText();
+	String getTabText();
 
 }

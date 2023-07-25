@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -54,7 +54,7 @@ public class StapleGroupDAO {
 			tx = session.beginTransaction();
 			Long id = (Long) session.save(sg);
 			HibernateUtil.commit(tx);
-			log.debug("create: {}" + id);
+			log.debug("create: {}", id);
 			return id;
 		} catch (HibernateException e) {
 			HibernateUtil.rollback(tx);

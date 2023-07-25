@@ -81,7 +81,7 @@ public class SearchService {
 		try {
 			log.debug("findByKeywords({})", keywords);
 			SearchModule sm = ModuleManager.getSearchModule();
-			Set<String> set = new HashSet<String>(keywords);
+			Set<String> set = new HashSet<>(keywords);
 			QueryResultList qrl = new QueryResultList();
 			qrl.getList().addAll(sm.findByKeywords(null, set));
 			log.debug("findByKeywords: {}", qrl);
@@ -172,9 +172,9 @@ public class SearchService {
 	@Path("/findSimpleQueryPaginated")
 	// Default "domain" is "1" for documents.
 	public ResultSet findSimpleQueryPaginated(@DefaultValue("0") @QueryParam("offset") int offset,
-											  @DefaultValue("10") @QueryParam("limit") int limit, @QueryParam("statement") String statement) throws GenericException {
+			@DefaultValue("10") @QueryParam("limit") int limit, @QueryParam("statement") String statement) throws GenericException {
 		try {
-			log.debug("findSimpleQueryPaginated({},{},{})", new Object[]{offset, limit, statement});
+			log.debug("findSimpleQueryPaginated({},{},{})", offset, limit, statement);
 			SearchModule sm = ModuleManager.getSearchModule();
 			ResultSet rs = sm.findSimpleQueryPaginated(null, statement, offset, limit);
 			log.debug("findSimpleQueryPaginated: {}", rs);
@@ -249,7 +249,7 @@ public class SearchService {
 			SearchModule sm = ModuleManager.getSearchModule();
 			long id = sm.saveSearch(null, params);
 			log.debug("saveSearch: {}", id);
-			return new Long(id);
+			return id;
 		} catch (Exception e) {
 			throw new GenericException(e);
 		}
@@ -315,10 +315,10 @@ public class SearchService {
 	 * copyToQueryParams
 	 */
 	private QueryParams copyToQueryParams(String content, String name, int domain, List<String> keywords, List<String> categories,
-										  List<String> properties, String author, String mimeType, String lastModifiedFrom, String lastModifiedTo, String mailSubject,
-										  String mailFrom, String mailTo, String path) {
+			List<String> properties, String author, String mimeType, String lastModifiedFrom, String lastModifiedTo, String mailSubject,
+			String mailFrom, String mailTo, String path) {
 		QueryParams params = new QueryParams();
-		Map<String, String> propMap = new HashMap<String, String>();
+		Map<String, String> propMap = new HashMap<>();
 
 		for (String propVal : properties) {
 			String[] keyVal = propVal.split("=");
@@ -334,8 +334,8 @@ public class SearchService {
 		}
 
 		params.setDomain(domain);
-		params.setKeywords(new HashSet<String>(keywords));
-		params.setCategories(new HashSet<String>(categories));
+		params.setKeywords(new HashSet<>(keywords));
+		params.setCategories(new HashSet<>(categories));
 		params.setProperties(propMap);
 
 		if (author != null && !author.isEmpty()) {

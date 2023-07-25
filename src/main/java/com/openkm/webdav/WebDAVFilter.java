@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -47,9 +47,8 @@ public class WebDAVFilter implements Filter {
 	}
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-			ServletException {
-		log.debug("doFilter({}, {}, {})", new Object[]{request, response, chain});
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		log.debug("doFilter({}, {}, {})", request, response, chain);
 		long begin = System.currentTimeMillis();
 
 		if (Config.SYSTEM_WEBDAV_SERVER) {
@@ -71,7 +70,7 @@ public class WebDAVFilter implements Filter {
 	/**
 	 * Handle WebDAV requests.
 	 */
-	private void handleRequest(ServletRequest request, ServletResponse response) throws IOException, ServletException {
+	private void handleRequest(ServletRequest request, ServletResponse response) throws IOException {
 		try {
 			WebDavService.get().handleRequest((HttpServletRequest) request, (HttpServletResponse) response, ctx);
 		} finally {

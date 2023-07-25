@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -83,10 +83,8 @@ public class CustomLoginModule implements LoginModule {
 			authenticate();
 			populateRoles();
 			return true;
-		} catch (PrincipalAdapterException pae) {
+		} catch (PrincipalAdapterException | NoSuchAlgorithmException pae) {
 			throw new LoginException(pae.getMessage());
-		} catch (NoSuchAlgorithmException nsae) {
-			throw new LoginException(nsae.getMessage());
 		}
 	}
 
@@ -153,7 +151,7 @@ public class CustomLoginModule implements LoginModule {
 	private void authenticate() throws PrincipalAdapterException, NoSuchAlgorithmException, LoginException {
 		PrincipalAdapter pa = CommonAuthModule.getPrincipalAdapter();
 		String ppass = pa.getPassword(name);
-		log.debug("User: {}, Password: {}, DBPassword: {}", new Object[]{name, password, ppass});
+		log.debug("User: {}, Password: {}, DBPassword: {}", name, password, ppass);
 
 		if (customCallbackHandler || ppass.equals(SecureStore.md5Encode(password.getBytes()))) {
 			subject.getPrincipals().add(new UserImpl(name));

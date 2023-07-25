@@ -31,10 +31,10 @@ import com.openkm.frontend.client.bean.GWTKeyword;
 import com.openkm.frontend.client.service.OKMMassiveService;
 import com.openkm.frontend.client.service.OKMMassiveServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
-import com.openkm.frontend.client.widget.util.WidgetUtil;
 import com.openkm.frontend.client.widget.dashboard.ImageHover;
 import com.openkm.frontend.client.widget.dashboard.keymap.TagCloud;
 import com.openkm.frontend.client.widget.thesaurus.ThesaurusSelectPopup;
+import com.openkm.frontend.client.widget.util.WidgetUtil;
 
 import java.util.*;
 
@@ -44,7 +44,7 @@ import java.util.*;
  * @author jllort
  */
 public class KeywordsPopup extends DialogBox {
-	private final OKMMassiveServiceAsync massiveService = (OKMMassiveServiceAsync) GWT.create(OKMMassiveService.class);
+	private final OKMMassiveServiceAsync massiveService = GWT.create(OKMMassiveService.class);
 
 	private FlexTable table;
 	private CellFormatter cellFormatter;
@@ -82,15 +82,15 @@ public class KeywordsPopup extends DialogBox {
 
 		cellFormatter = table.getCellFormatter(); // Gets the cell formatter
 
-		docKeywords = new ArrayList<String>();
-		keywordMap = new HashMap<String, Widget>();
-		keyWordsListPending = new ArrayList<String>();
+		docKeywords = new ArrayList<>();
+		keywordMap = new HashMap<>();
+		keyWordsListPending = new ArrayList<>();
 		keywordsCloud = new TagCloud();
 		keywordsCloud.setWidth("350px");
 
 		keywordPanel = new HorizontalPanel();
 		multiWordkSuggestKey = new MultiWordSuggestOracle();
-		keywordList = new ArrayList<String>();
+		keywordList = new ArrayList<>();
 		suggestKey = new SuggestBox(multiWordkSuggestKey);
 		suggestKey.setHeight("20px");
 		suggestKey.setText(Main.i18n("dashboard.keyword.suggest"));
@@ -100,9 +100,7 @@ public class KeywordsPopup extends DialogBox {
 				if ((char) KeyCodes.KEY_ENTER == event.getNativeKeyCode() && keyWordsListPending.isEmpty()) {
 					Main.get().mainPanel.enableKeyShorcuts(); // Enables general keys applications
 					String keys[] = suggestKey.getText().split(" "); // Separates keywords by space
-					for (int i = 0; i < keys.length; i++) {
-						keyWordsListPending.add(keys[i]);
-					}
+					Collections.addAll(keyWordsListPending, keys);
 					addPendingKeyWordsList();
 					suggestKey.setText("");
 				}
@@ -204,23 +202,19 @@ public class KeywordsPopup extends DialogBox {
 	 */
 	public void reset() {
 		// Evaluate remove button
-		if (Main.get().workspaceUserProperties.getWorkspace().getAvailableOption().isRemoveKeywordOption()) {
-			remove = true;
-		} else {
-			remove = false;
-		}
+		remove = Main.get().workspaceUserProperties.getWorkspace().getAvailableOption().isRemoveKeywordOption();
 
 		// Reloading keyword list
 		multiWordkSuggestKey.clear();
-		keywordList = new ArrayList<String>();
+		keywordList = new ArrayList<>();
 		for (GWTKeyword key : Main.get().mainPanel.dashboard.keyMapDashboard.getAllKeywordList()) {
 			String keyword = key.getKeyword();
 			multiWordkSuggestKey.add(keyword);
 			keywordList.add(keyword);
 		}
 
-		keyWordsListPending = new ArrayList<String>();
-		keywordMap = new HashMap<String, Widget>();
+		keyWordsListPending = new ArrayList<>();
+		keywordMap = new HashMap<>();
 		suggestKey.setText("");
 		hKeyPanel.clear();
 		if (!Main.get().mainPanel.desktop.browser.fileBrowser.isMassive()) {
@@ -246,16 +240,14 @@ public class KeywordsPopup extends DialogBox {
 			}
 
 		} else {
-			docKeywords = new HashSet<String>(); // hashset to be compatible with document.getKeywords(); etc..
+			docKeywords = new HashSet<>(); // hashset to be compatible with document.getKeywords(); etc..
 		}
-		// Dra
+
 		WidgetUtil.drawTagCloud(keywordsCloud, docKeywords);
 	}
 
 	/**
 	 * addKeywordToPendinList
-	 *
-	 * @param key
 	 */
 	public void addKeywordToPendinList(String key) {
 		keyWordsListPending.add(key);
@@ -269,14 +261,13 @@ public class KeywordsPopup extends DialogBox {
 		if (!keyWordsListPending.isEmpty()) {
 			String keyword = keyWordsListPending.remove(0);
 			if (!keywordMap.containsKey(keyword) && keyword.length() > 0) {
-				for (Iterator<String> it = keywordMap.keySet().iterator(); it.hasNext(); ) {
-					String key = it.next();
+				for (String key : keywordMap.keySet()) {
 					if (!keywordList.contains(key)) {
 						multiWordkSuggestKey.add(key);
 						keywordList.add(key);
 					}
 				}
-				Widget keywordButton = getKeyWidget(keyword, remove); // Always allow remove added keyword preventing error adding
+				Widget keywordButton = getKeyWidget(keyword, remove);
 				keywordMap.put(keyword, keywordButton);
 				hKeyPanel.add(keywordButton);
 				docKeywords.add(keyword);

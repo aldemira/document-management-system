@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -33,7 +33,6 @@ import com.openkm.frontend.client.service.OKMAuthService;
 import com.openkm.frontend.client.service.OKMAuthServiceAsync;
 import com.openkm.frontend.client.util.OKMBundleResources;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -232,8 +231,7 @@ public class NotifyRole extends Composite {
 	 */
 	final AsyncCallback<List<String>> callbackFilterRoles = new AsyncCallback<List<String>>() {
 		public void onSuccess(List<String> result) {
-			for (Iterator<String> it = result.iterator(); it.hasNext(); ) {
-				String role = it.next();
+			for (String role : result) {
 				if (selectedRoles != null) {
 					if (!selectedRoles.contains(role)) {
 						rolesTable.addRow(role);

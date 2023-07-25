@@ -44,8 +44,8 @@ public class DocumentTermsSuggestion implements Suggestion {
 	@Override
 	public List<String> getSuggestions(String nodeUuid, String nodePath, Select sel) throws PathNotFoundException, SuggestionException,
 			DatabaseException {
-		log.debug("getSuggestions({}, {}, {})", new Object[]{nodeUuid, nodePath, sel});
-		List<String> list = new ArrayList<String>();
+		log.debug("getSuggestions({}, {}, {})", nodeUuid, nodePath, sel);
+		List<String> list = new ArrayList<>();
 
 		try {
 			if (NodeDocumentDAO.getInstance().isValid(nodeUuid)) {

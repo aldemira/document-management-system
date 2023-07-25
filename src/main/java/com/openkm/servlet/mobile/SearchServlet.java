@@ -65,14 +65,6 @@ public class SearchServlet extends HttpServlet {
 			} else {
 				normalSearch(request, response);
 			}
-		} catch (PathNotFoundException e) {
-			sendErrorRedirect(request, response, e);
-		} catch (ParseException e) {
-			sendErrorRedirect(request, response, e);
-		} catch (RepositoryException e) {
-			sendErrorRedirect(request, response, e);
-		} catch (DatabaseException e) {
-			sendErrorRedirect(request, response, e);
 		} catch (Exception e) {
 			sendErrorRedirect(request, response, e);
 		}
@@ -102,7 +94,7 @@ public class SearchServlet extends HttpServlet {
 		ServletContext sc = getServletContext();
 
 		if (!content.isEmpty() || !filename.isEmpty() || !keywords.isEmpty()) {
-			Set<String> kwd = new HashSet<String>();
+			Set<String> kwd = new HashSet<>();
 			for (StringTokenizer st = new StringTokenizer(keywords); st.hasMoreTokens(); ) {
 				kwd.add(st.nextToken());
 			}

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -27,7 +27,6 @@ import com.openkm.frontend.client.bean.GWTMail;
  * MailComparator
  *
  * @author jllort
- *
  */
 public class MailComparator extends CultureComparator<GWTMail> {
 
@@ -37,22 +36,17 @@ public class MailComparator extends CultureComparator<GWTMail> {
 
 	public static MailComparator getInstance(String locale) {
 		try {
-			MailComparator comparator = (MailComparator) CultureComparator.getInstance(MailComparator.class, locale);
-			return comparator;
+			return (MailComparator) CultureComparator.getInstance(MailComparator.class, locale);
 		} catch (Exception e) {
 			return new MailComparator(locale);
 		}
 	}
 
 	public static MailComparator getInstance() {
-		MailComparator instance = getInstance(CultureComparator.DEFAULT_LOCALE);
-		return instance;
+		return getInstance(CultureComparator.DEFAULT_LOCALE);
 	}
 
-	public int compare(GWTMail arg0, GWTMail arg1) {
-		GWTMail first = arg0;
-		GWTMail second = arg1;
-
+	public int compare(GWTMail first, GWTMail second) {
 		return collator.compare(first.getSubject(), second.getSubject());
 	}
 }

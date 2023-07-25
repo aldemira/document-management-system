@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -31,13 +31,13 @@ import java.util.List;
  *
  */
 public interface OKMBookmarkServiceAsync {
-	public void getAll(AsyncCallback<List<GWTBookmark>> callback);
+	void getAll(AsyncCallback<List<GWTBookmark>> callback);
 
-	public void add(String nodePath, String name, AsyncCallback<GWTBookmark> callback);
+	void add(String nodePath, String name, AsyncCallback<GWTBookmark> callback);
 
-	public void remove(int bmId, AsyncCallback<?> callback);
+	void remove(int bmId, AsyncCallback<?> callback);
 
-	public void rename(int bmId, String newName, AsyncCallback<GWTBookmark> callback);
+	void rename(int bmId, String newName, AsyncCallback<GWTBookmark> callback);
 
-	public void get(int bmId, AsyncCallback<GWTBookmark> callback);
+	void get(int bmId, AsyncCallback<GWTBookmark> callback);
 }

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -118,7 +118,7 @@ public class ZohoTokenDAO {
 	 * Find
 	 */
 	public static ZohoToken findByPk(String id) throws DatabaseException {
-		log.debug("findByPk({})");
+		log.debug("findByPk({})", id);
 		String qs = "from ZohoToken zot where zot.id=:id";
 		Session session = null;
 
@@ -141,7 +141,7 @@ public class ZohoTokenDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<ZohoToken> findAll() throws DatabaseException {
-		log.debug("findAll({})");
+		log.debug("findAll()");
 		String qs = "select zot from ZohoToken zot order by zot.id asc";
 		Session session = null;
 		Transaction tx = null;

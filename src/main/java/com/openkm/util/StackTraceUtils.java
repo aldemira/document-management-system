@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -56,7 +56,7 @@ public class StackTraceUtils {
 			for (int i = 2; i < trace.length; i++) {
 				if (trace[i].getClassName().startsWith("com.openkm")) {
 					StackTraceElement sse = trace[i];
-					log.warn("{} -> {} ({}:{})", new Object[]{sse.getClassName(), sse.getMethodName(), sse.getFileName(), sse.getLineNumber()});
+					log.warn("{} -> {} ({}:{})", sse.getClassName(), sse.getMethodName(), sse.getFileName(), sse.getLineNumber());
 				}
 			}
 		}

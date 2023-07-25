@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -145,8 +145,8 @@ public class ResourceUtils {
 		//}
 
 		//catChilds.addAll(fldChilds);
-		List<Document> docChilds = new ArrayList<Document>();
-		List<Mail> mailChilds = new ArrayList<Mail>();
+		List<Document> docChilds = new ArrayList<>();
+		List<Mail> mailChilds = new ArrayList<>();
 		Resource catResource = new CategoryResource(path, cat, catChilds, docChilds, mailChilds);
 
 		SystemProfiling.log(null, System.currentTimeMillis() - begin);
@@ -159,7 +159,7 @@ public class ResourceUtils {
 	 */
 	public static void createContent(OutputStream out, Path path, List<Folder> fldChilds, List<Document> docChilds,
 	                                 List<Mail> mailChilds) {
-		log.debug("createContent({}, {}, {}, {}, {})", new Object[]{out, path, fldChilds, docChilds, mailChilds});
+		log.debug("createContent({}, {}, {}, {}, {})", out, path, fldChilds, docChilds, mailChilds);
 		long begin = System.currentTimeMillis();
 		PrintWriter pw = new PrintWriter(out);
 		pw.println("<html>");

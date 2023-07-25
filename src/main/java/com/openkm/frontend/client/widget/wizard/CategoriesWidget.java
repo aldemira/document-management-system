@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -46,7 +46,7 @@ import java.util.Collection;
  *
  */
 public class CategoriesWidget extends Composite {
-	private final OKMPropertyServiceAsync propertyService = (OKMPropertyServiceAsync) GWT.create(OKMPropertyService.class);
+	private final OKMPropertyServiceAsync propertyService = GWT.create(OKMPropertyService.class);
 
 	private FlexTable table;
 	private String docPath;
@@ -63,7 +63,7 @@ public class CategoriesWidget extends Composite {
 	public CategoriesWidget(String docPath, Widget widget) {
 		table = new FlexTable();
 		tableSubscribedCategories = new FlexTable();
-		assignedCategories = new ArrayList<GWTFolder>();
+		assignedCategories = new ArrayList<>();
 		this.docPath = docPath;
 
 		cellFormatter = table.getCellFormatter(); // Gets the cell formatter

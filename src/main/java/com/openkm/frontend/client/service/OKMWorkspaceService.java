@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -32,13 +32,13 @@ import com.openkm.frontend.client.bean.GWTWorkspace;
  */
 @RemoteServiceRelativePath("Workspace")
 public interface OKMWorkspaceService extends RemoteService {
-	public GWTWorkspace getUserWorkspace() throws OKMException;
+	GWTWorkspace getUserWorkspace() throws OKMException;
 
-	public Double getUserDocumentsSize() throws OKMException;
+	Double getUserDocumentsSize() throws OKMException;
 
-	public void updateUserWorkspace(GWTWorkspace workspace) throws OKMException;
+	void updateUserWorkspace(GWTWorkspace workspace) throws OKMException;
 
-	public void deleteMailAccount(long id) throws OKMException;
+	void deleteMailAccount(long id) throws OKMException;
 
-	public String isValidPassword(String password) throws OKMException;
+	String isValidPassword(String password) throws OKMException;
 }

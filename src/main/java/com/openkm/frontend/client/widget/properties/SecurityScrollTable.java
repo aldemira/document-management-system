@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -43,7 +43,10 @@ import com.openkm.frontend.client.util.RoleComparator;
 import com.openkm.frontend.client.util.ScrollTableHelper;
 import com.openkm.frontend.client.util.Util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * SecurityScrollTable
@@ -52,7 +55,7 @@ import java.util.*;
  *
  */
 public class SecurityScrollTable extends Composite implements ClickHandler {
-	private final OKMAuthServiceAsync authService = (OKMAuthServiceAsync) GWT.create(OKMAuthService.class);
+	private final OKMAuthServiceAsync authService = GWT.create(OKMAuthService.class);
 
 	// Number of columns
 	private String uuid;
@@ -200,7 +203,7 @@ public class SecurityScrollTable extends Composite implements ClickHandler {
 			col++;
 		}
 
-		// Level 1 headers		
+		// Level 1 headers
 		col = 0;
 		headerTable.setHTML(0, col++, Main.i18n("security.role.name"));
 		headerTable.setHTML(0, col++, Main.i18n("security.role.permission.read"));
@@ -494,17 +497,14 @@ public class SecurityScrollTable extends Composite implements ClickHandler {
 	 */
 	final AsyncCallback<Map<String, Integer>> callbackGetGrantedRoles = new AsyncCallback<Map<String, Integer>>() {
 		public void onSuccess(Map<String, Integer> result) {
-			List<String> rolesList = new ArrayList<String>();
+			List<String> rolesList = new ArrayList<>();
 
 			// Ordering grant roles to list
-			for (Iterator<String> it = result.keySet().iterator(); it.hasNext(); ) {
-				rolesList.add(it.next());
-			}
+			rolesList.addAll(result.keySet());
 			Collections.sort(rolesList, RoleComparator.getInstance());
 
-			for (Iterator<String> it = rolesList.iterator(); it.hasNext(); ) {
-				String groupName = it.next();
-				Integer permission = (Integer) result.get(groupName);
+			for (String groupName : rolesList) {
+				Integer permission = result.get(groupName);
 				addRolRow(groupName, permission);
 			}
 

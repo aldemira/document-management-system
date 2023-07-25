@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -39,7 +39,7 @@ import com.openkm.frontend.client.util.Util;
 import java.util.HashMap;
 
 public class FindFolderSelectPopup extends DialogBox {
-	private final OKMSearchServiceAsync searchService = (OKMSearchServiceAsync) GWT.create(OKMSearchService.class);
+	private final OKMSearchServiceAsync searchService = GWT.create(OKMSearchService.class);
 
 	public static final int ORIGIN_DEFAULT = 1;
 	public static final int ORIGIN_MAIL_EDITOR = 2; // Used in okm_mail_tiny_mce
@@ -128,7 +128,7 @@ public class FindFolderSelectPopup extends DialogBox {
 					gwtParams.setLastModifiedFrom(null);
 					gwtParams.setLastModifiedTo(null);
 					gwtParams.setDomain(GWTQueryParams.FOLDER);
-					gwtParams.setProperties(new HashMap<String, GWTPropertyParams>());
+					gwtParams.setProperties(new HashMap<>());
 
 					find(gwtParams);
 				} else {

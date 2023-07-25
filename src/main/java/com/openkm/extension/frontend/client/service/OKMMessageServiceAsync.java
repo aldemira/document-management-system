@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -34,23 +34,23 @@ import java.util.Map;
  *
  */
 public interface OKMMessageServiceAsync extends RemoteService {
-	public void send(String users, String roles, String subject, String content, AsyncCallback<?> callback);
+	void send(String users, String roles, String subject, String content, AsyncCallback<?> callback);
 
-	public void deleteSent(long msgId, AsyncCallback<?> callback);
+	void deleteSent(long msgId, AsyncCallback<?> callback);
 
-	public void deleteReceived(long msgId, AsyncCallback<?> callback);
+	void deleteReceived(long msgId, AsyncCallback<?> callback);
 
-	public void findSentUsersTo(AsyncCallback<List<String>> callback);
+	void findSentUsersTo(AsyncCallback<List<String>> callback);
 
-	public void findReceivedUsersFrom(AsyncCallback<Map<String, Long>> callback);
+	void findReceivedUsersFrom(AsyncCallback<Map<String, Long>> callback);
 
-	public void markSeen(long msgId, AsyncCallback<?> callback);
+	void markSeen(long msgId, AsyncCallback<?> callback);
 
-	public void findSentFromMeToUser(String user, AsyncCallback<List<GWTMessageSent>> callback);
+	void findSentFromMeToUser(String user, AsyncCallback<List<GWTMessageSent>> callback);
 
-	public void deleteSentFromMeToUser(String user, AsyncCallback<?> callback);
+	void deleteSentFromMeToUser(String user, AsyncCallback<?> callback);
 
-	public void findReceivedByMeFromUser(String user, AsyncCallback<List<GWTMessageReceived>> callback);
+	void findReceivedByMeFromUser(String user, AsyncCallback<List<GWTMessageReceived>> callback);
 
-	public void deleteReceivedByMeFromUser(String user, AsyncCallback<?> callback);
+	void deleteReceivedByMeFromUser(String user, AsyncCallback<?> callback);
 }

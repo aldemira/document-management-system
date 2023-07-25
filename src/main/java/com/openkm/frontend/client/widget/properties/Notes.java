@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -43,7 +43,6 @@ import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.richtext.RichTextToolbar;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Notes
@@ -52,7 +51,7 @@ import java.util.Iterator;
  *
  */
 public class Notes extends Composite {
-	private final OKMNoteServiceAsync noteService = (OKMNoteServiceAsync) GWT.create(OKMNoteService.class);
+	private final OKMNoteServiceAsync noteService = GWT.create(OKMNoteService.class);
 	public static final int DOCUMENT_NOTE = 1;
 	public static final int FOLDER_NOTE = 2;
 	public static final int MAIL_NOTE = 3;
@@ -189,8 +188,8 @@ public class Notes extends Composite {
 			tableNotes.removeRow(0);
 		}
 
-		for (Iterator<GWTNote> it = doc.getNotes().iterator(); it.hasNext(); ) {
-			writeNote(it.next());
+		for (GWTNote gwtNote : doc.getNotes()) {
+			writeNote(gwtNote);
 		}
 
 		writeAddNote();
@@ -210,8 +209,8 @@ public class Notes extends Composite {
 			tableNotes.removeRow(0);
 		}
 
-		for (Iterator<GWTNote> it = folder.getNotes().iterator(); it.hasNext(); ) {
-			writeNote(it.next());
+		for (GWTNote gwtNote : folder.getNotes()) {
+			writeNote(gwtNote);
 		}
 
 		writeAddNote();
@@ -231,8 +230,8 @@ public class Notes extends Composite {
 			tableNotes.removeRow(0);
 		}
 
-		for (Iterator<GWTNote> it = mail.getNotes().iterator(); it.hasNext(); ) {
-			writeNote(it.next());
+		for (GWTNote gwtNote : mail.getNotes()) {
+			writeNote(gwtNote);
 		}
 
 		writeAddNote();
@@ -249,9 +248,7 @@ public class Notes extends Composite {
 	}
 
 	/**
-	 * Writes the note 
-	 *
-	 * @param note
+	 * Writes the note
 	 */
 	private void writeNote(final GWTNote note) {
 		int row = tableNotes.getRowCount();
@@ -389,7 +386,7 @@ public class Notes extends Composite {
 	}
 
 	/**
-	 * Callback addNote 
+	 * Callback addNote
 	 */
 	final AsyncCallback<GWTNote> callbackAddNote = new AsyncCallback<GWTNote>() {
 		public void onSuccess(GWTNote result) {

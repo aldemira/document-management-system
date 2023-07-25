@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -47,7 +47,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +81,7 @@ public class CronTabServlet extends BaseServlet {
 		updateSessionManager(request);
 
 		try {
-			Map<String, String> types = new LinkedHashMap<String, String>();
+			Map<String, String> types = new LinkedHashMap<>();
 			types.put(MimeTypeConfig.MIME_BSH, "BSH");
 			types.put(MimeTypeConfig.MIME_JAR, "JAR");
 
@@ -117,10 +116,7 @@ public class CronTabServlet extends BaseServlet {
 			} else {
 				list(request, response);
 			}
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (EvalError e) {
+		} catch (DatabaseException | EvalError e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		}
@@ -144,9 +140,7 @@ public class CronTabServlet extends BaseServlet {
 				List<FileItem> items = upload.parseRequest(request);
 				CronTab ct = new CronTab();
 
-				for (Iterator<FileItem> it = items.iterator(); it.hasNext(); ) {
-					FileItem item = it.next();
-
+				for (FileItem item : items) {
 					if (item.isFormField()) {
 						if (item.getFieldName().equals("action")) {
 							action = item.getString("UTF-8");
@@ -190,10 +184,7 @@ public class CronTabServlet extends BaseServlet {
 					list(request, response);
 				}
 			}
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (FileUploadException e) {
+		} catch (DatabaseException | FileUploadException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		}
@@ -202,9 +193,9 @@ public class CronTabServlet extends BaseServlet {
 	/**
 	 * List registered reports
 	 */
-	private void list(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
-		log.debug("list({}, {})", new Object[]{request, response});
+	private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException,
+			DatabaseException {
+		log.debug("list({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		List<CronTab> list = CronTabDAO.findAll();
 		sc.setAttribute("crontabs", list);
@@ -215,9 +206,8 @@ public class CronTabServlet extends BaseServlet {
 	/**
 	 * Execute report
 	 */
-	private void execute(HttpServletRequest request, HttpServletResponse response) throws
-			IOException, DatabaseException, EvalError {
-		log.debug("execute({}, {})", new Object[]{request, response});
+	private void execute(HttpServletRequest request, HttpServletResponse response) throws DatabaseException, EvalError {
+		log.debug("execute({}, {})", request, response);
 		int ctId = WebUtils.getInt(request, "ct_id");
 		CronTab ct = CronTabDAO.findByPk(ctId);
 
@@ -239,9 +229,8 @@ public class CronTabServlet extends BaseServlet {
 	/**
 	 * Download script or jar
 	 */
-	private void download(HttpServletRequest request, HttpServletResponse response) throws IOException,
-			DatabaseException {
-		log.debug("download({}, {})", new Object[]{request, response});
+	private void download(HttpServletRequest request, HttpServletResponse response) throws IOException, DatabaseException {
+		log.debug("download({}, {})", request, response);
 		int ctId = WebUtils.getInt(request, "ct_id");
 		CronTab ct = CronTabDAO.findByPk(ctId);
 		ByteArrayInputStream bais = null;

@@ -80,7 +80,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 		updateSessionManager(request);
 
 		// JSON Stuff
-		Ref<FileUploadResponse> fuResponse = new Ref<FileUploadResponse>(new FileUploadResponse());
+		Ref<FileUploadResponse> fuResponse = new Ref<>(new FileUploadResponse());
 
 		try {
 			boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -210,7 +210,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 							sendResponse(out, action, fuResponse.get());
 						} else {
 							fileName = FilenameUtils.getName(fileName);
-							log.debug("Upload file '{}' into '{} ({})'", new Object[]{fileName, path, FormatUtil.formatSize(size)});
+							log.debug("Upload file '{}' into '{} ({})'", fileName, path, FormatUtil.formatSize(size));
 							String mimeType = MimeTypeConfig.mimeTypes.getContentType(fileName.toLowerCase());
 							Document doc = new Document();
 							doc.setPath(path + "/" + fileName);
@@ -321,8 +321,8 @@ public class FileUploadServlet extends OKMHttpServlet {
 				// If the document have been added to the repository, perform user notification if has no error
 				if ((action == UIFileUploadConstants.ACTION_INSERT || action == UIFileUploadConstants.ACTION_UPDATE) && notify
 						&& fuResponse.get().getError().equals("")) {
-					List<String> userNames = new ArrayList<String>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
-					List<String> roleNames = new ArrayList<String>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
+					List<String> userNames = new ArrayList<>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
+					List<String> roleNames = new ArrayList<>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
 
 					for (String role : roleNames) {
 						List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);
@@ -456,9 +456,7 @@ public class FileUploadServlet extends OKMHttpServlet {
 
 			try {
 				sc.getRequestDispatcher(redirectURL).forward(request, response);
-			} catch (ServletException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
+			} catch (ServletException | IOException e) {
 				e.printStackTrace();
 			}
 		} else {
@@ -503,7 +501,8 @@ public class FileUploadServlet extends OKMHttpServlet {
 
 			// Import files
 			StringWriter out = new StringWriter();
-			ImpExpStats stats = RepositoryImporter.importDocuments(null, tmpOut, path, false, false, false, out, new TextInfoDecorator(tmpOut));
+			ImpExpStats stats = RepositoryImporter.importDocuments(null, tmpOut, path, false, false,
+					false, out, new TextInfoDecorator(tmpOut));
 
 			if (!stats.isOk()) {
 				errorMsg = out.toString();
@@ -559,7 +558,8 @@ public class FileUploadServlet extends OKMHttpServlet {
 
 			// Import files
 			StringWriter out = new StringWriter();
-			ImpExpStats stats = RepositoryImporter.importDocuments(null, tmpOut, path, false, false, false, out, new TextInfoDecorator(tmpOut));
+			ImpExpStats stats = RepositoryImporter.importDocuments(null, tmpOut, path, false, false,
+					false, out, new TextInfoDecorator(tmpOut));
 			if (!stats.isOk()) {
 				errorMsg = out.toString();
 			}

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -177,7 +177,7 @@ public class DashboardDAO {
 	 */
 	public static void purgeOldVisitedNode(String user, String source, String node, Calendar date) throws
 			DatabaseException {
-		log.debug("purgeOldVisitedNode({}, {}, {}, {})", new Object[]{user, source, node, date});
+		log.debug("purgeOldVisitedNode({}, {}, {}, {})", user, source, node, date);
 		String qs = "delete from Dashboard db where db.user=:user and db.source=:source " +
 				"and db.node=:node and db.date=:date";
 		Session session = null;

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -136,7 +136,7 @@ public class OKMMail implements MailModule {
 	@Override
 	public Mail rename(String token, String mailId, String newName) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("rename({}, {}, {})", new Object[]{token, mailId, newName});
+		log.debug("rename({}, {}, {})", token, mailId, newName);
 		MailModule mm = ModuleManager.getMailModule();
 		Mail renamedMail = mm.rename(token, mailId, newName);
 		log.debug("rename: {}", renamedMail);
@@ -146,7 +146,7 @@ public class OKMMail implements MailModule {
 	@Override
 	public void move(String token, String mailPath, String dstId) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, DatabaseException {
-		log.debug("move({}, {}, {})", new Object[]{token, mailPath, dstId});
+		log.debug("move({}, {}, {})", token, mailPath, dstId);
 		MailModule mm = ModuleManager.getMailModule();
 		mm.move(token, mailPath, dstId);
 		log.debug("move: void");
@@ -156,7 +156,7 @@ public class OKMMail implements MailModule {
 	public void copy(String token, String mailPath, String dstId) throws PathNotFoundException,
 			ItemExistsException, AccessDeniedException, RepositoryException, IOException, AutomationException,
 			DatabaseException, UserQuotaExceededException {
-		log.debug("copy({}, {}, {})", new Object[]{token, mailPath, dstId});
+		log.debug("copy({}, {}, {})", token, mailPath, dstId);
 		MailModule mm = ModuleManager.getMailModule();
 		mm.copy(token, mailPath, dstId);
 		log.debug("copy: void");
@@ -166,7 +166,7 @@ public class OKMMail implements MailModule {
 	public void extendedCopy(String token, String mailPath, String dstId, ExtendedAttributes extAttr)
 			throws PathNotFoundException, ItemExistsException, AccessDeniedException, RepositoryException, IOException,
 			AutomationException, DatabaseException, UserQuotaExceededException {
-		log.debug("extendedCopy({}, {}, {}, {})", new Object[]{token, mailPath, dstId, extAttr});
+		log.debug("extendedCopy({}, {}, {}, {})", token, mailPath, dstId, extAttr);
 		MailModule mm = ModuleManager.getMailModule();
 		mm.extendedCopy(token, mailPath, dstId, extAttr);
 		log.debug("extendedCopy: void");
@@ -342,7 +342,8 @@ public class OKMMail implements MailModule {
 			String dstId) throws AccessDeniedException, PathNotFoundException, ItemExistsException, AutomationException,
 			VirusDetectedException, UserQuotaExceededException, UnsupportedMimeTypeException, FileSizeExceededException,
 			ExtensionException, RepositoryException, DatabaseException, IOException, LockException {
-		log.debug("sendMailWithAttachments({}, {}, {}, {}, {}, {}, {}, {})", token, toRecipients, ccRecipients, bccRecipients, replyToMails, subject, body, docsId);
+		log.debug("sendMailWithAttachments({}, {}, {}, {}, {}, {}, {}, {})", token, toRecipients, ccRecipients, bccRecipients,
+				replyToMails, subject, body, docsId);
 		RepositoryModule rp = ModuleManager.getRepositoryModule();
 		DocumentModule dm = ModuleManager.getDocumentModule();
 		MailModule mm = ModuleManager.getMailModule();

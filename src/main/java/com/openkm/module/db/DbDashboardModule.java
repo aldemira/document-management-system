@@ -26,8 +26,8 @@ import com.openkm.bean.nr.NodeQueryResult;
 import com.openkm.bean.nr.NodeResultSet;
 import com.openkm.cache.CacheProvider;
 import com.openkm.cache.UserItemsManager;
-import com.openkm.core.*;
 import com.openkm.core.Config;
+import com.openkm.core.*;
 import com.openkm.dao.*;
 import com.openkm.dao.bean.*;
 import com.openkm.dao.bean.cache.UserItems;
@@ -47,7 +47,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
 
 import java.io.IOException;
 import java.util.*;
@@ -218,8 +217,8 @@ public class DbDashboardModule implements DashboardModule {
 	@SuppressWarnings("unchecked")
 	private List<DashboardDocumentResult> executeQueryDocument(String user, String qs, String action, int maxResults)
 			throws RepositoryException, DatabaseException {
-		log.debug("executeQueryDocument({}, {}, {}, {})", new Object[]{user, qs, action, maxResults});
-		List<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
+		log.debug("executeQueryDocument({}, {}, {}, {})", user, qs, action, maxResults);
+		List<DashboardDocumentResult> al = new ArrayList<>();
 		Session session = null;
 		int i = 0;
 
@@ -267,7 +266,7 @@ public class DbDashboardModule implements DashboardModule {
 	@SuppressWarnings("unchecked")
 	private List<DashboardFolderResult> executeQueryFolder(String user, String qs, String action, int maxResults)
 			throws RepositoryException, DatabaseException {
-		List<DashboardFolderResult> al = new ArrayList<DashboardFolderResult>();
+		List<DashboardFolderResult> al = new ArrayList<>();
 		Session session = null;
 		int i = 0;
 
@@ -538,7 +537,7 @@ public class DbDashboardModule implements DashboardModule {
 	public List<QueryParams> getUserSearchs(String token) throws AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("getUserSearchs({})", token);
 		long begin = System.currentTimeMillis();
-		List<QueryParams> ret = new ArrayList<QueryParams>();
+		List<QueryParams> ret = new ArrayList<>();
 
 		try {
 			if (token != null) {
@@ -547,9 +546,7 @@ public class DbDashboardModule implements DashboardModule {
 
 			List<QueryParams> qParams = QueryParamsDAO.findByUser(PrincipalUtils.getUser());
 
-			for (Iterator<QueryParams> it = qParams.iterator(); it.hasNext(); ) {
-				QueryParams qp = it.next();
-
+			for (QueryParams qp : qParams) {
 				// If this is a dashboard user search, dates are used internally
 				if (qp.isDashboard()) {
 					qp.setLastModifiedFrom(null);
@@ -576,7 +573,7 @@ public class DbDashboardModule implements DashboardModule {
 	public List<DashboardDocumentResult> find(String token, int qpId) throws IOException, ParseException,
 			AccessDeniedException, RepositoryException, DatabaseException {
 		log.debug("find({}, {})", token, qpId);
-		List<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
+		List<DashboardDocumentResult> al;
 
 		try {
 			if (token != null) {
@@ -600,7 +597,7 @@ public class DbDashboardModule implements DashboardModule {
 	public List<DashboardDocumentResult> findSrv(String user, int qpId) throws RepositoryException,
 			DatabaseException, ParseException, IOException {
 		log.debug("findSrv({}, {})", user, qpId);
-		List<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
+		List<DashboardDocumentResult> al;
 		DbSearchModule directSearch = new DbSearchModule();
 
 		// Get the saved query params
@@ -658,8 +655,8 @@ public class DbDashboardModule implements DashboardModule {
 	 * Execute Lucene query with documents
 	 */
 	private List<DashboardDocumentResult> executeQueryDocument(String user, org.apache.lucene.search.Query query,
-	                                                           int maxResults) throws RepositoryException, DatabaseException {
-		List<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
+			int maxResults) throws RepositoryException, DatabaseException {
+		List<DashboardDocumentResult> al = new ArrayList<>();
 
 		try {
 			NodeResultSet nrs = SearchDAO.getInstance().findByQuery(query, 0, maxResults);
@@ -673,9 +670,7 @@ public class DbDashboardModule implements DashboardModule {
 				vo.setVisited(false);
 				al.add(vo);
 			}
-		} catch (ParseException e) {
-			throw new RepositoryException(e.getMessage(), e);
-		} catch (PathNotFoundException e) {
+		} catch (ParseException | PathNotFoundException e) {
 			throw new RepositoryException(e.getMessage(), e);
 		}
 
@@ -683,8 +678,8 @@ public class DbDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getLastWeekTopDownloadedDocuments(String token) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public List<DashboardDocumentResult> getLastWeekTopDownloadedDocuments(String token) throws AccessDeniedException,
+			RepositoryException, DatabaseException {
 		log.debug("getLastWeekTopDownloadedDocuments({})", token);
 
 		try {
@@ -705,8 +700,7 @@ public class DbDashboardModule implements DashboardModule {
 	/**
 	 * Convenient method for syndication
 	 */
-	public List<DashboardDocumentResult> getLastWeekTopDownloadedDocumentsSrv(String user) throws RepositoryException,
-			DatabaseException {
+	public List<DashboardDocumentResult> getLastWeekTopDownloadedDocumentsSrv(String user) throws DatabaseException {
 		log.debug("getUserLastImportedMailAttachmentsSrv({})", user);
 		long begin = System.currentTimeMillis();
 		String qs = "select a.item, max(a.date) from DashboardActivity a " +
@@ -749,8 +743,7 @@ public class DbDashboardModule implements DashboardModule {
 	/**
 	 * Convenient method for syndication
 	 */
-	public List<DashboardDocumentResult> getLastMonthTopDownloadedDocumentsSrv(String user) throws RepositoryException,
-			DatabaseException {
+	public List<DashboardDocumentResult> getLastMonthTopDownloadedDocumentsSrv(String user) throws DatabaseException {
 		log.debug("getLastMonthTopDownloadedDocumentsSrv({})", user);
 		long begin = System.currentTimeMillis();
 		String qs = "select a.item, max(a.date) from DashboardActivity a " +
@@ -793,8 +786,7 @@ public class DbDashboardModule implements DashboardModule {
 	/**
 	 * Convenient method for syndication
 	 */
-	public List<DashboardDocumentResult> getLastWeekTopModifiedDocumentsSrv(String user) throws RepositoryException,
-			DatabaseException {
+	public List<DashboardDocumentResult> getLastWeekTopModifiedDocumentsSrv(String user) throws DatabaseException {
 		log.debug("getLastWeekTopModifiedDocumentsSrv({})", user);
 		long begin = System.currentTimeMillis();
 		String qs = "select a.item, max(a.date) from DashboardActivity a " +
@@ -837,8 +829,7 @@ public class DbDashboardModule implements DashboardModule {
 	/**
 	 * Convenient method for syndication
 	 */
-	public List<DashboardDocumentResult> getLastMonthTopModifiedDocumentsSrv(String user) throws RepositoryException,
-			DatabaseException {
+	public List<DashboardDocumentResult> getLastMonthTopModifiedDocumentsSrv(String user) throws DatabaseException {
 		log.debug("getLastMonthTopModifiedDocumentsSrv({})", user);
 		long begin = System.currentTimeMillis();
 		String qs = "select a.item, max(a.date) from DashboardActivity a " +
@@ -881,8 +872,7 @@ public class DbDashboardModule implements DashboardModule {
 	/**
 	 * Convenient method for syndication
 	 */
-	public List<DashboardDocumentResult> getLastModifiedDocumentsSrv(String user) throws RepositoryException,
-			DatabaseException {
+	public List<DashboardDocumentResult> getLastModifiedDocumentsSrv(String user) throws DatabaseException {
 		log.debug("getLastModifiedDocumentsSrv({})", user);
 		long begin = System.currentTimeMillis();
 		String qs = "select distinct a.item, max(a.date) from DashboardActivity a " +
@@ -901,8 +891,7 @@ public class DbDashboardModule implements DashboardModule {
 	}
 
 	@Override
-	public List<DashboardDocumentResult> getLastCreatedDocuments(String token) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public List<DashboardDocumentResult> getLastCreatedDocuments(String token) throws AccessDeniedException, DatabaseException {
 		log.debug("getLastCreatedDocuments({})", token);
 
 		try {
@@ -923,8 +912,7 @@ public class DbDashboardModule implements DashboardModule {
 	/**
 	 * Convenient method for syndication
 	 */
-	public List<DashboardDocumentResult> getLastCreatedDocumentsSrv(String user) throws AccessDeniedException, RepositoryException,
-			DatabaseException {
+	public List<DashboardDocumentResult> getLastCreatedDocumentsSrv(String user) throws DatabaseException {
 		log.debug("getLastCreatedDocumentsSrv({})", user);
 		long begin = System.currentTimeMillis();
 		// @formatter:off
@@ -967,8 +955,7 @@ public class DbDashboardModule implements DashboardModule {
 	/**
 	 * Convenient method for syndication
 	 */
-	public List<DashboardDocumentResult> getLastUploadedDocumentsSrv(String user) throws RepositoryException,
-			DatabaseException {
+	public List<DashboardDocumentResult> getLastUploadedDocumentsSrv(String user) throws RepositoryException, DatabaseException {
 		log.debug("getLastUploadedDocumentsSrv({})", user);
 		long begin = System.currentTimeMillis();
 		String qs = "select distinct a.item, max(a.date) from DashboardActivity a " +
@@ -991,8 +978,8 @@ public class DbDashboardModule implements DashboardModule {
 	 */
 	@SuppressWarnings("unchecked")
 	private List<DashboardDocumentResult> getTopDocuments(String user, String source, String qs, Calendar date)
-			throws RepositoryException, DatabaseException {
-		log.debug("getTopDocuments({}, {}, {}, {})", new Object[]{user, source, qs, (date != null ? date.getTime() : "null")});
+			throws DatabaseException {
+		log.debug("getTopDocuments({}, {}, {}, {})", user, source, qs, (date != null ? date.getTime() : "null"));
 		List<DashboardDocumentResult> al = new ArrayList<>();
 		Cache docResultCache = CacheProvider.getInstance().getCache(CACHE_DASHBOARD_TOP_DOCUMENTS);
 		String key = source + ":" + user;
@@ -1024,10 +1011,6 @@ public class DbDashboardModule implements DashboardModule {
 					try {
 						NodeDocument nDoc = NodeDocumentDAO.getInstance().findByPk(resItem);
 						// String docPath = NodeBaseDAO.getInstance().getPathFromUuid(nDoc.getUuid());
-
-						// Only documents from taxonomy
-						// Already filtered in the query
-						// if (docPath.startsWith("/okm:root")) {
 						Document doc = BaseDocumentModule.getProperties(user, nDoc);
 						DashboardDocumentResult vo = new DashboardDocumentResult();
 						vo.setDocument(doc);
@@ -1107,7 +1090,7 @@ public class DbDashboardModule implements DashboardModule {
 	@SuppressWarnings("unchecked")
 	private List<DashboardFolderResult> getTopFolders(String user, String source, String qs, Calendar date)
 			throws RepositoryException, DatabaseException {
-		log.debug("getTopFolders({}, {}, {}, {})", new Object[]{user, source, qs, (date != null ? date.getTime() : "null")});
+		log.debug("getTopFolders({}, {}, {}, {})", user, source, qs, (date != null ? date.getTime() : "null"));
 		List<DashboardFolderResult> al = new ArrayList<>();
 		Cache fldResultCache = CacheProvider.getInstance().getCache(CACHE_DASHBOARD_TOP_FOLDERS);
 		String key = source + ":" + user;
@@ -1177,9 +1160,9 @@ public class DbDashboardModule implements DashboardModule {
 		return results;
 	}
 	@Override
-	public void visiteNode(String token, String source, String node, Calendar date) throws AccessDeniedException, RepositoryException,
+	public void visiteNode(String token, String source, String node, Calendar date) throws AccessDeniedException,
 			DatabaseException {
-		log.debug("visiteNode({}, {}, {}, {})", new Object[]{token, source, node, (date == null ? null : date.getTime())});
+		log.debug("visiteNode({}, {}, {}, {})", token, source, node, (date == null ? null : date.getTime()));
 
 		try {
 			if (token != null) {
@@ -1209,12 +1192,8 @@ public class DbDashboardModule implements DashboardModule {
 		List<Dashboard> visitedNodes = DashboardDAO.findByUserSource(user, source);
 
 		// Set already visited nodes
-		for (Iterator<DashboardDocumentResult> itDocs = docResult.iterator(); itDocs.hasNext(); ) {
-			DashboardDocumentResult dsDocResult = itDocs.next();
-
-			for (Iterator<Dashboard> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-				Dashboard visitedNode = itVisited.next();
-
+		for (DashboardDocumentResult dsDocResult : docResult) {
+			for (Dashboard visitedNode : visitedNodes) {
 				// Same node path and same activity log date ?
 				if (visitedNode.getNode().equals(dsDocResult.getDocument().getUuid())
 						&& visitedNode.getDate().equals(dsDocResult.getDate())) {
@@ -1223,13 +1202,10 @@ public class DbDashboardModule implements DashboardModule {
 			}
 		}
 
-		for (Iterator<Dashboard> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-			Dashboard visitedNode = itVisited.next();
+		for (Dashboard visitedNode : visitedNodes) {
 			boolean old = true;
 
-			for (Iterator<DashboardDocumentResult> itDocs = docResult.iterator(); itDocs.hasNext(); ) {
-				DashboardDocumentResult dsDocResult = itDocs.next();
-
+			for (DashboardDocumentResult dsDocResult : docResult) {
 				// Same node path and same activity log date ?
 				if (visitedNode.getNode().equals(dsDocResult.getDocument().getUuid())
 						&& visitedNode.getDate().equals(dsDocResult.getDate())) {
@@ -1251,12 +1227,8 @@ public class DbDashboardModule implements DashboardModule {
 		List<Dashboard> visitedNodes = DashboardDAO.findByUserSource(user, source);
 
 		// Set already visited nodes
-		for (Iterator<DashboardFolderResult> itFlds = fldResult.iterator(); itFlds.hasNext(); ) {
-			DashboardFolderResult dsFldResult = itFlds.next();
-
-			for (Iterator<Dashboard> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-				Dashboard visitedNode = itVisited.next();
-
+		for (DashboardFolderResult dsFldResult : fldResult) {
+			for (Dashboard visitedNode : visitedNodes) {
 				if (visitedNode.getNode().equals(dsFldResult.getFolder().getUuid())
 						&& visitedNode.getDate().equals(dsFldResult.getDate())) {
 					dsFldResult.setVisited(true);
@@ -1264,13 +1236,10 @@ public class DbDashboardModule implements DashboardModule {
 			}
 		}
 
-		for (Iterator<Dashboard> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-			Dashboard visitedNode = itVisited.next();
+		for (Dashboard visitedNode : visitedNodes) {
 			boolean old = true;
 
-			for (Iterator<DashboardFolderResult> itFlds = fldResult.iterator(); itFlds.hasNext(); ) {
-				DashboardFolderResult dsFldResult = itFlds.next();
-
+			for (DashboardFolderResult dsFldResult : fldResult) {
 				// Same node path and same activity log date ?
 				if (visitedNode.getNode().equals(dsFldResult.getFolder().getUuid())
 						&& visitedNode.getDate().equals(dsFldResult.getDate())) {
@@ -1292,12 +1261,8 @@ public class DbDashboardModule implements DashboardModule {
 		List<Dashboard> visitedNodes = DashboardDAO.findByUserSource(user, source);
 
 		// Set already visited nodes
-		for (Iterator<DashboardMailResult> itMails = mailResult.iterator(); itMails.hasNext(); ) {
-			DashboardMailResult dsMailResult = itMails.next();
-
-			for (Iterator<Dashboard> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-				Dashboard visitedNode = itVisited.next();
-
+		for (DashboardMailResult dsMailResult : mailResult) {
+			for (Dashboard visitedNode : visitedNodes) {
 				// Same node path and same activity log date ?
 				if (visitedNode.getNode().equals(dsMailResult.getMail().getUuid())
 						&& visitedNode.getDate().equals(dsMailResult.getDate())) {
@@ -1306,13 +1271,10 @@ public class DbDashboardModule implements DashboardModule {
 			}
 		}
 
-		for (Iterator<Dashboard> itVisited = visitedNodes.iterator(); itVisited.hasNext(); ) {
-			Dashboard visitedNode = itVisited.next();
+		for (Dashboard visitedNode : visitedNodes) {
 			boolean old = true;
 
-			for (Iterator<DashboardMailResult> itMails = mailResult.iterator(); itMails.hasNext(); ) {
-				DashboardMailResult dsMailResult = itMails.next();
-
+			for (DashboardMailResult dsMailResult : mailResult) {
 				// Same node path and same activity log date ?
 				if (visitedNode.getNode().equals(dsMailResult.getMail().getUuid())
 						&& visitedNode.getDate().equals(dsMailResult.getDate())) {
@@ -1330,10 +1292,9 @@ public class DbDashboardModule implements DashboardModule {
 	 * Get documents from statement
 	 */
 	@SuppressWarnings("unchecked")
-	private ArrayList<DashboardDocumentResult> getUserDocuments(String user, String source, String qs) throws
-			DatabaseException {
-		log.debug("getUserDocuments({}, {}, {})", new Object[]{user, source, qs});
-		ArrayList<DashboardDocumentResult> al = new ArrayList<DashboardDocumentResult>();
+	private ArrayList<DashboardDocumentResult> getUserDocuments(String user, String source, String qs) throws DatabaseException {
+		log.debug("getUserDocuments({}, {}, {})", user, source, qs);
+		ArrayList<DashboardDocumentResult> al = new ArrayList<>();
 		Cache docResultCache = CacheProvider.getInstance().getCache(CACHE_DASHBOARD_USER_DOCUMENTS);
 		String key = source + ":" + user;
 		Element elto = docResultCache.get(key);
@@ -1351,8 +1312,7 @@ public class DbDashboardModule implements DashboardModule {
 				q.setString("user", user);
 				q.setMaxResults(MAX_RESULTS);
 
-				for (Iterator<Object[]> it = q.list().iterator(); it.hasNext(); ) {
-					Object[] actData = it.next();
+				for (Object[] actData : (Iterable<Object[]>) q.list()) {
 					String actItem = (String) actData[0];
 					Calendar actDate = (Calendar) actData[1];
 
@@ -1385,10 +1345,9 @@ public class DbDashboardModule implements DashboardModule {
 	 * Get mails from statement
 	 */
 	@SuppressWarnings("unchecked")
-	private ArrayList<DashboardMailResult> getUserMails(String user, String source, String qs) throws
-			DatabaseException {
-		log.debug("getUserMails({}, {}, {})", new Object[]{user, source, qs});
-		ArrayList<DashboardMailResult> al = new ArrayList<DashboardMailResult>();
+	private ArrayList<DashboardMailResult> getUserMails(String user, String source, String qs) throws DatabaseException {
+		log.debug("getUserMails({}, {}, {})", user, source, qs);
+		ArrayList<DashboardMailResult> al = new ArrayList<>();
 		Cache mailResultCache = CacheProvider.getInstance().getCache(CACHE_DASHBOARD_USER_MAILS);
 		String key = source + ":" + user;
 		Element elto = mailResultCache.get(key);
@@ -1406,9 +1365,7 @@ public class DbDashboardModule implements DashboardModule {
 				q.setString("user", user);
 				q.setMaxResults(MAX_RESULTS);
 
-				for (Iterator<DashboardActivity> it = q.list().iterator(); it.hasNext(); ) {
-					DashboardActivity da = it.next();
-
+				for (DashboardActivity da : (Iterable<DashboardActivity>) q.list()) {
 					try {
 						NodeMail nMail = NodeMailDAO.getInstance().findByPk(da.getItem());
 						Mail mail = BaseMailModule.getProperties(user, nMail);

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -48,7 +48,7 @@ public class AutomationValidation implements Serializable {
 	@Column(name = "AVP_PARAM")
 	@OrderColumn(name = "AVP_ORDER")
 	@CollectionTable(name = "OKM_AUTO_VALIDATION_PARAMS", joinColumns = {@JoinColumn(name = "AVP_VALIDATION")})
-	private List<String> params = new ArrayList<String>();
+	private List<String> params = new ArrayList<>();
 
 	@Column(name = "AVL_ACTIVE", nullable = false)
 	@Type(type = "true_false")

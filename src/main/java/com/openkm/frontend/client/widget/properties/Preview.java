@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -21,10 +21,6 @@
 
 package com.openkm.frontend.client.widget.properties;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.URL;
@@ -35,6 +31,9 @@ import com.openkm.frontend.client.bean.GWTWorkspace;
 import com.openkm.frontend.client.constants.service.RPCService;
 import com.openkm.frontend.client.extension.widget.preview.PreviewExtension;
 import com.openkm.frontend.client.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Notes
@@ -59,7 +58,8 @@ public class Preview extends Composite {
 	/**
 	 * Preview
 	 */
-	public Preview() {
+	public Preview(final HasPreviewEvent previewEvent) {
+		this.previewEvent = previewEvent;
 		widgetPreviewExtensionList = new ArrayList<>();
 		vPanel = new VerticalPanel();
 		embeddedPreview = new EmbeddedPreview();
@@ -71,9 +71,53 @@ public class Preview extends Composite {
 	@Override
 	public void setPixelSize(int width, int height) {
 		super.setPixelSize(width, height);
-		this.width = width;
-		this.height = height;
-		embeddedPreview.setPixelSize(width, height);
+		this.width = (previewEvent == null) ? width : width;
+		this.height = (previewEvent == null) ? height : height - TURN_BACK_HEIGHT;
+		htmlPreview.setPixelSize(this.width, this.height);
+		syntaxHighlighterPreview.setPixelSize(this.width, this.height);
+		embeddedPreview.setPixelSize(this.width, this.height);
+	}
+
+	/**
+	 * showHTML
+	 */
+	public void showHTML(GWTDocument doc) {
+		hideWidgetExtension();
+		vPanel.clear();
+
+		if (previewEvent != null) {
+			vPanel.add(hReturnPanel);
+			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT) + "px");
+		}
+
+		vPanel.add(htmlPreview);
+		vPanel.setCellHorizontalAlignment(htmlPreview, HasAlignment.ALIGN_CENTER);
+		vPanel.setCellVerticalAlignment(htmlPreview, HasAlignment.ALIGN_MIDDLE);
+
+		if (previewAvailable) {
+			htmlPreview.showHTML(doc);
+		}
+	}
+
+	/**
+	 * showSyntaxHighlighterHTML
+	 */
+	public void showSyntaxHighlighterHTML(GWTDocument doc) {
+		hideWidgetExtension();
+		vPanel.clear();
+
+		if (previewEvent != null) {
+			vPanel.add(hReturnPanel);
+			vPanel.setCellHeight(hReturnPanel, String.valueOf(TURN_BACK_HEIGHT) + "px");
+		}
+
+		vPanel.add(syntaxHighlighterPreview);
+		vPanel.setCellHorizontalAlignment(syntaxHighlighterPreview, HasAlignment.ALIGN_CENTER);
+		vPanel.setCellVerticalAlignment(syntaxHighlighterPreview, HasAlignment.ALIGN_MIDDLE);
+
+		if (previewAvailable) {
+			syntaxHighlighterPreview.showHightlighterHTML(doc);
+		}
 	}
 
 	/**
@@ -98,7 +142,7 @@ public class Preview extends Composite {
 					"</object>" +
 					"</div>\n"); // needed for rewriting  purpose
 		} else {
-			pdf.setHTML("<div id=\"" + flashContainer + "\" align=\"center\"><br><br>" + Main.i18n("preview.unavailable") + "</div>\n");
+			pdf.setHTML("<div id=\"pdfembededcontainer\" align=\"center\"><br><br>" + Main.i18n("preview.unavailable") + "</div>\n");
 		}
 	}
 
@@ -180,6 +224,47 @@ public class Preview extends Composite {
 		if (!previewAvailable) {
 			swf.setHTML("<div id=\"pdfviewercontainer\" align=\"center\"><br><br>" + Main.i18n("preview.unavailable")
 					+ "</div>\n"); // needed for rewriting purpose
+		}
+		backButton.setHTML(Main.i18n("search.button.preview.back"));
+	}
+
+	/**
+	 * previewDocument
+	 */
+	public void previewDocument(boolean refreshing, GWTDocument doc) {
+		if (doc.getMimeType().equals("video/x-flv") || doc.getMimeType().equals("video/mp4") || doc.getMimeType().equals("audio/mpeg")) {
+			if (!refreshing) {
+				showMediaFile(RPCService.DownloadServlet + "?uuid=" + URL.encodeQueryString(doc.getUuid()), doc.getMimeType());
+			} else {
+				resizeMediaPlayer(width, height);
+			}
+		} else if (HTMLPreview.isPreviewAvailable(doc.getMimeType())) {
+			if (!refreshing) {
+				showHTML(doc);
+			}
+		} else if (SyntaxHighlighterPreview.isPreviewAvailable(doc.getMimeType())) {
+			if (!refreshing) {
+				showSyntaxHighlighterHTML(doc);
+			}
+		} else if (doc.getMimeType().equals("application/pdf")) {
+			setPreviewConversion(false);
+			if (!refreshing) {
+				showPDF(doc.getUuid());
+			}
+		} else {
+			if (Main.get().workspaceUserProperties.getWorkspace().isAcrobatPluginPreview() && doc.getMimeType().equals("application/pdf")) {
+				if (!refreshing) {
+					showEmbedPDF(doc.getUuid());
+				} else {
+					Util.resizeEmbededPDF("" + width, "" + height, pdfID);
+				}
+			} else {
+				setPreviewConversion(true);
+
+				if (!refreshing && doc.isConvertibleToPdf()) {
+					showPDF(doc.getUuid());
+				}
+			}
 		}
 	}
 

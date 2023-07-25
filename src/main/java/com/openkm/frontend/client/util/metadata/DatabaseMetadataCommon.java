@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -53,7 +53,7 @@ public abstract class DatabaseMetadataCommon implements IsSerializable {
 	 * restoreToMap
 	 */
 	public Map<String, String> restoreToMap() {
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<>();
 
 		if (realId != null) {
 			map.put(DatabaseMetadataMap.MV_NAME_ID, DatabaseMetadataMap.mapDoubleValue(getRealId()));

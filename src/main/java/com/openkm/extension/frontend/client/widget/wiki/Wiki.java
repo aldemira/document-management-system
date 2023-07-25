@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -48,7 +48,7 @@ public class Wiki implements LanguageHandlerExtension {
 	public static Wiki singleton;
 	private static final String UUID = "a7b5a3c0-4b2f-11e0-b8af-0800200c9a66";
 
-	private int selectedPanel = TAB_FOLDER;  // By default the folder tab is selected at starting 
+	private int selectedPanel = TAB_FOLDER;  // By default the folder tab is selected at starting
 	private TabDocumentWiki tabDocumentWiki;
 	private TabFolderWiki tabFolderWiki;
 	private TabMailWiki tabMailWiki;
@@ -61,8 +61,6 @@ public class Wiki implements LanguageHandlerExtension {
 
 	/**
 	 * Wiki
-	 *
-	 * @param uuidList
 	 */
 	public Wiki(List<String> uuidList) {
 		if (isRegistered(uuidList)) {
@@ -98,11 +96,9 @@ public class Wiki implements LanguageHandlerExtension {
 
 	/**
 	 * getExtensions
-	 *
-	 * @return
 	 */
 	public List<Object> getExtensions() {
-		List<Object> extensions = new ArrayList<Object>();
+		List<Object> extensions = new ArrayList<>();
 		extensions.add(singleton);
 		extensions.add(tabDocumentWiki);
 		extensions.add(tabFolderWiki);
@@ -114,8 +110,6 @@ public class Wiki implements LanguageHandlerExtension {
 
 	/**
 	 * Wiki
-	 *
-	 * @return
 	 */
 	public static Wiki get() {
 		return singleton;
@@ -123,8 +117,6 @@ public class Wiki implements LanguageHandlerExtension {
 
 	/**
 	 * getWidgetTab
-	 *
-	 * @return
 	 */
 	public Widget getWidgetTab() {
 		Widget widget = null;
@@ -146,8 +138,6 @@ public class Wiki implements LanguageHandlerExtension {
 
 	/**
 	 * getUuid
-	 *
-	 * @return
 	 */
 	public String getUuid() {
 		if (WorkspaceComunicator.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP) {
@@ -261,8 +251,6 @@ public class Wiki implements LanguageHandlerExtension {
 
 	/**
 	 * addWigiTag
-	 *
-	 * @param wikiTitle
 	 */
 	public void addWigiTag(String wikiTitle) {
 		if (WorkspaceComunicator.getSelectedWorkspace() == UIDockPanelConstants.DESKTOP) {
@@ -298,8 +286,6 @@ public class Wiki implements LanguageHandlerExtension {
 
 	/**
 	 * openWikiPage
-	 *
-	 * @param wikiTitle
 	 */
 	public static void openWikiPage(String wikiTitle) {
 		WorkspaceComunicator.changeSelectedTab(UIDockPanelConstants.DASHBOARD);
@@ -309,9 +295,6 @@ public class Wiki implements LanguageHandlerExtension {
 
 	/**
 	 * isRegistered
-	 *
-	 * @param uuidList
-	 * @return
 	 */
 	public static boolean isRegistered(List<String> uuidList) {
 		return uuidList.contains(UUID);

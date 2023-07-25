@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -33,9 +33,8 @@ import java.util.Collection;
  *
  */
 public class GWTResultSet implements IsSerializable {
-
+	private Collection<GWTQueryResult> results = new ArrayList<>();
 	private long total;
-	private Collection<GWTQueryResult> results = new ArrayList<GWTQueryResult>();
 
 	public long getTotal() {
 		return total;

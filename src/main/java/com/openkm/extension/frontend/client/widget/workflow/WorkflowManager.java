@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -43,7 +43,8 @@ import java.util.List;
  *
  */
 public class WorkflowManager extends Composite implements WorkflowController {
-	private final OKMWorkflowServiceAsync workflowService = (OKMWorkflowServiceAsync) GWT.create(OKMWorkflowService.class);
+	private final OKMWorkflowServiceAsync workflowService = GWT.create(OKMWorkflowService.class);
+
 	private VerticalPanel vPanel;
 	private TabToolbarWorkflow toolbar;
 	public WorkflowTable workflowTable;

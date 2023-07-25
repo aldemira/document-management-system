@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -32,7 +32,7 @@ public class UserConfig implements Serializable {
 	private String homeType;
 	private String homeNode;
 	private Profile profile;
-	private Set<String> lockTokens = new HashSet<String>();
+	private Set<String> lockTokens = new HashSet<>();
 
 	public String getUser() {
 		return user;

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -498,7 +498,8 @@ public class MailServlet extends OKMRemoteServiceServlet implements OKMMailServi
 			}
 
 			String from = new DbAuthModule().getMail(null, PrincipalUtils.getUser());
-			Mail mail = OKMMail.getInstance().sendMailWithAttachments(null, from, toMails, ccMails, bccMails, replyToMails, subject, message, uuidList, path);
+			Mail mail = OKMMail.getInstance().sendMailWithAttachments(null, from, toMails, ccMails, bccMails, replyToMails,
+					subject, message, uuidList, path);
 			return GWTUtil.copy(mail, getUserWorkspaceSession());
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);

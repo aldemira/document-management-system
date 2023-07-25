@@ -62,10 +62,7 @@ public class DocumentExpirationServlet extends BaseServlet {
 			if (action.equals("") || WebUtils.getBoolean(request, "persist") || action.startsWith("sync") || action.equals("clean")) {
 				groupList(request, response);
 			}
-		} catch (DatabaseException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (PrincipalAdapterException e) {
+		} catch (DatabaseException | PrincipalAdapterException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		}
@@ -75,9 +72,9 @@ public class DocumentExpirationServlet extends BaseServlet {
 	 * Group List
 	 */
 	@SuppressWarnings("unchecked")
-	private void groupList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException,
-			PrincipalAdapterException {
-		log.debug("groupList({}, {})", new Object[]{request, response});
+	private void groupList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException,
+			DatabaseException, PrincipalAdapterException {
+		log.debug("groupList({}, {})", request, response);
 		ServletContext sc = getServletContext();
 		String qs = "select distinct (dmv.col00) from DatabaseMetadataValue dmv where dmv.table='group' order by dmv.col00";
 		org.hibernate.Session dbSession = null;
@@ -105,9 +102,9 @@ public class DocumentExpirationServlet extends BaseServlet {
 	 * Edit
 	 */
 	@SuppressWarnings("unchecked")
-	private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException,
-			PrincipalAdapterException {
-		log.debug("edit({}, {})", new Object[]{request, response});
+	private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException,
+			DatabaseException, PrincipalAdapterException {
+		log.debug("edit({}, {})", request, response);
 		String group = WebUtils.getString(request, "gru_name");
 		org.hibernate.Session dbSession = null;
 		Transaction tx = null;
@@ -140,16 +137,14 @@ public class DocumentExpirationServlet extends BaseServlet {
 				q.setParameter("group", group);
 				List<String> users = q.list();
 				HibernateUtil.commit(tx);
-				List<String> availableUsers = new ArrayList<String>();
+				List<String> availableUsers = new ArrayList<>();
 
 				if (db) {
 					for (User user : AuthDAO.findAllUsers(false)) {
 						availableUsers.add(user.getId());
 					}
 				} else {
-					for (String user : OKMAuth.getInstance().getUsers(null)) {
-						availableUsers.add(user);
-					}
+					availableUsers.addAll(OKMAuth.getInstance().getUsers(null));
 				}
 
 				sc.setAttribute("action", WebUtils.getString(request, "action"));
@@ -172,9 +167,9 @@ public class DocumentExpirationServlet extends BaseServlet {
 	/**
 	 * Create
 	 */
-	private void create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException,
-			PrincipalAdapterException {
-		log.debug("create({}, {})", new Object[]{request, response});
+	private void create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException,
+			DatabaseException, PrincipalAdapterException {
+		log.debug("create({}, {})", request, response);
 		String group = WebUtils.getString(request, "gru_name");
 		org.hibernate.Session dbSession = null;
 		Transaction tx = null;
@@ -202,23 +197,21 @@ public class DocumentExpirationServlet extends BaseServlet {
 				HibernateUtil.commit(tx);
 			} else {
 				ServletContext sc = getServletContext();
-				List<String> availableUsers = new ArrayList<String>();
+				List<String> availableUsers = new ArrayList<>();
 
 				if (db) {
 					for (User user : AuthDAO.findAllUsers(false)) {
 						availableUsers.add(user.getId());
 					}
 				} else {
-					for (String user : OKMAuth.getInstance().getUsers(null)) {
-						availableUsers.add(user);
-					}
+					availableUsers.addAll(OKMAuth.getInstance().getUsers(null));
 				}
 
 				sc.setAttribute("action", WebUtils.getString(request, "action"));
-				sc.setAttribute("group", group);
 				sc.setAttribute("users", new ArrayList<String>());
 				sc.setAttribute("availableUsers", availableUsers);
 				sc.setAttribute("persist", true);
+				sc.setAttribute("group", group);
 				sc.getRequestDispatcher("/admin/document_expiration_group_edit.jsp").forward(request, response);
 			}
 		} catch (HibernateException e) {
@@ -235,9 +228,9 @@ public class DocumentExpirationServlet extends BaseServlet {
 	 * Delete
 	 */
 	@SuppressWarnings("unchecked")
-	private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException,
-			PrincipalAdapterException {
-		log.debug("delete({}, {})", new Object[]{request, response});
+	private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException,
+			DatabaseException, PrincipalAdapterException {
+		log.debug("delete({}, {})", request, response);
 		String group = WebUtils.getString(request, "gru_name");
 		org.hibernate.Session dbSession = null;
 		Transaction tx = null;
@@ -259,16 +252,14 @@ public class DocumentExpirationServlet extends BaseServlet {
 				q.setParameter("group", group);
 				List<String> users = q.list();
 				HibernateUtil.commit(tx);
-				List<String> availableUsers = new ArrayList<String>();
+				List<String> availableUsers = new ArrayList<>();
 
 				if (db) {
 					for (User user : AuthDAO.findAllUsers(false)) {
 						availableUsers.add(user.getId());
 					}
 				} else {
-					for (String user : OKMAuth.getInstance().getUsers(null)) {
-						availableUsers.add(user);
-					}
+					availableUsers.addAll(OKMAuth.getInstance().getUsers(null));
 				}
 
 				sc.setAttribute("action", WebUtils.getString(request, "action"));
@@ -291,25 +282,23 @@ public class DocumentExpirationServlet extends BaseServlet {
 	/**
 	 * syncUsers
 	 */
-	private void syncUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException,
+	private void syncUsers(HttpServletRequest request, HttpServletResponse response) throws DatabaseException,
 			PrincipalAdapterException {
-		log.debug("syncUsers({}, {})", new Object[]{request, response});
+		log.debug("syncUsers({}, {})", request, response);
 		org.hibernate.Session dbSession = null;
 		Transaction tx = null;
 
 		try {
 			dbSession = HibernateUtil.getSessionFactory().openSession();
 			tx = dbSession.beginTransaction();
-			List<String> availableUsers = new ArrayList<String>();
+			List<String> availableUsers = new ArrayList<>();
 
 			if (db) {
 				for (User user : AuthDAO.findAllUsers(false)) {
 					availableUsers.add(user.getId());
 				}
 			} else {
-				for (String user : OKMAuth.getInstance().getUsers(null)) {
-					availableUsers.add(user);
-				}
+				availableUsers.addAll(OKMAuth.getInstance().getUsers(null));
 			}
 
 			// Delete all users
@@ -343,25 +332,23 @@ public class DocumentExpirationServlet extends BaseServlet {
 	/**
 	 * syncRoles
 	 */
-	private void syncRoles(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException,
+	private void syncRoles(HttpServletRequest request, HttpServletResponse response) throws DatabaseException,
 			PrincipalAdapterException {
-		log.debug("syncRoles({}, {})", new Object[]{request, response});
+		log.debug("syncRoles({}, {})", request, response);
 		org.hibernate.Session dbSession = null;
 		Transaction tx = null;
 
 		try {
 			dbSession = HibernateUtil.getSessionFactory().openSession();
 			tx = dbSession.beginTransaction();
-			List<String> availableRoles = new ArrayList<String>();
+			List<String> availableRoles = new ArrayList<>();
 
 			if (db) {
 				for (Role role : AuthDAO.findAllRoles()) {
 					availableRoles.add(role.getId());
 				}
 			} else {
-				for (String role : OKMAuth.getInstance().getRoles(null)) {
-					availableRoles.add(role);
-				}
+				availableRoles.addAll(OKMAuth.getInstance().getRoles(null));
 			}
 
 			// Delete all roles
@@ -375,16 +362,14 @@ public class DocumentExpirationServlet extends BaseServlet {
 
 			// Create all roles
 			for (String role : availableRoles) {
-				List<String> users = new ArrayList<String>();
+				List<String> users = new ArrayList<>();
 
 				if (db) {
 					for (User user : AuthDAO.findUsersByRole(role, false)) {
 						users.add(user.getId());
 					}
 				} else {
-					for (String user : OKMAuth.getInstance().getUsersByRole(null, role)) {
-						users.add(user);
-					}
+					users.addAll(OKMAuth.getInstance().getUsersByRole(null, role));
 				}
 
 				for (String user : users) {
@@ -412,9 +397,8 @@ public class DocumentExpirationServlet extends BaseServlet {
 	/**
 	 * clean
 	 */
-	private void clean(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DatabaseException,
-			PrincipalAdapterException {
-		log.debug("clean({}, {})", new Object[]{request, response});
+	private void clean(HttpServletRequest request, HttpServletResponse response) throws DatabaseException, PrincipalAdapterException {
+		log.debug("clean({}, {})", request, response);
 		org.hibernate.Session dbSession = null;
 		Transaction tx = null;
 

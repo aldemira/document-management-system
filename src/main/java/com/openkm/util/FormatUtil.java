@@ -31,10 +31,6 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -93,8 +89,7 @@ public class FormatUtil {
 	 */
 	public static String formatTime(long time) {
 		DateFormat df = new SimpleDateFormat("HH:mm:ss.SSS");
-		String str = df.format(time);
-		return str;
+		return df.format(time);
 	}
 
 	/**
@@ -134,21 +129,6 @@ public class FormatUtil {
 	 */
 	public static String formatDate(Calendar cal) {
 		return new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(cal.getTime());
-	}
-
-	/**
-	 * Format string array
-	 */
-	public static String formatArray(String[] values) {
-		if (values != null) {
-			if (values.length == 1) {
-				return values[0];
-			} else {
-				return ArrayUtils.toString(values);
-			}
-		} else {
-			return "NULL";
-		}
 	}
 
 	/**
@@ -195,6 +175,9 @@ public class FormatUtil {
 				.replaceAll("(?i)<.*?javascript:.*?>.*?</.*?>", "") // case 2 - Open and close
 				.replaceAll("(?i)<.*?javascript:.*?/>", "") // case 2 - Open / close
 				.replaceAll("(?i)<.*?javascript:.*?>", "") // case 2 - Open and !close
+				.replaceAll("(?i)<.*?javascript&colon;.*?>.*?</.*?>", "") // case 2.5 - Open and close
+				.replaceAll("(?i)<.*?javascript&colon;.*?/>", "") // case 2.5 - Open / close
+				.replaceAll("(?i)<.*?javascript&colon;.*?>", "") // case 2.5 - Open and !close
 				.replaceAll("(?i)<.*?\\s+on.*?>.*?</.*?>", "") // case 3 - Open and close
 				.replaceAll("(?i)<.*?\\s+on.*?/>", "") // case 3 - Open / close
 				.replaceAll("(?i)<.*?\\s+on.*?>", ""); // case 3 - Open and !close
@@ -206,9 +189,9 @@ public class FormatUtil {
 	 * @see http://greatwebguy.com/programming/java/simple-cross-site-scripting-xss-servlet-filter/
 	 */
 	public static String cleanXSS(String value) {
-		value = value.replaceAll("<", "& lt;").replaceAll(">", "& gt;");
-		value = value.replaceAll("\\(", "& #40;").replaceAll("\\)", "& #41;");
-		value = value.replaceAll("'", "& #39;");
+		value = value.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+		value = value.replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;");
+		value = value.replaceAll("'", "&#39;");
 		value = value.replaceAll("eval\\((.*)\\)", "");
 		value = value.replaceAll("[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']", "\"\"");
 		value = value.replaceAll("script", "");
@@ -219,8 +202,8 @@ public class FormatUtil {
 	 * Parser log file
 	 */
 	public static Collection<LogMessage> parseLog(File flog, int begin, int end, String str) throws IOException {
-		// log.debug("parseLog({}, {}, {}, {})", new Object[] { flog, begin, end, str });
-		ArrayList<LogMessage> al = new ArrayList<LogMessage>();
+		log.debug("parseLog({}, {}, {}, {})", flog, begin, end, str);
+		ArrayList<LogMessage> al = new ArrayList<>();
 		int i = 0;
 
 		if (begin < 0 || end < 0) {
@@ -265,38 +248,6 @@ public class FormatUtil {
 
 		// log.debug("parseLog: {}", al);
 		return al;
-	}
-
-	/**
-	 * Check for valid UTF8
-	 */
-	public static boolean validUTF8(byte[] input) {
-		CharsetDecoder cd = Charset.availableCharsets().get("UTF-8").newDecoder();
-
-		try {
-			cd.decode(ByteBuffer.wrap(input));
-		} catch (CharacterCodingException e) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Fix UTF-8 NULL
-	 */
-	public static byte[] fixUTF8(byte[] input) {
-		byte[] fixed = new byte[input.length];
-
-		for (int i = 0; i < input.length; i++) {
-			if (input[i] == 0x00) {
-				fixed[i] = 0x20;
-			} else {
-				fixed[i] = input[i];
-			}
-		}
-
-		return fixed;
 	}
 
 	/**

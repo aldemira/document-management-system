@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -44,16 +44,16 @@ public class ChatManager {
 	private static final int ACTION_DELETE_EMPTY_MESSAGE_ROOM = 11;
 	private static final int ACTION_GET_USERS_IN_MESSAGE_ROOM = 12;
 
-	private static List<String> loggedUsers = new ArrayList<String>();
+	private static List<String> loggedUsers = new ArrayList<>();
 
 	// user is the key
-	private static Map<String, List<String>> usersRooms = new HashMap<String, List<String>>();
+	private static Map<String, List<String>> usersRooms = new HashMap<>();
 
 	// user is the key
-	private static Map<String, List<String>> pendingUsersRooms = new HashMap<String, List<String>>();
+	private static Map<String, List<String>> pendingUsersRooms = new HashMap<>();
 
 	// room is the key, user is the subkey, messages are copied to each user
-	private static Map<String, HashMap<String, List<String>>> msgUsersRooms = new HashMap<String, HashMap<String, List<String>>>();
+	private static Map<String, HashMap<String, List<String>>> msgUsersRooms = new HashMap<>();
 
 	public void login(String user) throws OKMException {
 		usersLoggedAction(user, ACTION_LOGIN);
@@ -118,7 +118,6 @@ public class ChatManager {
 
 	/**
 	 * Synchronized users logged actions
-	 * @throws OKMException
 	 */
 	private synchronized void usersLoggedAction(String user, int action) throws OKMException {
 		switch (action) {
@@ -144,9 +143,7 @@ public class ChatManager {
 				if (usersRooms.containsKey(user)) {
 					List<String> rooms = usersRooms.get(user);
 
-					for (Iterator<String> it = rooms.iterator(); it.hasNext(); ) {
-						String room = it.next();
-
+					for (String room : rooms) {
 						if (msgUsersRooms.containsKey(room)) {
 							Map<String, List<String>> roomMessages = msgUsersRooms.get(room);
 							if (roomMessages.containsKey(user)) {
@@ -167,7 +164,7 @@ public class ChatManager {
 		switch (action) {
 			case ACTION_ADD_ROOM_TO_USER:
 				if (!usersRooms.keySet().contains(user)) {
-					List<String> userRoomList = new ArrayList<String>();
+					List<String> userRoomList = new ArrayList<>();
 					userRoomList.add(room);
 					usersRooms.put(user, userRoomList);
 				} else {
@@ -199,7 +196,7 @@ public class ChatManager {
 		switch (action) {
 			case ACTION_ADD_PENDING_ROOM_TO_USER:
 				if (!pendingUsersRooms.keySet().contains(user)) {
-					List<String> userPendingRoomList = new ArrayList<String>();
+					List<String> userPendingRoomList = new ArrayList<>();
 					userPendingRoomList.add(room);
 					pendingUsersRooms.put(user, userPendingRoomList);
 				} else {
@@ -210,7 +207,7 @@ public class ChatManager {
 					}
 				}
 
-				return new ArrayList<String>();
+				return new ArrayList<>();
 
 			case ACTION_GET_PENDING_USER_FROM_ROOM:
 				if (pendingUsersRooms.keySet().contains(user)) {
@@ -218,11 +215,11 @@ public class ChatManager {
 					pendingUsersRooms.remove(user);
 					return userRooms;
 				} else {
-					return new ArrayList<String>();
+					return new ArrayList<>();
 				}
 
 			default:
-				return new ArrayList<String>();
+				return new ArrayList<>();
 		}
 	}
 
@@ -234,16 +231,16 @@ public class ChatManager {
 			case ACTION_GET_PENDING_USER_ROOM_MESSAGE:
 				if (msgUsersRooms.containsKey(room) && msgUsersRooms.get(room).containsKey(user)) {
 					List<String> messages = msgUsersRooms.get(room).get(user);
-					msgUsersRooms.get(room).put(user, new ArrayList<String>());
+					msgUsersRooms.get(room).put(user, new ArrayList<>());
 
 					return messages;
 				} else {
-					return new ArrayList<String>();
+					return new ArrayList<>();
 				}
 
 			case ACTION_ADD_USER_MESSAGE_TO_ROOM:
 				String username = OKMAuth.getInstance().getName(null, user);
-				//avoid cross scripting 
+				//avoid cross scripting
 				if (msg.endsWith("</br>")) {
 					msg = msg.substring(0, msg.lastIndexOf("</br>"));
 				}
@@ -254,9 +251,7 @@ public class ChatManager {
 				if (msgUsersRooms.containsKey(room)) {
 					Map<String, List<String>> roomMap = msgUsersRooms.get(room);
 
-					for (Iterator<String> it = roomMap.keySet().iterator(); it.hasNext(); ) {
-						String roomUser = it.next();
-
+					for (String roomUser : roomMap.keySet()) {
 						// Pending message is not added to himself ( that's done by UI )
 						if (!roomUser.equals(user)) {
 							// Add message for each user available
@@ -265,32 +260,30 @@ public class ChatManager {
 					}
 				}
 
-				return new ArrayList<String>();
+				return new ArrayList<>();
 
 			case ACTION_CREATE_MESSAGE_ROOM:
 				if (!msgUsersRooms.containsKey(room)) {
-					msgUsersRooms.put(room, new HashMap<String, List<String>>());
+					msgUsersRooms.put(room, new HashMap<>());
 				}
 
-				return new ArrayList<String>();
+				return new ArrayList<>();
 
 			case ACTION_CREATE_MESSAGE_USER_ROOM:
 				if (msgUsersRooms.containsKey(room)) {
 					if (!msgUsersRooms.get(room).containsKey(user)) {
-						msgUsersRooms.get(room).put(user, new ArrayList<String>());
+						msgUsersRooms.get(room).put(user, new ArrayList<>());
 					}
 				}
 
-				return new ArrayList<String>();
+				return new ArrayList<>();
 
 			case ACTION_REMOVE_USER_MESSAGE_ROOM:
 				if (msgUsersRooms.containsKey(room)) {
-					if (msgUsersRooms.get(room).containsKey(user)) {
-						msgUsersRooms.get(room).remove(user);
-					}
+					msgUsersRooms.get(room).remove(user);
 				}
 
-				return new ArrayList<String>();
+				return new ArrayList<>();
 
 			case ACTION_DELETE_EMPTY_MESSAGE_ROOM:
 				// Room message without users must be deleted
@@ -300,18 +293,18 @@ public class ChatManager {
 					}
 				}
 
-				return new ArrayList<String>();
+				return new ArrayList<>();
 
 			case ACTION_GET_USERS_IN_MESSAGE_ROOM:
 				if (msgUsersRooms.containsKey(room)) {
 					Collection<String> userList = msgUsersRooms.get(room).keySet();
-					return new ArrayList<String>(userList);
+					return new ArrayList<>(userList);
 				} else {
-					return new ArrayList<String>();
+					return new ArrayList<>();
 				}
 
 			default:
-				return new ArrayList<String>();
+				return new ArrayList<>();
 		}
 	}
 }

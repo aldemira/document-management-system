@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -118,7 +118,7 @@ public class ConfigUtils {
 			// file
 			JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
 			Enumeration<JarEntry> entries = jar.entries(); // gives ALL entries in jar
-			Set<String> result = new HashSet<String>(); // avoid duplicates in case it is a subdirectory
+			Set<String> result = new HashSet<>(); // avoid duplicates in case it is a subdirectory
 
 			while (entries.hasMoreElements()) {
 				String name = entries.nextElement().getName();
@@ -136,7 +136,7 @@ public class ConfigUtils {
 				}
 			}
 
-			return new ArrayList<String>(result);
+			return new ArrayList<>(result);
 		}
 
 		throw new UnsupportedOperationException("Cannot list files for URL " + dirUrl);

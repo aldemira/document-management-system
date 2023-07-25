@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -81,19 +81,13 @@ public class DashboardServlet extends HttpServlet {
 			} else if (action.equals("generalLastModified")) {
 				generalLastModified(request, response);
 			}
-		} catch (PathNotFoundException e) {
-			sendErrorRedirect(request, response, e);
-		} catch (RepositoryException e) {
-			sendErrorRedirect(request, response, e);
-		} catch (DatabaseException e) {
-			sendErrorRedirect(request, response, e);
-		} catch (OKMException e) {
+		} catch (PathNotFoundException | RepositoryException | DatabaseException | OKMException e) {
 			sendErrorRedirect(request, response, e);
 		}
 	}
 
 	/**
-	 * Dispatch errors 
+	 * Dispatch errors
 	 */
 	private void sendErrorRedirect(HttpServletRequest request, HttpServletResponse response,
 	                               Throwable e) throws ServletException, IOException {

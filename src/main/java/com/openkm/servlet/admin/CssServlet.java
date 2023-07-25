@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Iterator;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -110,15 +110,13 @@ public class CssServlet extends BaseServlet {
 				Css css = new Css();
 				css.setActive(false);
 
-				for (Iterator<FileItem> it = items.iterator(); it.hasNext(); ) {
-					FileItem item = it.next();
-
+				for (FileItem item : items) {
 					if (item.isFormField()) {
 						if (item.getFieldName().equals("action")) {
 							action = item.getString("UTF-8");
 						} else if (item.getFieldName().equals("css_id")) {
 							if (!item.getString("UTF-8").isEmpty()) {
-								css.setId(new Long(item.getString("UTF-8")).longValue());
+								css.setId(new Long(item.getString("UTF-8")));
 							}
 						} else if (item.getFieldName().equals("css_name")) {
 							css.setName(item.getString("UTF-8"));
@@ -152,10 +150,7 @@ public class CssServlet extends BaseServlet {
 			}
 
 			list(userId, request, response);
-		} catch (FileUploadException e) {
-			log.error(e.getMessage(), e);
-			sendErrorRedirect(request, response, e);
-		} catch (DatabaseException e) {
+		} catch (FileUploadException | DatabaseException e) {
 			log.error(e.getMessage(), e);
 			sendErrorRedirect(request, response, e);
 		}
@@ -164,14 +159,15 @@ public class CssServlet extends BaseServlet {
 	/**
 	 * Download CSS
 	 */
-	private void download(String userId, HttpServletRequest request, HttpServletResponse response) throws DatabaseException, IOException {
-		log.debug("download({}, {}, {})", new Object[]{userId, request, response});
+	private void download(String userId, HttpServletRequest request, HttpServletResponse response) throws DatabaseException,
+			IOException {
+		log.debug("download({}, {}, {})", userId, request, response);
 		long id = WebUtils.getLong(request, "css_id");
 		Css css = CssDAO.getInstance().findByPk(id);
 		ByteArrayInputStream bais = null;
 
 		try {
-			bais = new ByteArrayInputStream(css.getContent().getBytes("UTF-8"));
+			bais = new ByteArrayInputStream(css.getContent().getBytes(StandardCharsets.UTF_8));
 			WebUtils.sendFile(request, response, css.getName() + ".css", MimeTypeConfig.MIME_CSS, false, bais);
 		} finally {
 			IOUtils.closeQuietly(bais);
@@ -183,9 +179,9 @@ public class CssServlet extends BaseServlet {
 	/**
 	 * Delete CSS
 	 */
-	private void delete(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
-		log.debug("delete({}, {}, {})", new Object[]{userId, request, response});
+	private void delete(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
+		log.debug("delete({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		long id = WebUtils.getLong(request, "css_id");
 
@@ -200,9 +196,9 @@ public class CssServlet extends BaseServlet {
 	/**
 	 * Edit CSS
 	 */
-	private void edit(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
-		log.debug("edit({}, {}, {})", new Object[]{userId, request, response});
+	private void edit(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
+		log.debug("edit({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		long id = WebUtils.getLong(request, "css_id");
 
@@ -217,9 +213,9 @@ public class CssServlet extends BaseServlet {
 	/**
 	 * Create CSS
 	 */
-	private void create(String userId, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, DatabaseException {
-		log.debug("create({}, {}, {})", new Object[]{userId, request, response});
+	private void create(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
+			IOException, DatabaseException {
+		log.debug("create({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 
 		sc.setAttribute("action", WebUtils.getString(request, "action"));
@@ -235,7 +231,7 @@ public class CssServlet extends BaseServlet {
 	 */
 	private void list(String userId, HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException, DatabaseException {
-		log.debug("list({}, {}, {})", new Object[]{userId, request, response});
+		log.debug("list({}, {}, {})", userId, request, response);
 		ServletContext sc = getServletContext();
 		sc.setAttribute("cssList", CssDAO.getInstance().findAll());
 		sc.getRequestDispatcher("/admin/css_list.jsp").forward(request, response);

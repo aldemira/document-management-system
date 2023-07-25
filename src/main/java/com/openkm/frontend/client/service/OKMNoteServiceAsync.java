@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -29,9 +29,9 @@ import com.openkm.frontend.client.bean.GWTNote;
  *
  */
 public interface OKMNoteServiceAsync {
-	public void add(String nodePath, String text, AsyncCallback<GWTNote> callback);
+	void add(String nodePath, String text, AsyncCallback<GWTNote> callback);
 
-	public void delete(String notePath, AsyncCallback<?> callback);
+	void delete(String notePath, AsyncCallback<?> callback);
 
-	public void set(String notePath, String text, AsyncCallback<?> callback);
+	void set(String notePath, String text, AsyncCallback<?> callback);
 }

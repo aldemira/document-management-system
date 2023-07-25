@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -51,13 +51,11 @@ public class WebDAVServlet extends HttpServlet {
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-			IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doService(request, response);
 	}
 
-	private void doService(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-			IOException {
+	private void doService(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		try {
 			WebDavService.get().handleRequest(request, response, ctx);
 		} catch (Exception e) {

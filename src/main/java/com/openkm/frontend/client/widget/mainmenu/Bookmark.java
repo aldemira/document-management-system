@@ -38,7 +38,6 @@ import com.openkm.frontend.client.widget.ConfirmPopup;
 import com.openkm.frontend.client.widget.startup.StartUp;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -48,16 +47,13 @@ import java.util.List;
  *
  */
 public class Bookmark {
-
-	private final OKMBookmarkServiceAsync bookmarkService = (OKMBookmarkServiceAsync) GWT
-			.create(OKMBookmarkService.class);
-	private final OKMUserConfigServiceAsync userConfigService = (OKMUserConfigServiceAsync) GWT
-			.create(OKMUserConfigService.class);
+	private final OKMUserConfigServiceAsync userConfigService = GWT.create(OKMUserConfigService.class);
+	private final OKMBookmarkServiceAsync bookmarkService = GWT.create(OKMBookmarkService.class);
 
 	public static final String BOOKMARK_DOCUMENT = "okm:document";
 	public static final String BOOKMARK_FOLDER = "okm:folder";
 
-	private List<MenuItem> bookmarks = new ArrayList<MenuItem>();
+	private List<MenuItem> bookmarks = new ArrayList<>();
 	private String uuid = "";
 	private String nodePath = "";
 	private boolean document = false;
@@ -85,10 +81,9 @@ public class Bookmark {
 
 			// Resets all bookmark menu
 			resetMenu();
-			bookmarks = new ArrayList<MenuItem>();
+			bookmarks = new ArrayList<>();
 
-			for (Iterator<GWTBookmark> it = bookmarkList.iterator(); it.hasNext(); ) {
-				final GWTBookmark bookmark = it.next();
+			for (final GWTBookmark bookmark : bookmarkList) {
 				String icon = "";
 
 				if (bookmark.getType().equals(BOOKMARK_DOCUMENT)) {
@@ -141,7 +136,6 @@ public class Bookmark {
 	 */
 	final AsyncCallback<GWTBookmark> callbackAdd = new AsyncCallback<GWTBookmark>() {
 		public void onSuccess(GWTBookmark result) {
-
 			MenuBar subMenuBookmark = Main.get().mainPanel.topPanel.mainMenu.subMenuBookmark;
 			final GWTBookmark bookmark = result;
 
@@ -215,8 +209,8 @@ public class Bookmark {
 		if (!bookmarks.isEmpty()) {
 			MenuBar subMenuBookmark = Main.get().mainPanel.topPanel.mainMenu.subMenuBookmark;
 
-			for (Iterator<MenuItem> it = bookmarks.iterator(); it.hasNext(); ) {
-				subMenuBookmark.removeItem(it.next());
+			for (MenuItem bookmark : bookmarks) {
+				subMenuBookmark.removeItem(bookmark);
 			}
 		}
 	}
@@ -234,7 +228,6 @@ public class Bookmark {
 	 *
 	 * @param nodePath String The node path
 	 * @param name String The bookmark name
-	 * @param document boolean is document
 	 */
 	public void add(String nodePath, String name) {
 		bookmarkService.add(nodePath, name, callbackAdd);

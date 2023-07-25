@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -33,8 +33,8 @@ import java.util.List;
  *
  */
 public class GWTDownload extends GWTFormElement implements IsSerializable {
-	private List<GWTValidator> validators = new ArrayList<GWTValidator>();
-	private List<GWTNode> nodes = new ArrayList<GWTNode>();
+	private List<GWTValidator> validators = new ArrayList<>();
+	private List<GWTNode> nodes = new ArrayList<>();
 	private String data = "";
 
 	public GWTDownload() {

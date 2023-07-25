@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -31,15 +31,15 @@ import java.util.List;
  *
  */
 public interface OKMStaplingServiceAsync {
-	public void create(String username, String uuid, String type, String uuid2, String type2, AsyncCallback<String> callback);
+	void create(String username, String uuid, String type, String uuid2, String type2, AsyncCallback<String> callback);
 
-	public void add(String id, String uuid, String type, AsyncCallback<?> callback);
+	void add(String id, String uuid, String type, AsyncCallback<?> callback);
 
-	public void remove(String id, AsyncCallback<?> callback);
+	void remove(String id, AsyncCallback<?> callback);
 
-	public void removeStaple(String id, AsyncCallback<?> callback);
+	void removeStaple(String id, AsyncCallback<?> callback);
 
-	public void getAll(String uuid, AsyncCallback<List<GWTStapleGroup>> callback);
+	void getAll(String uuid, AsyncCallback<List<GWTStapleGroup>> callback);
 
-	public void removeAllStapleByUuid(String uuid, AsyncCallback<?> callback);
+	void removeAllStapleByUuid(String uuid, AsyncCallback<?> callback);
 }

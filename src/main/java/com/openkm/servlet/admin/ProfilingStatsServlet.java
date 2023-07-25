@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -90,8 +90,7 @@ public class ProfilingStatsServlet extends BaseServlet {
 	/**
 	 * Activate stats
 	 */
-	private void activate(HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException {
+	private void activate(HttpServletRequest request, HttpServletResponse response) {
 		Config.SYSTEM_PROFILING = true;
 	}
 

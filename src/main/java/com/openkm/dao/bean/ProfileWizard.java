@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -29,8 +29,8 @@ public class ProfileWizard implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private boolean keywordsEnabled;
 	private boolean categoriesEnabled;
-	private Set<String> propertyGroups = new HashSet<String>();
-	private Set<String> workflows = new HashSet<String>();
+	private Set<String> propertyGroups = new HashSet<>();
+	private Set<String> workflows = new HashSet<>();
 
 	public boolean isKeywordsEnabled() {
 		return keywordsEnabled;

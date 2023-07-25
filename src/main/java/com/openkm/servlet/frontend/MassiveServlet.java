@@ -71,39 +71,9 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 				} else if (OKMMail.getInstance().isValid(null, path)) {
 					OKMMail.getInstance().copy(null, path, fldPath);
 				}
-			} catch (PathNotFoundException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (DatabaseException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (ItemExistsException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (IOException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (UserQuotaExceededException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (ExtensionException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AutomationException e) {
+			} catch (PathNotFoundException | AccessDeniedException | RepositoryException | DatabaseException |
+					 ItemExistsException | IOException | UserQuotaExceededException | ExtensionException |
+					 AutomationException e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + path;
@@ -132,35 +102,8 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 				} else if (OKMMail.getInstance().isValid(null, path)) {
 					OKMMail.getInstance().move(null, path, fldPath);
 				}
-			} catch (PathNotFoundException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (DatabaseException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (ItemExistsException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (LockException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (ExtensionException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AutomationException e) {
+			} catch (PathNotFoundException | AccessDeniedException | RepositoryException | DatabaseException |
+					 ItemExistsException | LockException | ExtensionException | AutomationException e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + path;
@@ -189,31 +132,8 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 				} else if (OKMMail.getInstance().isValid(null, path)) {
 					OKMMail.getInstance().delete(null, path);
 				}
-			} catch (PathNotFoundException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (DatabaseException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (LockException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (ExtensionException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AutomationException e) {
+			} catch (PathNotFoundException | AccessDeniedException | RepositoryException | DatabaseException |
+					 LockException | ExtensionException | AutomationException e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + path;
@@ -236,23 +156,8 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 		for (String path : paths) {
 			try {
 				OKMNote.getInstance().add(null, path, text);
-			} catch (LockException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (PathNotFoundException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (DatabaseException e) {
+			} catch (LockException | PathNotFoundException | AccessDeniedException | RepositoryException |
+					 DatabaseException e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + path;
@@ -275,27 +180,8 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 		for (String path : paths) {
 			try {
 				OKMProperty.getInstance().addCategory(null, path, category);
-			} catch (VersionException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (LockException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (PathNotFoundException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (DatabaseException e) {
+			} catch (VersionException | LockException | PathNotFoundException | AccessDeniedException |
+					 RepositoryException | DatabaseException e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + path;
@@ -318,27 +204,8 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 		for (String path : paths) {
 			try {
 				OKMProperty.getInstance().removeCategory(null, path, category);
-			} catch (VersionException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (LockException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (PathNotFoundException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (DatabaseException e) {
+			} catch (VersionException | LockException | PathNotFoundException | AccessDeniedException |
+					 RepositoryException | DatabaseException e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + path;
@@ -361,27 +228,8 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 		for (String path : paths) {
 			try {
 				OKMProperty.getInstance().addKeyword(null, path, keyword);
-			} catch (VersionException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (LockException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (PathNotFoundException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (DatabaseException e) {
+			} catch (VersionException | LockException | PathNotFoundException | AccessDeniedException |
+					 RepositoryException | DatabaseException e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + path;
@@ -404,27 +252,8 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 		for (String path : paths) {
 			try {
 				OKMProperty.getInstance().removeKeyword(null, path, keyword);
-			} catch (VersionException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (LockException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (PathNotFoundException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (DatabaseException e) {
+			} catch (VersionException | LockException | PathNotFoundException | AccessDeniedException |
+					 RepositoryException | DatabaseException e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + path;
@@ -457,43 +286,9 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 				if (!hasPropertyGroup) {
 					OKMPropertyGroup.getInstance().addGroup(null, path, grpName);
 				}
-			} catch (IOException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (ParseException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (NoSuchGroupException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (LockException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (PathNotFoundException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (DatabaseException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (ExtensionException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AutomationException e) {
+			} catch (IOException | ParseException | NoSuchGroupException | LockException | PathNotFoundException |
+					 AccessDeniedException | RepositoryException | DatabaseException | ExtensionException |
+					 AutomationException e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + path;
@@ -508,13 +303,13 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 
 	@Override
 	public void setProperties(List<String> paths, String grpName, List<GWTFormElement> formProperties) throws OKMException {
-		log.debug("setProperties({}, {}, {})", new Object[]{paths, grpName, formProperties});
+		log.debug("setProperties({}, {}, {})", paths, grpName, formProperties);
 		updateSessionManager();
 		String error = "";
 		String pathErrors = "";
 
 		// Properties conversion to be added
-		List<FormElement> properties = new ArrayList<FormElement>();
+		List<FormElement> properties = new ArrayList<>();
 		for (GWTFormElement gWTformElement : formProperties) {
 			properties.add(GWTUtil.copy(gWTformElement));
 		}
@@ -522,47 +317,9 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 		for (String path : paths) {
 			try {
 				OKMPropertyGroup.getInstance().setProperties(null, path, grpName, properties);
-			} catch (IOException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (ParseException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (NoSuchPropertyException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (NoSuchGroupException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (LockException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (PathNotFoundException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (DatabaseException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (ExtensionException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AutomationException e) {
+			} catch (IOException | ParseException | NoSuchPropertyException | NoSuchGroupException | LockException |
+					 PathNotFoundException | AccessDeniedException | RepositoryException | DatabaseException |
+					 ExtensionException | AutomationException e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + path;
@@ -585,26 +342,6 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 		for (String path : paths) {
 			try {
 				OKMDocument.getInstance().lock(null, path);
-			} catch (LockException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (PathNotFoundException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (DatabaseException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
@@ -632,26 +369,6 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 				} else {
 					OKMDocument.getInstance().unlock(null, path);
 				}
-			} catch (LockException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (PathNotFoundException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
-			} catch (DatabaseException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + path;
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
@@ -666,13 +383,14 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 	}
 
 	@Override
-	public void notify(List<String> uuids, String mails, String users, String roles, String message, boolean attachment) throws OKMException {
-		log.debug("notify({}, {}, {}, {}, {})", new Object[]{uuids, mails, users, roles, message, attachment});
+	public void notify(List<String> uuids, String mails, String users, String roles, String message, boolean attachment)
+			throws OKMException {
+		log.debug("notify({}, {}, {}, {}, {}, {})", uuids, mails, users, roles, message, attachment);
 		updateSessionManager();
 
 		try {
-			List<String> userNames = new ArrayList<String>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
-			List<String> roleNames = new ArrayList<String>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
+			List<String> userNames = new ArrayList<>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
+			List<String> roleNames = new ArrayList<>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
 
 			for (String role : roleNames) {
 				List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);
@@ -717,13 +435,13 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 
 	@Override
 	public void forwardMail(List<String> uuids, String mails, String users, String roles, String message) throws OKMException {
-		log.debug("forwardMail({}, {}, {}, {}, {})", new Object[]{uuids, mails, users, roles, message});
+		log.debug("forwardMail({}, {}, {}, {}, {})", uuids, mails, users, roles, message);
 		updateSessionManager();
 
 		try {
-			List<String> userNames = new ArrayList<String>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
-			List<String> roleNames = new ArrayList<String>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
-			List<String> to = new ArrayList<String>(MailUtils.parseMailList(mails));
+			List<String> userNames = new ArrayList<>(Arrays.asList(users.isEmpty() ? new String[0] : users.split(",")));
+			List<String> roleNames = new ArrayList<>(Arrays.asList(roles.isEmpty() ? new String[0] : roles.split(",")));
+			List<String> to = new ArrayList<>(MailUtils.parseMailList(mails));
 
 			for (String role : roleNames) {
 				List<String> usersInRole = OKMAuth.getInstance().getUsersByRole(null, role);
@@ -779,8 +497,8 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 
 	@Override
 	public void setMixedProperties(List<String> uuidList, List<GWTFormElement> formProperties, boolean recursive) throws OKMException {
-		log.debug("setMixedProperties({}, {})", new Object[]{uuidList, formProperties, recursive});
-		Map<String, List<FormElement>> groupElements = new HashMap<String, List<FormElement>>();
+		log.debug("setMixedProperties({}, {}, {})", uuidList, formProperties, recursive);
+		Map<String, List<FormElement>> groupElements = new HashMap<>();
 		updateSessionManager();
 		String error = "";
 		String pathErrors = "";
@@ -788,7 +506,7 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 		// Prepare data
 		try {
 			for (Entry<PropertyGroup, List<FormElement>> entry : FormUtils.parsePropertyGroupsForms(Config.PROPERTY_GROUPS_XML).entrySet()) {
-				List<FormElement> grpEltos = new ArrayList<FormElement>();
+				List<FormElement> grpEltos = new ArrayList<>();
 
 				for (FormElement fe : entry.getValue()) {
 					for (GWTFormElement gwtFe : formProperties) {
@@ -819,47 +537,9 @@ public class MassiveServlet extends OKMRemoteServiceServlet implements OKMMassiv
 				if (recursive && OKMFolder.getInstance().isValid(null, uuid)) {
 					setMixedPropertiesHelper(uuid, groupElements);
 				}
-			} catch (LockException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + uuid;
-			} catch (PathNotFoundException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + uuid;
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + uuid;
-			} catch (RepositoryException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + uuid;
-			} catch (DatabaseException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + uuid;
-			} catch (ExtensionException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + uuid;
-			} catch (IOException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + uuid;
-			} catch (ParseException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + uuid;
-			} catch (NoSuchPropertyException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + uuid;
-			} catch (NoSuchGroupException e) {
-				log.error(e.getMessage(), e);
-				error += "\n" + e.getMessage();
-				pathErrors += "\n" + uuid;
-			} catch (AutomationException e) {
+			} catch (LockException | PathNotFoundException | AccessDeniedException | RepositoryException |
+					 DatabaseException | ExtensionException | IOException | ParseException | NoSuchPropertyException |
+					 NoSuchGroupException | AutomationException e) {
 				log.error(e.getMessage(), e);
 				error += "\n" + e.getMessage();
 				pathErrors += "\n" + uuid;

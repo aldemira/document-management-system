@@ -52,7 +52,7 @@ import java.util.Map;
  * @author jllort
  */
 public class MainMenu extends Composite {
-	private final OKMDocumentServiceAsync documentService = (OKMDocumentServiceAsync) GWT.create(OKMDocumentService.class);
+	private final OKMDocumentServiceAsync documentService = GWT.create(OKMDocumentService.class);
 
 	private static final int OUTPUT_PDF = 2;
 	private static final int OUTPUT_RTF = 3;
@@ -170,8 +170,8 @@ public class MainMenu extends Composite {
 	private MenuItem about;
 
 	public MainMenu() {
-		fldMenus = new HashMap<String, MenuBar>();
-		templateMenuItems = new ArrayList<MenuItem>();
+		fldMenus = new HashMap<>();
+		templateMenuItems = new ArrayList<>();
 
 		// The bookmark
 		bookmark = new Bookmark();
@@ -1711,7 +1711,7 @@ public class MainMenu extends Composite {
 							Main.get().reportPopup.setReport(report);
 							Main.get().reportPopup.center();
 						} else {
-							Map<String, String> parameters = new HashMap<String, String>();
+							Map<String, String> parameters = new HashMap<>();
 							parameters.put("format", String.valueOf(reportOutput));
 							Util.executeReport(report.getId(), parameters);
 						}
@@ -1852,8 +1852,8 @@ public class MainMenu extends Composite {
 				@Override
 				public void onSuccess(List<GWTDocument> result) {
 					subMenuTemplates.clearItems(); // Remove all items
-					fldMenus = new HashMap<String, MenuBar>();
-					templateMenuItems = new ArrayList<MenuItem>();
+					fldMenus = new HashMap<>();
+					templateMenuItems = new ArrayList<>();
 					fldMenus.put(GWTRepository.TEMPLATES, subMenuTemplates);
 
 					for (final GWTDocument doc : result) {

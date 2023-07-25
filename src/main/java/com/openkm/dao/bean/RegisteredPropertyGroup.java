@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -43,7 +43,7 @@ public class RegisteredPropertyGroup implements Serializable {
 	@Column(name = "RPR_TYPE", length = 64)
 	@MapKeyColumn(name = "RPR_NAME", length = 64)
 	@CollectionTable(name = "OKM_REG_PROPERTY", joinColumns = {@JoinColumn(name = "RPR_GROUP")})
-	private Map<String, String> properties = new HashMap<String, String>();
+	private Map<String, String> properties = new HashMap<>();
 
 	public String getName() {
 		return name;

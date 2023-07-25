@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -24,7 +24,7 @@ package com.openkm.spring;
 import javax.security.auth.login.LoginContext;
 
 public class LoginContextHolder {
-	private static ThreadLocal<LoginContext> ctx = new ThreadLocal<LoginContext>();
+	private static ThreadLocal<LoginContext> ctx = new ThreadLocal<>();
 
 	public static void set(LoginContext lc) {
 		ctx.set(lc);

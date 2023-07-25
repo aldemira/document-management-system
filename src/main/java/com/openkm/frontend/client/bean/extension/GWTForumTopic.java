@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -42,7 +42,7 @@ public class GWTForumTopic implements IsSerializable {
 	private int views;
 	private String lastPostUser;
 	private Date lastPostDate;
-	private Set<GWTForumPost> posts = new LinkedHashSet<GWTForumPost>();
+	private Set<GWTForumPost> posts = new LinkedHashSet<>();
 
 	public String getLastPostUser() {
 		return lastPostUser;

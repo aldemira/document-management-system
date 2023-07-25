@@ -162,7 +162,7 @@ public class BaseFolderModule {
 		fld.setKeywords(nFolder.getKeywords());
 
 		// Get categories
-		Set<Folder> categories = new HashSet<Folder>();
+		Set<Folder> categories = new HashSet<>();
 		NodeFolderDAO nFldDao = NodeFolderDAO.getInstance();
 		Set<NodeFolder> resolvedCategories = nFldDao.resolveCategories(nFolder.getCategories());
 
@@ -174,7 +174,7 @@ public class BaseFolderModule {
 
 		if (!Config.ROOT_NODE_UUID.equals(nFolder.getUuid())) {
 			// Get notes
-			List<Note> notes = new ArrayList<Note>();
+			List<Note> notes = new ArrayList<>();
 			List<NodeNote> nNoteList = NodeNoteDAO.getInstance().findByParent(nFolder.getUuid());
 
 			for (NodeNote nNote : nNoteList) {
@@ -196,16 +196,16 @@ public class BaseFolderModule {
 	public static NodeFolder copy(String user, NodeFolder srcFldNode, NodeFolder dstFldNode, ExtendedAttributes extAttr)
 			throws ItemExistsException, UserQuotaExceededException, PathNotFoundException, AccessDeniedException, AutomationException,
 			DatabaseException, IOException {
-		log.debug("copy({}, {}, {}, {})", new Object[]{user, srcFldNode, dstFldNode, extAttr});
+		log.debug("copy({}, {}, {}, {})", user, srcFldNode, dstFldNode, extAttr);
 		InputStream is = null;
 		NodeFolder newFolder = null;
 
 		try {
 			String name = srcFldNode.getName();
-			Set<String> keywords = new HashSet<String>();
-			Set<String> categories = new HashSet<String>();
-			Set<NodeProperty> propertyGroups = new HashSet<NodeProperty>();
-			List<NodeNote> notes = new ArrayList<NodeNote>();
+			Set<String> keywords = new HashSet<>();
+			Set<String> categories = new HashSet<>();
+			Set<NodeProperty> propertyGroups = new HashSet<>();
+			List<NodeNote> notes = new ArrayList<>();
 			WikiPage wiki = null;
 
 			if (extAttr != null) {
@@ -301,7 +301,7 @@ public class BaseFolderModule {
 	 * Check if a node is being used in a running workflow
 	 */
 	public static boolean hasWorkflowNodes(String fldUuid) throws WorkflowException, PathNotFoundException, DatabaseException {
-		Set<String> workflowNodes = new HashSet<String>();
+		Set<String> workflowNodes = new HashSet<>();
 
 		for (ProcessDefinition procDef : CommonWorkflowModule.findAllProcessDefinitions()) {
 			for (ProcessInstance procIns : CommonWorkflowModule.findProcessInstances(procDef.getId())) {
@@ -382,7 +382,7 @@ public class BaseFolderModule {
 	 */
 	public static Map<String, ContentInfo> getUserContentInfo(String folderUuid) throws PathNotFoundException, DatabaseException {
 		log.debug("getUserContentInfo({})", folderUuid);
-		Map<String, ContentInfo> userContentInfo = new HashMap<String, ContentInfo>();
+		Map<String, ContentInfo> userContentInfo = new HashMap<>();
 
 		for (NodeFolder nFld : NodeFolderDAO.getInstance().findByParent(folderUuid)) {
 			Map<String, ContentInfo> usrContInfoRt = getUserContentInfo(nFld.getUuid());

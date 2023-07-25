@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -36,7 +36,7 @@ import com.openkm.frontend.client.service.OKMGeneralServiceAsync;
  *
  */
 public class ConversionStatus {
-	private final OKMGeneralServiceAsync generalService = (OKMGeneralServiceAsync) GWT.create(OKMGeneralService.class);
+	private final OKMGeneralServiceAsync generalService = GWT.create(OKMGeneralService.class);
 	private static final int REFRESH_STATUS_DELAY = 500;
 
 	/**

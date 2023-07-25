@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,13 +56,13 @@ public class WebUtils {
 	 * @param name Nombre del parámetro
 	 * @return El valor String del parámetro o un String vacio si no existe.
 	 */
-	public static final String getString(HttpServletRequest request, String name) {
+	public static String getString(HttpServletRequest request, String name) {
 		String value = request.getParameter(name);
 		String stringValue = EMPTY_STRING;
 
 		if (value != null) {
 			try {
-				return new String(value.getBytes(Config.TOMCAT_CONNECTOR_URI_ENCODING), "UTF-8").trim();
+				return new String(value.getBytes(Config.TOMCAT_CONNECTOR_URI_ENCODING), StandardCharsets.UTF_8).trim();
 			} catch (UnsupportedEncodingException e) {
 				// Ignore
 			}
@@ -78,13 +79,13 @@ public class WebUtils {
 	 * @param Valor per defecto del parámetro.
 	 * @return El valor String del parámetro o el valor por defecto si no existe.
 	 */
-	public static final String getString(HttpServletRequest request, String name, String defaultValue) {
+	public static String getString(HttpServletRequest request, String name, String defaultValue) {
 		String value = request.getParameter(name);
 		String stringValue = defaultValue;
 
 		if (value != null) {
 			try {
-				return new String(value.getBytes(Config.TOMCAT_CONNECTOR_URI_ENCODING), "UTF-8").trim();
+				return new String(value.getBytes(Config.TOMCAT_CONNECTOR_URI_ENCODING), StandardCharsets.UTF_8).trim();
 			} catch (UnsupportedEncodingException e) {
 				// Ignore
 			}
@@ -100,14 +101,14 @@ public class WebUtils {
 	 * @param name Nombre del parámetro
 	 * @return El valor String del parámetro o un String vacio si no existe.
 	 */
-	public static final List<String> getStringList(HttpServletRequest request, String name) {
+	public static List<String> getStringList(HttpServletRequest request, String name) {
 		String[] value = request.getParameterValues(name);
-		List<String> stringValue = new ArrayList<String>();
+		List<String> stringValue = new ArrayList<>();
 
 		if (value != null) {
 			try {
-				for (int i = 0; i < value.length; i++) {
-					stringValue.add(new String(value[i].getBytes(Config.TOMCAT_CONNECTOR_URI_ENCODING), "UTF-8"));
+				for (String s : value) {
+					stringValue.add(new String(s.getBytes(Config.TOMCAT_CONNECTOR_URI_ENCODING), StandardCharsets.UTF_8));
 				}
 			} catch (UnsupportedEncodingException e) {
 				// Ignore
@@ -125,20 +126,16 @@ public class WebUtils {
 	 * @param name    Nombre del parámetro
 	 * @return El valor String del parámetro o un String vacio si no existe.
 	 */
-	public static final String getStringComaSeparedValues(HttpServletRequest request, String name) {
+	public static String getStringComaSeparedValues(HttpServletRequest request, String name) {
 		String[] value = request.getParameterValues(name);
 		String stringValue = EMPTY_STRING;
 
 		if (value != null) {
-			try {
-				for (int i = 0; i < value.length; i++) {
-					if (i > 0) {
-						stringValue += ",";
-					}
-					stringValue += (new String(value[i].getBytes("ISO-8859-1"), "UTF-8"));
+			for (int i = 0; i < value.length; i++) {
+				if (i > 0) {
+					stringValue += ",";
 				}
-			} catch (UnsupportedEncodingException e) {
-				// Ignore
+				stringValue += (new String(value[i].getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
 			}
 		}
 
@@ -152,7 +149,7 @@ public class WebUtils {
 	 * @param name Nombre del parámetro
 	 * @return El valor int del parámetro o 0 si no existe o no es valido.
 	 */
-	public static final int getInt(HttpServletRequest request, String name) {
+	public static int getInt(HttpServletRequest request, String name) {
 		String strValue = request.getParameter(name);
 		int intValue = 0;
 
@@ -175,7 +172,7 @@ public class WebUtils {
 	 * @param defaultValue Valor per defecto
 	 * @return El valor int del parámetro o el valor por defecto especificado si no existe o no es valido.
 	 */
-	public static final int getInt(HttpServletRequest request, String name, int defaultValue) {
+	public static int getInt(HttpServletRequest request, String name, int defaultValue) {
 		String strValue = request.getParameter(name);
 		int intValue = defaultValue;
 
@@ -197,14 +194,14 @@ public class WebUtils {
 	 * @param name Nombre del parámetro
 	 * @return El valor String del parámetro o un String vacio si no existe.
 	 */
-	public static final List<Integer> getIntList(HttpServletRequest request, String name) {
+	public static List<Integer> getIntList(HttpServletRequest request, String name) {
 		String[] value = request.getParameterValues(name);
-		List<Integer> intValue = new ArrayList<Integer>();
+		List<Integer> intValue = new ArrayList<>();
 
 		if (value != null) {
 			try {
-				for (int i = 0; i < value.length; i++) {
-					intValue.add(Integer.parseInt(value[i]));
+				for (String s : value) {
+					intValue.add(Integer.parseInt(s));
 				}
 			} catch (Throwable e) {
 				// Ignore
@@ -221,14 +218,14 @@ public class WebUtils {
 	 * @param name Nombre del parámetro
 	 * @return El valor String del parámetro o un String vacio si no existe.
 	 */
-	public static final List<Long> getLongList(HttpServletRequest request, String name) {
+	public static List<Long> getLongList(HttpServletRequest request, String name) {
 		String[] value = request.getParameterValues(name);
-		List<Long> intValue = new ArrayList<Long>();
+		List<Long> intValue = new ArrayList<>();
 
 		if (value != null) {
 			try {
-				for (int i = 0; i < value.length; i++) {
-					intValue.add(Long.parseLong(value[i]));
+				for (String s : value) {
+					intValue.add(Long.parseLong(s));
 				}
 			} catch (Throwable e) {
 				// Ignore
@@ -245,7 +242,7 @@ public class WebUtils {
 	 * @param name Nombre del parámetro
 	 * @return El valor int del parámetro o 0 si no existe o no es valido.
 	 */
-	public static final long getLong(HttpServletRequest request, String name) {
+	public static long getLong(HttpServletRequest request, String name) {
 		String strValue = request.getParameter(name);
 		long longValue = 0;
 
@@ -267,7 +264,7 @@ public class WebUtils {
 	 * @param name Nombre del parámetro
 	 * @return El valor float del parámetro o 0 si no existe o no es valido.
 	 */
-	public static final float getFloat(HttpServletRequest request, String name) {
+	public static float getFloat(HttpServletRequest request, String name) {
 		String strValue = request.getParameter(name);
 		float floatValue = 0;
 
@@ -289,7 +286,7 @@ public class WebUtils {
 	 * @param name Nombre del parámetro
 	 * @return true si el parámetro existe y no esta vacio, false en caso contrario.
 	 */
-	public static final boolean getBoolean(HttpServletRequest request, String name) {
+	public static boolean getBoolean(HttpServletRequest request, String name) {
 		String strValue = request.getParameter(name);
 		return (strValue != null && !strValue.equals(EMPTY_STRING) && !strValue.equals("false"));
 	}
@@ -303,7 +300,7 @@ public class WebUtils {
 	 * @param trueValue Valor considerado true.
 	 * @return true si el parámetro existe y es igual a trueValue, false en caso contrario.
 	 */
-	public static final boolean getBoolean(HttpServletRequest request, String name, String trueValue) {
+	public static boolean getBoolean(HttpServletRequest request, String name, String trueValue) {
 		String strValue = request.getParameter(name);
 		return (strValue != null && strValue.equals(trueValue));
 	}
@@ -325,8 +322,8 @@ public class WebUtils {
 	 * {@link #sendFile(HttpServletRequest, HttpServletResponse, String, String, boolean, InputStream, long)}
 	 */
 	public static void sendFile(HttpServletRequest request, HttpServletResponse response,
-	                            String fileName, String mimeType, boolean inline, InputStream is) throws IOException {
-		log.debug("sendFile({}, {}, {}, {}, {}, {})", new Object[]{request, response, fileName, mimeType, inline, is});
+			String fileName, String mimeType, boolean inline, InputStream is) throws IOException {
+		log.debug("sendFile({}, {}, {}, {}, {}, {})", request, response, fileName, mimeType, inline, is);
 		sendFile(request, response, fileName, mimeType, inline, is, is.available());
 	}
 
@@ -334,8 +331,8 @@ public class WebUtils {
 	 * Send file to client browser.
 	 */
 	public static void sendFile(HttpServletRequest request, HttpServletResponse response, String fileName, String mimeType,
-	                            boolean inline, InputStream is, long overallSize) throws IOException {
-		log.debug("sendFile({}, {}, {}, {}, {}, {})", new Object[]{request, response, fileName, mimeType, inline, is});
+			boolean inline, InputStream is, long overallSize) throws IOException {
+		log.debug("sendFile({}, {}, {}, {}, {}, {})", request, response, fileName, mimeType, inline, is);
 		prepareSendFile(request, response, fileName, mimeType, inline);
 
 		// Set length
@@ -354,8 +351,8 @@ public class WebUtils {
 	 * @throws IOException If there is a communication error.
 	 */
 	public static void sendFile(HttpServletRequest request, HttpServletResponse response,
-	                            String fileName, String mimeType, boolean inline, File input) throws IOException {
-		log.debug("sendFile({}, {}, {}, {}, {}, {})", new Object[]{request, response, fileName, mimeType, inline, input});
+			String fileName, String mimeType, boolean inline, File input) throws IOException {
+		log.debug("sendFile({}, {}, {}, {}, {}, {})", request, response, fileName, mimeType, inline, input);
 		prepareSendFile(request, response, fileName, mimeType, inline);
 
 		// Set length
@@ -372,7 +369,7 @@ public class WebUtils {
 	 * Prepare to send the file.
 	 */
 	public static void prepareSendFile(HttpServletRequest request, HttpServletResponse response,
-	                                   String fileName, String mimeType, boolean inline) throws UnsupportedEncodingException {
+			String fileName, String mimeType, boolean inline) throws UnsupportedEncodingException {
 		String userAgent = WebUtils.getHeader(request, "user-agent").toLowerCase();
 		fileName = PathUtils.decodeEntities(fileName);
 

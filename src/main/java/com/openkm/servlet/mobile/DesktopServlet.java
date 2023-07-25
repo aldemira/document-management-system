@@ -89,22 +89,6 @@ public class DesktopServlet extends HttpServlet {
 			} else {
 				browse(uuid, path, request, response);
 			}
-		} catch (PathNotFoundException e) {
-			sendErrorRedirect(request, response, e);
-		} catch (LockException e) {
-			sendErrorRedirect(request, response, e);
-		} catch (AccessDeniedException e) {
-			sendErrorRedirect(request, response, e);
-		} catch (ParseException e) {
-			sendErrorRedirect(request, response, e);
-		} catch (NoSuchGroupException e) {
-			sendErrorRedirect(request, response, e);
-		} catch (ExtensionException e) {
-			sendErrorRedirect(request, response, e);
-		} catch (RepositoryException e) {
-			sendErrorRedirect(request, response, e);
-		} catch (DatabaseException e) {
-			sendErrorRedirect(request, response, e);
 		} catch (Exception e) {
 			sendErrorRedirect(request, response, e);
 		}
@@ -127,9 +111,9 @@ public class DesktopServlet extends HttpServlet {
 			throws AccessDeniedException, PathNotFoundException, RepositoryException, DatabaseException, ServletException, IOException {
 		log.debug("browse({}, {})", request, response);
 		String context = "context.taxonomy";
-		List<Folder> catList = new ArrayList<Folder>();
-		List<Folder> fldList = new ArrayList<Folder>();
-		List<Document> docList = new ArrayList<Document>();
+		List<Folder> catList = new ArrayList<>();
+		List<Folder> fldList = new ArrayList<>();
+		List<Document> docList = new ArrayList<>();
 
 		if (uuid == null || uuid.isEmpty()) {
 			path = "/" + Repository.ROOT;
@@ -258,7 +242,7 @@ public class DesktopServlet extends HttpServlet {
 
 		if (Document.TYPE.equals(nodeType)) {
 			Document doc = OKMDocument.getInstance().getProperties(null, path);
-			List<String> categories = new ArrayList<String>();
+			List<String> categories = new ArrayList<>();
 
 			for (Folder cat : doc.getCategories()) {
 				categories.add(cat.getPath().substring(Repository.CATEGORIES.length() + 2));
@@ -271,7 +255,7 @@ public class DesktopServlet extends HttpServlet {
 			sc.getRequestDispatcher("/" + Config.MOBILE_CONTEXT + "/document_properties.jsp").forward(request, response);
 		} else if (Folder.TYPE.equals(nodeType)) {
 			Folder fld = OKMFolder.getInstance().getProperties(null, path);
-			List<String> categories = new ArrayList<String>();
+			List<String> categories = new ArrayList<>();
 
 			for (Folder cat : fld.getCategories()) {
 				categories.add(cat.getPath().substring(Repository.CATEGORIES.length() + 2));
@@ -284,7 +268,7 @@ public class DesktopServlet extends HttpServlet {
 			sc.getRequestDispatcher("/" + Config.MOBILE_CONTEXT + "/folder_properties.jsp").forward(request, response);
 		} else if (Mail.TYPE.equals(nodeType)) {
 			Mail mail = OKMMail.getInstance().getProperties(null, path);
-			List<String> categories = new ArrayList<String>();
+			List<String> categories = new ArrayList<>();
 
 			for (Folder cat : mail.getCategories()) {
 				categories.add(cat.getPath().substring(Repository.CATEGORIES.length() + 2));
@@ -326,10 +310,10 @@ public class DesktopServlet extends HttpServlet {
 	 */
 	private List<GroupMobileData> getPropertyGroups(String path) throws IOException, ParseException, AccessDeniedException,
 			PathNotFoundException, RepositoryException, DatabaseException, NoSuchGroupException {
-		List<GroupMobileData> groupMobileDataList = new ArrayList<GroupMobileData>();
+		List<GroupMobileData> groupMobileDataList = new ArrayList<>();
 
 		for (PropertyGroup pGroup : OKMPropertyGroup.getInstance().getGroups(null, path)) {
-			Map<String, String> map = new HashMap<String, String>();
+			Map<String, String> map = new HashMap<>();
 
 			for (FormElement fe : OKMPropertyGroup.getInstance().getProperties(null, path, pGroup.getName())) {
 				if (fe instanceof Input) {
@@ -351,7 +335,7 @@ public class DesktopServlet extends HttpServlet {
 
 					if (sb.getValue() != null && sb.getTable() != null) {
 						String formatedQuery = MessageFormat.format(sb.getValueQuery(), sb.getValue());
-						List<String> tables = new ArrayList<String>();
+						List<String> tables = new ArrayList<>();
 						tables.add(sb.getTable());
 
 						for (KeyValue keyValue : KeyValueDAO.getKeyValues(tables, formatedQuery)) {
@@ -403,7 +387,7 @@ public class DesktopServlet extends HttpServlet {
 	/**
 	 * GroupMobileData
 	 */
-	public class GroupMobileData {
+	public static class GroupMobileData {
 		private String label;
 		private Map<String, String> map;
 

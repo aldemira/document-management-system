@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -31,19 +31,19 @@ import java.util.Map;
  *
  */
 public interface OKMProposedSubscriptionServiceAsync extends RemoteService {
-	public void send(String uuid, String type, String users, String roles, String comment, AsyncCallback<?> callback);
+	void send(String uuid, String type, String users, String roles, String comment, AsyncCallback<?> callback);
 
-	public void findProposedSubscriptionsUsersFrom(AsyncCallback<Map<String, Long>> callback);
+	void findProposedSubscriptionsUsersFrom(AsyncCallback<Map<String, Long>> callback);
 
-	public void markSeen(int msgId, AsyncCallback<?> callback);
+	void markSeen(int msgId, AsyncCallback<?> callback);
 
-	public void markAccepted(int msgId, AsyncCallback<?> callback);
+	void markAccepted(int msgId, AsyncCallback<?> callback);
 
-	public void deleteReceived(int msgId, AsyncCallback<?> callback);
+	void deleteReceived(int msgId, AsyncCallback<?> callback);
 
-	public void deleteSent(int msgId, AsyncCallback<?> callback);
+	void deleteSent(int msgId, AsyncCallback<?> callback);
 
-	public void deleteProposedSubscriptionByMeFromUser(String sender, AsyncCallback<?> callback);
+	void deleteProposedSubscriptionByMeFromUser(String sender, AsyncCallback<?> callback);
 
-	public void findProposedSubscriptionByMeFromUser(String user, AsyncCallback<?> asyncCallback);
+	void findProposedSubscriptionByMeFromUser(String user, AsyncCallback<?> asyncCallback);
 }

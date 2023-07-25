@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -21,9 +21,6 @@
 
 package com.openkm.frontend.client.widget.massive;
 
-import java.util.Iterator;
-import java.util.List;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
@@ -39,6 +36,8 @@ import com.openkm.frontend.client.service.OKMRepositoryService;
 import com.openkm.frontend.client.service.OKMRepositoryServiceAsync;
 import com.openkm.frontend.client.util.Util;
 
+import java.util.List;
+
 /**
  * Folder tree
  *
@@ -46,11 +45,12 @@ import com.openkm.frontend.client.util.Util;
  *
  */
 public class FolderSelectTree extends Composite {
-	private Tree tree;
+	private final OKMRepositoryServiceAsync repositoryService = GWT.create(OKMRepositoryService.class);
+	private final OKMFolderServiceAsync folderService = GWT.create(OKMFolderService.class);
+
+	private TreeItem rootItem = new TreeItem();
 	private TreeItem actualItem;
-	private final OKMFolderServiceAsync folderService = (OKMFolderServiceAsync) GWT.create(OKMFolderService.class);
-	private final OKMRepositoryServiceAsync repositoryService = (OKMRepositoryServiceAsync) GWT.create(OKMRepositoryService.class);
-	TreeItem rootItem = new TreeItem();
+	private Tree tree;
 
 	/**
 	 * Folder Tree
@@ -137,8 +137,7 @@ public class FolderSelectTree extends Composite {
 			}
 
 			// Ads folders childs if exists
-			for (Iterator<GWTFolder> it = result.iterator(); it.hasNext(); ) {
-				GWTFolder folder = it.next();
+			for (GWTFolder folder : result) {
 				TreeItem folderItem = new TreeItem();
 				folderItem.setHTML(folder.getName());
 				folderItem.setUserObject(folder);

@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -49,8 +49,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.zip.ZipInputStream;
 
 public class CommonWorkflowModule {
@@ -142,7 +142,7 @@ public class CommonWorkflowModule {
 	 * Get Process Definition Image
 	 */
 	public static byte[] getProcessDefinitionImage(long processDefinitionId, String node) throws WorkflowException {
-		log.debug("getProcessDefinitionImage({}, {})", new Object[]{processDefinitionId, node});
+		log.debug("getProcessDefinitionImage({}, {})", processDefinitionId, node);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 		byte[] image = null;
 
@@ -156,8 +156,8 @@ public class CommonWorkflowModule {
 			BufferedImage img = ImageIO.read(fileDef.getInputStream("processimage.jpg"));
 
 			// Obtain all nodes Y and X
-			List<Integer> ordenadas = new ArrayList<Integer>();
-			List<Integer> abcisas = new ArrayList<Integer>();
+			List<Integer> ordenadas = new ArrayList<>();
+			List<Integer> abcisas = new ArrayList<>();
 
 			for (WorkflowUtils.DiagramNodeInfo nodeInfo : dInfo.getNodeMap().values()) {
 				ordenadas.add(nodeInfo.getY());
@@ -208,7 +208,7 @@ public class CommonWorkflowModule {
 		log.debug("getProcessDefinitionForms({})", processDefinitionId);
 		long begin = System.currentTimeMillis();
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
-		Map<String, List<FormElement>> forms = new HashMap<String, List<FormElement>>();
+		Map<String, List<FormElement>> forms = new HashMap<>();
 		InputStream is = null;
 
 		try {
@@ -238,7 +238,7 @@ public class CommonWorkflowModule {
 	 */
 	public static ProcessInstance runProcessDefinition(String user, long processDefinitionId, String uuid,
 	                                                   List<FormElement> variables) throws WorkflowException {
-		log.debug("runProcessDefinition({}, {}, {}, {})", new Object[]{user, processDefinitionId, uuid, variables});
+		log.debug("runProcessDefinition({}, {}, {}, {})", user, processDefinitionId, uuid, variables);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 		ProcessInstance vo = new ProcessInstance();
 
@@ -249,7 +249,7 @@ public class CommonWorkflowModule {
 		try {
 			jbpmContext.setActorId(user);
 			GraphSession graphSession = jbpmContext.getGraphSession();
-			Map<String, Object> hm = new HashMap<String, Object>();
+			Map<String, Object> hm = new HashMap<>();
 			hm.put(Config.WORKFLOW_PROCESS_INSTANCE_VARIABLE_UUID, uuid);
 
 			for (FormElement fe : variables) {
@@ -292,7 +292,7 @@ public class CommonWorkflowModule {
 	 */
 	public static ProcessInstance sendProcessInstanceSignal(long processInstanceId, String transitionName)
 			throws WorkflowException {
-		log.debug("sendProcessInstanceSignal({}, {})", new Object[]{processInstanceId, transitionName});
+		log.debug("sendProcessInstanceSignal({}, {})", processInstanceId, transitionName);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 		ProcessInstance vo = new ProcessInstance();
 
@@ -362,13 +362,13 @@ public class CommonWorkflowModule {
 	public static List<ProcessInstance> findProcessInstances(long processDefinitionId) throws WorkflowException {
 		log.debug("findProcessInstances({})", processDefinitionId);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
-		List<ProcessInstance> al = new ArrayList<ProcessInstance>();
+		List<ProcessInstance> al = new ArrayList<>();
 
 		try {
 			GraphSession graphSession = jbpmContext.getGraphSession();
 
-			for (Iterator it = graphSession.findProcessInstances(processDefinitionId).iterator(); it.hasNext(); ) {
-				org.jbpm.graph.exe.ProcessInstance procInst = (org.jbpm.graph.exe.ProcessInstance) it.next();
+			for (Object o : graphSession.findProcessInstances(processDefinitionId)) {
+				org.jbpm.graph.exe.ProcessInstance procInst = (org.jbpm.graph.exe.ProcessInstance) o;
 				al.add(WorkflowUtils.copy(procInst));
 			}
 		} catch (JbpmException e) {
@@ -388,13 +388,13 @@ public class CommonWorkflowModule {
 	public static List<ProcessDefinition> findAllProcessDefinitions() throws WorkflowException {
 		log.debug("findAllProcessDefinitions()");
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
-		List<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
+		List<ProcessDefinition> al = new ArrayList<>();
 
 		try {
 			GraphSession graphSession = jbpmContext.getGraphSession();
 
-			for (Iterator it = graphSession.findAllProcessDefinitions().iterator(); it.hasNext(); ) {
-				org.jbpm.graph.def.ProcessDefinition procDef = (org.jbpm.graph.def.ProcessDefinition) it.next();
+			for (Object o : graphSession.findAllProcessDefinitions()) {
+				org.jbpm.graph.def.ProcessDefinition procDef = (org.jbpm.graph.def.ProcessDefinition) o;
 				al.add(WorkflowUtils.copy(procDef));
 			}
 		} catch (JbpmException e) {
@@ -414,13 +414,13 @@ public class CommonWorkflowModule {
 	public static List<ProcessDefinition> findLatestProcessDefinitions() throws WorkflowException {
 		log.debug("findLatestProcessDefinitions()");
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
-		List<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
+		List<ProcessDefinition> al = new ArrayList<>();
 
 		try {
 			GraphSession graphSession = jbpmContext.getGraphSession();
 
-			for (Iterator it = graphSession.findLatestProcessDefinitions().iterator(); it.hasNext(); ) {
-				org.jbpm.graph.def.ProcessDefinition procDef = (org.jbpm.graph.def.ProcessDefinition) it.next();
+			for (Object o : graphSession.findLatestProcessDefinitions()) {
+				org.jbpm.graph.def.ProcessDefinition procDef = (org.jbpm.graph.def.ProcessDefinition) o;
 				al.add(WorkflowUtils.copy(procDef));
 			}
 		} catch (JbpmException e) {
@@ -442,8 +442,8 @@ public class CommonWorkflowModule {
 		try {
 			GraphSession graphSession = jbpmContext.getGraphSession();
 
-			for (Iterator it = graphSession.findLatestProcessDefinitions().iterator(); it.hasNext(); ) {
-				org.jbpm.graph.def.ProcessDefinition procDef = (org.jbpm.graph.def.ProcessDefinition) it.next();
+			for (Object o : graphSession.findLatestProcessDefinitions()) {
+				org.jbpm.graph.def.ProcessDefinition procDef = (org.jbpm.graph.def.ProcessDefinition) o;
 
 				if (procDef.getName().equals(name)) {
 					pd = WorkflowUtils.copy(procDef);
@@ -466,13 +466,13 @@ public class CommonWorkflowModule {
 	public static List<ProcessDefinition> findAllProcessDefinitionVersions(String name) throws WorkflowException {
 		log.debug("findAllProcessDefinitionVersions({})", name);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
-		List<ProcessDefinition> al = new ArrayList<ProcessDefinition>();
+		List<ProcessDefinition> al = new ArrayList<>();
 
 		try {
 			GraphSession graphSession = jbpmContext.getGraphSession();
 
-			for (Iterator it = graphSession.findAllProcessDefinitionVersions(name).iterator(); it.hasNext(); ) {
-				org.jbpm.graph.def.ProcessDefinition procDef = (org.jbpm.graph.def.ProcessDefinition) it.next();
+			for (Object o : graphSession.findAllProcessDefinitionVersions(name)) {
+				org.jbpm.graph.def.ProcessDefinition procDef = (org.jbpm.graph.def.ProcessDefinition) o;
 				al.add(WorkflowUtils.copy(procDef));
 			}
 		} catch (JbpmException e) {
@@ -546,9 +546,8 @@ public class CommonWorkflowModule {
 	/**
 	 * Add Process Instance Variable
 	 */
-	public static void addProcessInstanceVariable(long processInstanceId, String name, Object value)
-			throws WorkflowException {
-		log.debug("addProcessInstanceVariable({}, {}, {})", new Object[]{processInstanceId, name, value});
+	public static void addProcessInstanceVariable(long processInstanceId, String name, Object value) throws WorkflowException {
+		log.debug("addProcessInstanceVariable({}, {}, {})", processInstanceId, name, value);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 
 		try {
@@ -566,7 +565,7 @@ public class CommonWorkflowModule {
 	 * Delete Process Instance
 	 */
 	public static void deleteProcessInstanceVariable(long processInstanceId, String name) throws WorkflowException {
-		log.debug("deleteProcessInstanceVariable({}, {})", new Object[]{processInstanceId, name});
+		log.debug("deleteProcessInstanceVariable({}, {})", processInstanceId, name);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 
 		try {
@@ -587,13 +586,13 @@ public class CommonWorkflowModule {
 	public static List<TaskInstance> findUserTaskInstances(String user) throws WorkflowException {
 		log.debug("findUserTaskInstances({})", user);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
-		List<TaskInstance> al = new ArrayList<TaskInstance>();
+		List<TaskInstance> al = new ArrayList<>();
 
 		try {
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 
-			for (Iterator it = taskMgmtSession.findTaskInstances(user).iterator(); it.hasNext(); ) {
-				org.jbpm.taskmgmt.exe.TaskInstance ti = (org.jbpm.taskmgmt.exe.TaskInstance) it.next();
+			for (Object o : taskMgmtSession.findTaskInstances(user)) {
+				org.jbpm.taskmgmt.exe.TaskInstance ti = (org.jbpm.taskmgmt.exe.TaskInstance) o;
 				al.add(WorkflowUtils.copy(ti));
 			}
 
@@ -616,13 +615,13 @@ public class CommonWorkflowModule {
 	public static List<TaskInstance> findPooledTaskInstances(String user) throws WorkflowException {
 		log.debug("findPooledTaskInstances({})", user);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
-		ArrayList<TaskInstance> al = new ArrayList<TaskInstance>();
+		ArrayList<TaskInstance> al = new ArrayList<>();
 
 		try {
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
 
-			for (Iterator it = taskMgmtSession.findPooledTaskInstances(user).iterator(); it.hasNext(); ) {
-				org.jbpm.taskmgmt.exe.TaskInstance ti = (org.jbpm.taskmgmt.exe.TaskInstance) it.next();
+			for (Object o : taskMgmtSession.findPooledTaskInstances(user)) {
+				org.jbpm.taskmgmt.exe.TaskInstance ti = (org.jbpm.taskmgmt.exe.TaskInstance) o;
 				al.add(WorkflowUtils.copy(ti));
 			}
 
@@ -645,7 +644,7 @@ public class CommonWorkflowModule {
 	public static List<TaskInstance> findTaskInstances(long processInstanceId) throws WorkflowException {
 		log.debug("findTaskInstances({})", processInstanceId);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
-		ArrayList<TaskInstance> al = new ArrayList<TaskInstance>();
+		ArrayList<TaskInstance> al = new ArrayList<>();
 
 		try {
 			GraphSession graphSession = jbpmContext.getGraphSession();
@@ -653,8 +652,7 @@ public class CommonWorkflowModule {
 			TaskMgmtInstance taskMgmtInstance = pi.getTaskMgmtInstance();
 
 			if (taskMgmtInstance.getTaskInstances() != null) {
-				for (Iterator it = taskMgmtInstance.getTaskInstances().iterator(); it.hasNext(); ) {
-					org.jbpm.taskmgmt.exe.TaskInstance ti = (org.jbpm.taskmgmt.exe.TaskInstance) it.next();
+				for (org.jbpm.taskmgmt.exe.TaskInstance ti : taskMgmtInstance.getTaskInstances()) {
 					al.add(WorkflowUtils.copy(ti));
 				}
 			}
@@ -676,12 +674,12 @@ public class CommonWorkflowModule {
 	 */
 	public static void setTaskInstanceValues(long taskInstanceId, String transitionName, List<FormElement> values)
 			throws WorkflowException {
-		log.debug("setTaskInstanceValues({}, {}, {})", new Object[]{taskInstanceId, transitionName, values});
+		log.debug("setTaskInstanceValues({}, {}, {})", taskInstanceId, transitionName, values);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 
 		try {
 			TaskMgmtSession taskMgmtSession = jbpmContext.getTaskMgmtSession();
-			Map<String, FormElement> hm = new HashMap<String, FormElement>();
+			Map<String, FormElement> hm = new HashMap<>();
 
 			for (FormElement fe : values) {
 				hm.put(fe.getName(), fe);
@@ -715,9 +713,8 @@ public class CommonWorkflowModule {
 	/**
 	 * Add Task Instance Comment
 	 */
-	public static void addTaskInstanceComment(String user, long taskInstanceId, String message)
-			throws WorkflowException {
-		log.debug("addTaskInstanceComment({}, {}, {})", new Object[]{user, taskInstanceId, message});
+	public static void addTaskInstanceComment(String user, long taskInstanceId, String message) throws WorkflowException {
+		log.debug("addTaskInstanceComment({}, {}, {})", user, taskInstanceId, message);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 
 		try {
@@ -758,7 +755,7 @@ public class CommonWorkflowModule {
 	 * Set Task Instance Actor Id
 	 */
 	public static void setTaskInstanceActorId(long taskInstanceId, String actorId) throws WorkflowException {
-		log.debug("setTaskInstanceActorId({}, {})", new Object[]{taskInstanceId, actorId});
+		log.debug("setTaskInstanceActorId({}, {})", taskInstanceId, actorId);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 
 		try {
@@ -778,7 +775,7 @@ public class CommonWorkflowModule {
 	 * Add Task Instance Variable Esto creo que sobra pq no se puede hacer
 	 */
 	public static void addTaskInstanceVariable(long taskInstanceId, String name, Object value) throws WorkflowException {
-		log.debug("addTaskInstanceVariable({}, {}, {})", new Object[]{taskInstanceId, name, value});
+		log.debug("addTaskInstanceVariable({}, {}, {})", taskInstanceId, name, value);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 
 		try {
@@ -798,7 +795,7 @@ public class CommonWorkflowModule {
 	 * Delete Task Instance Variable
 	 */
 	public static void deleteTaskInstanceVariable(long taskInstanceId, String name) throws WorkflowException {
-		log.debug("deleteTaskInstanceVariable({}, {})", new Object[]{taskInstanceId, name});
+		log.debug("deleteTaskInstanceVariable({}, {})", taskInstanceId, name);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 
 		try {
@@ -839,7 +836,7 @@ public class CommonWorkflowModule {
 	 * End Task Instance
 	 */
 	public static void endTaskInstance(long taskInstanceId, String transitionName) throws WorkflowException {
-		log.debug("endTaskInstance({}, {})", new Object[]{taskInstanceId, transitionName});
+		log.debug("endTaskInstance({}, {})", taskInstanceId, transitionName);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 
 		try {
@@ -940,7 +937,7 @@ public class CommonWorkflowModule {
 	 * Add Token Comment
 	 */
 	public static void addTokenComment(String user, long tokenId, String message) throws WorkflowException {
-		log.debug("addTokenComment({}, {}, {})", new Object[]{user, tokenId, message});
+		log.debug("addTokenComment({}, {}, {})", user, tokenId, message);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 
 		try {
@@ -1000,7 +997,7 @@ public class CommonWorkflowModule {
 	 * Send Token Signal
 	 */
 	public static Token sendTokenSignal(long tokenId, String transitionName) throws WorkflowException {
-		log.debug("sendTokenSignal({}, {})", new Object[]{tokenId, transitionName});
+		log.debug("sendTokenSignal({}, {})", tokenId, transitionName);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 		Token vo = new Token();
 
@@ -1032,7 +1029,7 @@ public class CommonWorkflowModule {
 	 * Set Token Node
 	 */
 	public static void setTokenNode(long tokenId, String nodeName) throws WorkflowException {
-		log.debug("setTokenNode({}, {})", new Object[]{tokenId, nodeName});
+		log.debug("setTokenNode({}, {})", tokenId, nodeName);
 		JbpmContext jbpmContext = JBPMUtils.getConfig().createJbpmContext();
 
 		try {

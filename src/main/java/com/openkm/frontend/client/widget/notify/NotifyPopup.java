@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -41,15 +41,14 @@ import java.util.List;
  * @author jllort
  */
 public class NotifyPopup extends DialogBox implements NotifyHandler {
+	private final OKMMassiveServiceAsync massiveService = GWT.create(OKMMassiveService.class);
+	private final OKMNotifyServiceAsync notifyService = GWT.create(OKMNotifyService.class);
+	private final OKMMailServiceAsync mailService = GWT.create(OKMMailService.class);
 
 	private static final int NONE = -1;
 	public static final int NOTIFY_WITH_LINK = 0;
 	public static final int NOTIFY_WITH_ATTACHMENT = 1;
 	public static final int FORWARD_MAIL = 2;
-
-	private final OKMNotifyServiceAsync notifyService = (OKMNotifyServiceAsync) GWT.create(OKMNotifyService.class);
-	private final OKMMassiveServiceAsync massiveService = (OKMMassiveServiceAsync) GWT.create(OKMMassiveService.class);
-	private final OKMMailServiceAsync mailService = (OKMMailServiceAsync) GWT.create(OKMMailService.class);
 
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
@@ -76,7 +75,7 @@ public class NotifyPopup extends DialogBox implements NotifyHandler {
 		mails = "";
 		users = "";
 		roles = "";
-		uuidList = new ArrayList<String>();
+		uuidList = new ArrayList<>();
 
 		vPanel = new VerticalPanel();
 		hPanel = new HorizontalPanel();
@@ -366,7 +365,8 @@ public class NotifyPopup extends DialogBox implements NotifyHandler {
 	 */
 	public void evaluateSendButton() {
 		boolean enabled = message.getText().trim().length() > 0 &&
-				(!notifyPanel.getUsersToNotify().equals("") || !notifyPanel.getRolesToNotify().equals("") || !notifyPanel.getExternalMailAddress().equals(""));
+				(!notifyPanel.getUsersToNotify().equals("") || !notifyPanel.getRolesToNotify().equals("")
+						|| !notifyPanel.getExternalMailAddress().equals(""));
 		sendButton.setEnabled(enabled);
 	}
 }

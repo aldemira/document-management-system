@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -52,7 +52,7 @@ import java.util.ListIterator;
  *
  */
 public class DashboardWidget extends Composite {
-	private final OKMDashboardServiceAsync dashboardService = (OKMDashboardServiceAsync) GWT.create(OKMDashboardService.class);
+	private final OKMDashboardServiceAsync dashboardService = GWT.create(OKMDashboardService.class);
 
 	private static int HEADER_SQUARE = 24;
 	private static int SEPARATOR_HEIGHT = 20;
@@ -72,9 +72,9 @@ public class DashboardWidget extends Composite {
 	private Image feedImage;
 	private boolean zoom = false;
 	private boolean flagZoom = true;
-	private List<GWTDashboardDocumentResult> lastDocList = new ArrayList<GWTDashboardDocumentResult>();
-	private List<GWTDashboardFolderResult> lastFolderList = new ArrayList<GWTDashboardFolderResult>();
-	private List<GWTDashboardMailResult> lastMailList = new ArrayList<GWTDashboardMailResult>();
+	private List<GWTDashboardDocumentResult> lastDocList = new ArrayList<>();
+	private List<GWTDashboardFolderResult> lastFolderList = new ArrayList<>();
+	private List<GWTDashboardMailResult> lastMailList = new ArrayList<>();
 	private WidgetToFire widgetToFire;
 	private String source;
 	public Status status;

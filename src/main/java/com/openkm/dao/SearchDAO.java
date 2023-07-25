@@ -42,7 +42,10 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.index.*;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.index.TermDocs;
+import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.*;
@@ -115,7 +118,7 @@ public class SearchDAO {
 	 * Search by query
 	 */
 	public NodeResultSet findByQuery(Query query, int offset, int limit) throws ParseException, DatabaseException {
-		log.debug("findByQuery({}, {}, {})", new Object[]{query, offset, limit});
+		log.debug("findByQuery({}, {}, {})", query, offset, limit);
 		FullTextSession ftSession = null;
 		Session session = null;
 		Transaction tx = null;
@@ -143,13 +146,7 @@ public class SearchDAO {
 			log.trace("findByQuery.Time: {}", FormatUtil.formatMiliSeconds(System.currentTimeMillis() - begin));
 			log.debug("findByQuery: {}", result);
 			return result;
-		} catch (IOException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} catch (InvalidTokenOffsetsException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} catch (HibernateException e) {
+		} catch (IOException | InvalidTokenOffsetsException | HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
@@ -163,7 +160,7 @@ public class SearchDAO {
 	 */
 	public NodeResultSet findBySimpleQuery(String expression, int offset, int limit) throws ParseException,
 			DatabaseException {
-		log.debug("findBySimpleQuery({}, {}, {})", new Object[]{expression, offset, limit});
+		log.debug("findBySimpleQuery({}, {}, {})", expression, offset, limit);
 		FullTextSession ftSession = null;
 		Session session = null;
 		Transaction tx = null;
@@ -197,13 +194,7 @@ public class SearchDAO {
 		} catch (org.apache.lucene.queryParser.ParseException e) {
 			HibernateUtil.rollback(tx);
 			throw new ParseException(e.getMessage(), e);
-		} catch (IOException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} catch (InvalidTokenOffsetsException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} catch (HibernateException e) {
+		} catch (IOException | InvalidTokenOffsetsException | HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
@@ -219,7 +210,7 @@ public class SearchDAO {
 	 * @param field      the default field for query terms.
 	 */
 	public Query parseQuery(String expression, String field) throws ParseException, DatabaseException {
-		log.debug("parseQuery({})", new Object[]{expression});
+		log.debug("parseQuery({}, {})", expression, field);
 
 		try {
 			QueryParser parser = new QueryParser(Config.LUCENE_VERSION, field, analyzer);
@@ -242,8 +233,8 @@ public class SearchDAO {
 	@SuppressWarnings("unchecked")
 	private NodeResultSet runQueryLucene(FullTextSession ftSession, Query query, int offset, int limit)
 			throws IOException, InvalidTokenOffsetsException, HibernateException, DatabaseException {
-		log.debug("runQueryLucene({}, {}, {}, {})", new Object[]{ftSession, query, offset, limit});
-		List<NodeQueryResult> results = new ArrayList<NodeQueryResult>();
+		log.debug("runQueryLucene({}, {}, {}, {})", ftSession, query, offset, limit);
+		List<NodeQueryResult> results = new ArrayList<>();
 		NodeResultSet result = new NodeResultSet();
 		FullTextQuery ftq = ftSession.createFullTextQuery(query, NodeDocument.class, NodeFolder.class, NodeMail.class);
 		ftq.setProjection(FullTextQuery.SCORE, FullTextQuery.THIS);
@@ -287,8 +278,8 @@ public class SearchDAO {
 	@SuppressWarnings("unchecked")
 	private NodeResultSet runQueryAccessManagerMore(FullTextSession ftSession, Query query, int offset, int limit)
 			throws IOException, InvalidTokenOffsetsException, DatabaseException, HibernateException {
-		log.debug("runQueryAccessManagerMore({}, {}, {}, {})", new Object[]{ftSession, query, offset, limit});
-		List<NodeQueryResult> results = new ArrayList<NodeQueryResult>();
+		log.debug("runQueryAccessManagerMore({}, {}, {}, {})", ftSession, query, offset, limit);
+		List<NodeQueryResult> results = new ArrayList<>();
 		NodeResultSet result = new NodeResultSet();
 		FullTextQuery ftq = ftSession.createFullTextQuery(query, NodeDocument.class, NodeFolder.class, NodeMail.class);
 		ftq.setProjection(FullTextQuery.SCORE, FullTextQuery.THIS);
@@ -358,8 +349,8 @@ public class SearchDAO {
 	@SuppressWarnings("unchecked")
 	private NodeResultSet runQueryAccessManagerWindow(FullTextSession ftSession, Query query, int offset, int limit)
 			throws IOException, InvalidTokenOffsetsException, DatabaseException, HibernateException {
-		log.debug("runQueryAccessManagerWindow({}, {}, {}, {})", new Object[]{ftSession, query, offset, limit});
-		List<NodeQueryResult> results = new ArrayList<NodeQueryResult>();
+		log.debug("runQueryAccessManagerWindow({}, {}, {}, {})", ftSession, query, offset, limit);
+		List<NodeQueryResult> results = new ArrayList<>();
 		NodeResultSet result = new NodeResultSet();
 		FullTextQuery ftq = ftSession.createFullTextQuery(query, NodeDocument.class, NodeFolder.class, NodeMail.class);
 		ftq.setProjection(FullTextQuery.SCORE, FullTextQuery.THIS);
@@ -430,7 +421,7 @@ public class SearchDAO {
 	private NodeResultSet runQueryAccessManagerLimited(FullTextSession ftSession, Query query, int offset, int limit)
 			throws IOException, InvalidTokenOffsetsException, DatabaseException, HibernateException {
 		log.debug("runQueryAccessManagerLimited({}, {}, {}, {})", ftSession, query, offset, limit);
-		List<NodeQueryResult> results = new ArrayList<NodeQueryResult>();
+		List<NodeQueryResult> results = new ArrayList<>();
 		NodeResultSet result = new NodeResultSet();
 		FullTextQuery ftq = ftSession.createFullTextQuery(query, NodeDocument.class, NodeFolder.class, NodeMail.class);
 		ftq.setProjection(FullTextQuery.SCORE, FullTextQuery.THIS);
@@ -526,7 +517,7 @@ public class SearchDAO {
 			excerpt = highlighter.getBestFragment(analyzer, NodeMail.CONTENT_FIELD, nMail.getContent());
 		}
 
-		log.debug("Result: SCORE({}), EXCERPT({}), DOCUMENT({})", new Object[]{score, excerpt, nBase});
+		log.debug("Result: SCORE({}), EXCERPT({}), DOCUMENT({})", score, excerpt, nBase);
 		qr.setScore(score);
 		qr.setExcerpt(FormatUtil.stripNonValidXMLCharacters(excerpt));
 
@@ -583,10 +574,7 @@ public class SearchDAO {
 				// fldResultCache.put(new Element(key, ret));
 				SystemProfiling.log(parentUuid, System.currentTimeMillis() - begin);
 				log.trace("findFoldersInDepth.Time: {}", FormatUtil.formatMiliSeconds(System.currentTimeMillis() - begin));
-			} catch (PathNotFoundException e) {
-				HibernateUtil.rollback(tx);
-				throw e;
-			} catch (DatabaseException e) {
+			} catch (PathNotFoundException | DatabaseException e) {
 				HibernateUtil.rollback(tx);
 				throw e;
 			} catch (HibernateException e) {
@@ -608,7 +596,7 @@ public class SearchDAO {
 	private List<String> findFoldersInDepthHelper(Session session, String parentUuid) throws HibernateException,
 			DatabaseException {
 		log.debug("findFoldersInDepthHelper({}, {})", "session", parentUuid);
-		List<String> ret = new ArrayList<String>();
+		List<String> ret = new ArrayList<>();
 		String qs = "from NodeFolder nf where nf.parent=:parent";
 		org.hibernate.Query q = session.createQuery(qs).setCacheable(true);
 		q.setString("parent", parentUuid);
@@ -617,9 +605,7 @@ public class SearchDAO {
 		// Security Check
 		DbAccessManager am = SecurityHelper.getAccessManager();
 
-		for (Iterator<NodeFolder> it = results.iterator(); it.hasNext(); ) {
-			NodeFolder node = it.next();
-
+		for (NodeFolder node : results) {
 			if (am.isGranted(node, Permission.READ)) {
 				ret.add(node.getUuid());
 				ret.addAll(findFoldersInDepthHelper(session, node.getUuid()));
@@ -634,7 +620,7 @@ public class SearchDAO {
 	 * Return a list of similar documents.
 	 */
 	public NodeResultSet moreLikeThis(String uuid, int maxResults) throws DatabaseException, PathNotFoundException {
-		log.debug("moreLikeThis({}, {})", new Object[]{uuid, maxResults});
+		log.debug("moreLikeThis({}, {})", uuid, maxResults);
 		String[] moreLikeFields = new String[]{"text"};
 		FullTextSession ftSession = null;
 		Session session = null;
@@ -685,13 +671,7 @@ public class SearchDAO {
 			log.trace("moreLikeThis.Time: {}", FormatUtil.formatMiliSeconds(System.currentTimeMillis() - begin));
 			log.debug("moreLikeThis: {}", result);
 			return result;
-		} catch (IOException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} catch (InvalidTokenOffsetsException e) {
-			HibernateUtil.rollback(tx);
-			throw new DatabaseException(e.getMessage(), e);
-		} catch (HibernateException e) {
+		} catch (IOException | InvalidTokenOffsetsException | HibernateException e) {
 			HibernateUtil.rollback(tx);
 			throw new DatabaseException(e.getMessage(), e);
 		} finally {
@@ -715,8 +695,8 @@ public class SearchDAO {
 	 * Get Lucent document terms.
 	 */
 	@SuppressWarnings("unchecked")
-	public List<String> getTerms(Class<?> entityType, String nodeUuid) throws CorruptIndexException, IOException {
-		List<String> terms = new ArrayList<String>();
+	public List<String> getTerms(Class<?> entityType, String nodeUuid) throws IOException {
+		List<String> terms = new ArrayList<>();
 		FullTextSession ftSession = null;
 		IndexSearcher searcher = null;
 		ReaderProvider provider = null;

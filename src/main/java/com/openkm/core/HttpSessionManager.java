@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -42,7 +42,7 @@ public class HttpSessionManager {
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(HttpSessionManager.class);
 	private static HttpSessionManager instance = new HttpSessionManager();
-	private List<HttpSessionInfo> sessions = new ArrayList<HttpSessionInfo>();
+	private List<HttpSessionInfo> sessions = new ArrayList<>();
 
 	/**
 	 * Prevents class instantiation

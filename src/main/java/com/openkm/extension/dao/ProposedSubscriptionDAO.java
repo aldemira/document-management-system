@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -49,7 +49,7 @@ public class ProposedSubscriptionDAO {
 	 */
 	public static void send(String from, String to, String user, String nodeUuid, String type, String comment) throws
 			DatabaseException {
-		log.debug("send({}, {}, {}, {}, {})", new Object[]{from, to, user, nodeUuid, comment});
+		log.debug("send({}, {}, {}, {}, {})", from, to, user, nodeUuid, comment);
 		Session session = null;
 		Transaction tx = null;
 
@@ -138,7 +138,6 @@ public class ProposedSubscriptionDAO {
 
 	/**
 	 * Find sent from me to user
-	 * @throws RepositoryException
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<ProposedSubscriptionSent> findSentProposedSubscriptionFromMeToUser(String me, String user)
@@ -204,7 +203,7 @@ public class ProposedSubscriptionDAO {
 			Query q = session.createQuery(qs);
 			q.setString("me", me);
 			List<Object[]> list = q.list();
-			Map<String, Long> ret = new HashMap<String, Long>();
+			Map<String, Long> ret = new HashMap<>();
 
 			for (Object[] item : list) {
 				ret.put((String) item[0], (Long) item[1]);

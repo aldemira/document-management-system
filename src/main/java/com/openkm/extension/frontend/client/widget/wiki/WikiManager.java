@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -41,8 +41,8 @@ import java.util.List;
  *
  */
 public class WikiManager extends Composite implements WikiController {
-	private final OKMWikiServiceAsync wikiService = (OKMWikiServiceAsync) GWT.create(OKMWikiService.class);
 	private final static int IE_SIZE_RECTIFICATION = (Util.getUserAgent().startsWith("ie") ? 1 : 0);
+	private final OKMWikiServiceAsync wikiService = GWT.create(OKMWikiService.class);
 
 	private VerticalPanel vPanel;
 	private TabToolbarWiki toolbar;

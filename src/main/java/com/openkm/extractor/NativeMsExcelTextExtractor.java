@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -81,15 +81,13 @@ public class NativeMsExcelTextExtractor extends AbstractTextExtractor {
 				fos.close();
 
 				// Perform text extraction
-				HashMap<String, Object> hm = new HashMap<String, Object>();
+				HashMap<String, Object> hm = new HashMap<>();
 				hm.put("fileIn", tmpFileIn.getPath());
 				cmd = TemplateUtils.replace("SYSTEM_XLS2CSV", Config.SYSTEM_CATDOC_XLS2CSV, hm);
 				ExecutionResult execRes = ExecutionUtils.runCmd(cmd);
 
 				// Read result
-				String text = execRes.getStdout();
-
-				return text;
+				return execRes.getStdout();
 			} catch (SecurityException e) {
 				log.warn("Security exception executing command: " + cmd, e);
 				return "";

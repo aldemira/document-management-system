@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -41,7 +41,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Servlet Class
@@ -477,7 +480,7 @@ public class DashboardServlet extends OKMRemoteServiceServlet implements OKMDash
 	@Override
 	public List<GWTDashboardDocumentResult> getLastWeekTopModifiedDocuments() throws OKMException {
 		log.debug("getLastWeekTopModifiedDocuments()");
-		List<GWTDashboardDocumentResult> docList = new ArrayList<GWTDashboardDocumentResult>();
+		List<GWTDashboardDocumentResult> docList = new ArrayList<>();
 		updateSessionManager();
 
 		try {
@@ -843,7 +846,7 @@ public class DashboardServlet extends OKMRemoteServiceServlet implements OKMDash
 
 	@Override
 	public void visiteNode(String source, String node, Date date) throws OKMException {
-		log.debug("visiteNode({}, {}, {})", new Object[]{source, node, date});
+		log.debug("visiteNode({}, {}, {})", source, node, date);
 		updateSessionManager();
 
 		try {

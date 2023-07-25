@@ -58,17 +58,15 @@ import java.util.Map;
  * @author jllort
  */
 public class ExtendedScrollTable extends ScrollTable {
-	private final OKMProposedSubscriptionServiceAsync proposedSubscriptionService = (OKMProposedSubscriptionServiceAsync) GWT
-			.create(OKMProposedSubscriptionService.class);
-	private final OKMProposedQueryServiceAsync proposedQueryService = (OKMProposedQueryServiceAsync) GWT
-			.create(OKMProposedQueryService.class);
-	private final OKMMessageServiceAsync messageService = (OKMMessageServiceAsync) GWT.create(OKMMessageService.class);
+	private final OKMProposedSubscriptionServiceAsync proposedSubscriptionService = GWT.create(OKMProposedSubscriptionService.class);
+	private final OKMProposedQueryServiceAsync proposedQueryService = GWT.create(OKMProposedQueryService.class);
+	private final OKMMessageServiceAsync messageService = GWT.create(OKMMessageService.class);
 
 	// Special event case
 	private static final int EVENT_ONMOUSEDOWN_RIGHT = -2;
 
 	// Holds the data rows of the table this is a list of RowData Object
-	public Map<Integer, Object> data = new HashMap<Integer, Object>();
+	public Map<Integer, Object> data = new HashMap<>();
 	private int mouseX = 0;
 	private int mouseY = 0;
 	private int dataIndexValue = 0;
@@ -320,13 +318,11 @@ public class ExtendedScrollTable extends ScrollTable {
 		dataIndexValue = 0;
 
 		// Only resets rows table the header is never reset
-		data = new HashMap<Integer, Object>();
+		data = new HashMap<>();
 	}
 
 	/**
 	 * Adds values to the panel
-	 *
-	 * @param
 	 */
 	public void addRow(Object obj) {
 		if (obj instanceof GWTProposedSubscriptionReceived) {

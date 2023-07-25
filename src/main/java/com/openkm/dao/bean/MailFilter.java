@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -32,7 +32,7 @@ public class MailFilter implements Serializable {
 	private String node;
 	private boolean grouping = true;
 	private boolean active = false;
-	private Set<MailFilterRule> filterRules = new HashSet<MailFilterRule>();
+	private Set<MailFilterRule> filterRules = new HashSet<>();
 
 	public long getId() {
 		return id;

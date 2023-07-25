@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -35,19 +35,19 @@ import java.util.Map;
  */
 @RemoteServiceRelativePath("../extension/ProposedQuery")
 public interface OKMProposedQueryService extends RemoteService {
-	public void create(long qpId, String users, String roles, String comment) throws OKMException;
+	void create(long qpId, String users, String roles, String comment) throws OKMException;
 
-	public Map<String, Long> findProposedQueriesUsersFrom() throws OKMException;
+	Map<String, Long> findProposedQueriesUsersFrom() throws OKMException;
 
-	public void markSeen(long msgId) throws OKMException;
+	void markSeen(long msgId) throws OKMException;
 
-	public void markAccepted(long msgId) throws OKMException;
+	void markAccepted(long msgId) throws OKMException;
 
-	public void deleteReceived(long msgId) throws OKMException;
+	void deleteReceived(long msgId) throws OKMException;
 
-	public void deleteSent(long msgId) throws OKMException;
+	void deleteSent(long msgId) throws OKMException;
 
-	public List<GWTProposedQueryReceived> findProposedQueryByMeFromUser(String sender) throws OKMException;
+	List<GWTProposedQueryReceived> findProposedQueryByMeFromUser(String sender) throws OKMException;
 
-	public void deleteProposedQueryByMeFromUser(String user) throws OKMException;
+	void deleteProposedQueryByMeFromUser(String user) throws OKMException;
 }

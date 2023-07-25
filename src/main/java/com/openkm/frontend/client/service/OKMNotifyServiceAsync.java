@@ -1,6 +1,6 @@
 /**
  * OpenKM, Open Document Management System (http://www.openkm.com)
- * Copyright (c) 2006-2017  Paco Avila & Josep Llort
+ * Copyright (c) Paco Avila & Josep Llort
  * <p>
  * No bytes were intentionally harmed during the development of this application.
  * <p>
@@ -27,13 +27,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * OKMNotifyServiceAsync
  *
  * @author jllort
- *
  */
 public interface OKMNotifyServiceAsync {
-	public void subscribe(String nodePath, AsyncCallback<?> callback);
+	void subscribe(String nodePath, AsyncCallback<?> callback);
 
-	public void unsubscribe(String nodePath, AsyncCallback<?> callback);
+	void unsubscribe(String nodePath, AsyncCallback<?> callback);
 
-	public void notify(String docPath, String mails, String users, String roles, String message, boolean attachment,
-	                   AsyncCallback<?> callback);
+	void notify(String docPath, String mails, String users, String roles, String message, boolean attachment,
+				AsyncCallback<?> callback);
 }
